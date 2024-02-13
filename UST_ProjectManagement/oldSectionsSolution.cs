@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace UST_ProjectManagement
+{
+    public class oldSectionsSolution
+    {
+        public string Path { get; set; }
+
+        public int TechSolutionId { get; set; }
+
+        public int StageId { get; set; }
+
+        public int UserId { get; set; }
+
+        public bool Rus { get; set; }
+
+        public byte Mode { get; set; }
+
+        public List<OldSection> spSection = new List<OldSection>();
+    }
+}

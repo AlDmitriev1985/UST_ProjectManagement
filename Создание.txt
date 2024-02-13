@@ -1,0 +1,51 @@
+LibraryDB.DB.Project prj = new LibraryDB.DB.Project();
+            prj.ProjectDataStart = "01.02.2022";
+            prj.ProjectDataEnd = "29.07.2022";
+            prj.ProjectGIP = "Давыдик Михаил Михайлович";
+            prj.NationId = "112";
+            prj.ProjectName = "Тест";
+            prj.ProjectFullName = "Полный Тест";
+            prj.ProjectId = "B112.071-33";
+
+            try
+            {
+                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://10.10.25.130:8085/CreateProject/");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://127.0.0.1:8085/CreateProject/");
+
+                request.UseDefaultCredentials = true;
+                request.ContentType = "text/html";
+                request.Method = "POST";
+
+                string text = "App" + Environment.NewLine;
+                text += JsonConvert.SerializeObject(prj);
+
+
+                byte[] byteArray = Encoding.UTF8.GetBytes(text);
+                request.ContentLength = byteArray.Length;
+
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+                text = "";
+                try
+                {
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    using (Stream stream = response.GetResponseStream())
+                    {
+                        Console.WriteLine("Готово");
+                    }
+                    response.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + Environment.NewLine + ex.StackTrace);
+                    //MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + Environment.NewLine + ex.StackTrace);
+                //MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+            }
+            Console.ReadLine();

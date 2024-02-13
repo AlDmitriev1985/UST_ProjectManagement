@@ -1,0 +1,80 @@
+
+
+var pos = Request.lb.Positions.First(x => x.PositionCode == trNode.Text);
+                        GetSectionProjectInfo(pos.PositionId, pos);
+
+
+        public void GetSectionProjectInfo(int PositionId, Position pos)
+        {
+            var spSection = Request.lb.SectionsPositions.Where(x => x.PositionId == PositionId).ToList();
+            bool languageRus = true;
+            if (pos.StageId < 5) languageRus = false;
+
+            listViewSection.Items.Clear();
+            listViewSection.Groups.Clear();
+            dataGridView1.Rows.Clear();
+
+            var secThree = Request.lb.SectionsThrees.Where(y => (spSection.Select(x => x.SectionThreeId).ToList()).Contains(y.SectionThreeId)).ToList();
+            var secTwoGroup = secThree.GroupBy(x => x.SectionTwoId).OrderBy(x => x.Key);
+            
+            foreach (var gr in secTwoGroup)
+            {
+                var secTwo = Request.lb.SectionsTwoes.First(x => x.SectionTwoId == gr.Key);
+                string ColumnName = "";
+                if (languageRus) { ColumnName = secTwo.SectionTwoNameRus; }
+                else { ColumnName = secTwo.SectionTwoNameEng; }
+
+                dataGridView1.Rows.Add(secTwo.SectionTwoNum, "", ColumnName, "процент", "Расчет статуса", "Дата", "Ответственный");
+                
+                foreach (SectionsThree secThr in gr)
+                {
+                    string tag = "";
+                    if (languageRus) 
+                    { 
+                        ColumnName = secThr.SectionThreeNameRus;
+                        tag = secThr.SectionThreeTagRus;
+                    }
+                    else 
+                    { 
+                        ColumnName = secThr.SectionThreeNameEng; 
+                        tag = secThr.SectionThreeTagEng;
+                    }
+     
+                    string status = Request.lb.Status.First(y => y.StatusId == Request.lb.SectionsPositions.First(x => (x.SectionThreeId == secThr.SectionThreeId && x.PositionId == pos.PositionId)).StatusId).StatusName;
+                    dataGridView1.Rows.Add(secThr.SectionThreeNum, tag, ColumnName, "процент", status, "Дата", "Ответственный");
+                }
+            }
+
+            var secOneGroup = secThree.GroupBy(x => x.SectionOneId).OrderBy(x => x.Key);
+            foreach(var gr in secOneGroup)
+            {
+                var secOne = Request.lb.SectionsOnes.First(x => x.SectionOneId == gr.Key);
+                string groupName = "";
+                if (languageRus) groupName = $"{secOne.SectionOneNum} {secOne.SectionOneNameRus}";               
+                else groupName = $"{secOne.SectionOneNum} {secOne.SectionOneNameEng}";
+               
+                ListViewGroup LvGr = new ListViewGroup(groupName);
+                listViewSection.Groups.AddRange(new ListViewGroup[] { LvGr });
+
+                foreach(SectionsThree secThr in gr)
+                {
+                    string Name = "";
+                    string designation = "";                   
+                    if (languageRus)
+                    {
+                        designation = $"{pos.PositionCode} {secThr.SectionThreeTagRus}";
+                        Name = secThr.SectionThreeNameRus;
+                        groupName = $"{secOne.SectionOneNum} {secOne.SectionOneNameRus}";
+                    }
+                    else
+                    {
+                        designation = $"{pos.PositionCode} {secThr.SectionThreeTagEng}";
+                        Name = secThr.SectionThreeNameEng;
+                        groupName = $"{secOne.SectionOneNum} {secOne.SectionOneNameEng}";
+                    }
+                    ListViewItem lvi = new ListViewItem(new string[] { secThr.SectionThreeNum, designation, Name, "В работе", "" });
+                    listViewSection.Items.Add(lvi);
+                }
+            }
+        }
+    

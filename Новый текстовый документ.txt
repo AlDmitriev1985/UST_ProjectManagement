@@ -1,0 +1,46 @@
+static void requestInfoThree()
+        {
+            LibraryDB.LibraryDB lb = new LibraryDB.LibraryDB();            
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://127.0.0.1:8085/Info/");
+               
+                request.UseDefaultCredentials = true;
+                request.ContentType = "text/html";
+                request.Method = "POST";
+
+                string text = "";
+                text = "InfoThree"; 
+
+                byte[] byteArray = Encoding.UTF8.GetBytes(text);
+                request.ContentLength = byteArray.Length;
+
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+                text = "";
+                try
+                {
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();                    
+                    using (Stream stream = response.GetResponseStream())
+                    {
+                        lb = System.Text.Json.JsonSerializer.Deserialize<LibraryDB.LibraryDB>(stream);                        
+                    }
+                    response.Close();             
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + Environment.NewLine + ex.StackTrace);
+                    //MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + Environment.NewLine + ex.StackTrace);
+                //MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+            }
+
+              
+        }

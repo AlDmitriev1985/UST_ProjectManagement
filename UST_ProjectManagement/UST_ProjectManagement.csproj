@@ -1,0 +1,656 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2AF304A4-9F28-47D1-91D4-E1FF14CAEF47}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>UST_ProjectManagement</RootNamespace>
+    <AssemblyName>UST_ProjectManagement</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CardTask, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Z:\BIM01\01_Библиотеки\06_Приложения\05_UST ProjectManagement\CardTask.exe</HintPath>
+    </Reference>
+    <Reference Include="LibraryDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Z:\BIM01\01_Библиотеки\06_Приложения\05_UST ProjectManagement\LibraryDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Z:\BIM01\01_Библиотеки\00_Autodesk Revit\13_SkyWay_вкладка\Version\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.7.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=7.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.7.0.1\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CreateProject.cs" />
+    <Compile Include="EditSetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditSetForm.Designer.cs">
+      <DependentUpon>EditSetForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ClassComment.cs" />
+    <Compile Include="ClassCountry.cs" />
+    <Compile Include="ClassCreatedProdStage.cs" />
+    <Compile Include="classCreatedSchedule.cs" />
+    <Compile Include="ClassCreatedTechSolutionStage.cs" />
+    <Compile Include="ClassNaviTreeView.cs" />
+    <Compile Include="ClassPositionSet.cs" />
+    <Compile Include="ClassPrductCatalog.cs" />
+    <Compile Include="ClassProduct.cs" />
+    <Compile Include="ClassSearchPanelRow.cs" />
+    <Compile Include="ClassSet.cs" />
+    <Compile Include="ClassPosition.cs" />
+    <Compile Include="ClassUser.cs" />
+    <Compile Include="Class_PrintSetsList.cs" />
+    <Compile Include="ClassSubsetInfo.cs" />
+    <Compile Include="control.cs" />
+    <Compile Include="ClassFolder.cs" />
+    <Compile Include="CreateNWF.cs" />
+    <Compile Include="CreateTechSolution.cs" />
+    <Compile Include="CreateProduct.cs" />
+    <Compile Include="HistoryInfo.cs" />
+    <Compile Include="HistoryLog.cs" />
+    <Compile Include="oldSectionsSolution.cs" />
+    <Compile Include="Panel_TasksGridPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ScheduleItem.cs" />
+    <Compile Include="TechSolutionInfo.cs" />
+    <Compile Include="TechSulutionStageInfo.cs" />
+    <Compile Include="TechSulutionCatalogInfo.cs" />
+    <Compile Include="ProductStageInfo.cs" />
+    <Compile Include="ProductCatalogInfo.cs" />
+    <Compile Include="ProcessForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcessForm.Designer.cs">
+      <DependentUpon>ProcessForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductInfo.cs" />
+    <Compile Include="PositionInfo.cs" />
+    <Compile Include="ProjectStageInfo.cs" />
+    <Compile Include="RequestInfo.cs" />
+    <Compile Include="OldSection.cs" />
+    <Compile Include="SectionProgress.cs" />
+    <Compile Include="oldSectionsProduct.cs" />
+    <Compile Include="SetsInfo.cs" />
+    <Compile Include="StartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartForm.Designer.cs">
+      <DependentUpon>StartForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalData.cs" />
+    <Compile Include="GlobalMethodes.cs" />
+    <Compile Include="GlobalSettingsClass.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="ClassProject.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ClassStage.cs" />
+    <Compile Include="ClassStageType.cs" />
+    <Compile Include="UC_AddProjectSetPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_AddProjectSetPanel.Designer.cs">
+      <DependentUpon>UC_AddProjectSetPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_AdmiPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_AdmiPanel.Designer.cs">
+      <DependentUpon>UC_AdmiPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_Approvals.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_Approvals.Designer.cs">
+      <DependentUpon>UC_Approvals.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_CalendarPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_CalendarPanel.Designer.cs">
+      <DependentUpon>UC_CalendarPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_Comments.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_Comments.Designer.cs">
+      <DependentUpon>UC_Comments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_CoordinationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_CoordinationPanel.Designer.cs">
+      <DependentUpon>UC_CoordinationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_CreatePositionPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_CreatePositionPanel.Designer.cs">
+      <DependentUpon>UC_CreatePositionPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_CreateStagePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_CreateStagePanel.Designer.cs">
+      <DependentUpon>UC_CreateStagePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_HistoryPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_HistoryPanel.Designer.cs">
+      <DependentUpon>UC_HistoryPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_NavigationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_NavigationPanel.Designer.cs">
+      <DependentUpon>UC_NavigationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_NewSetRelisePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_NewSetRelisePanel.Designer.cs">
+      <DependentUpon>UC_NewSetRelisePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_PositionItemPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_PositionItemPanel.Designer.cs">
+      <DependentUpon>UC_PositionItemPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_ProjectNaviPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_ProjectNaviPanel.Designer.cs">
+      <DependentUpon>UC_ProjectNaviPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_ProjectPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_ProjectPanel.Designer.cs">
+      <DependentUpon>UC_ProjectPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_ProjectSchedulePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_ProjectSchedulePanel.Designer.cs">
+      <DependentUpon>UC_ProjectSchedulePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_SearchPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_SearchPanel.Designer.cs">
+      <DependentUpon>UC_SearchPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_Search_Projects.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_Search_Projects.Designer.cs">
+      <DependentUpon>UC_Search_Projects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_StartPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_StartPanel.Designer.cs">
+      <DependentUpon>UC_StartPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_TaskInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_TaskInfo.Designer.cs">
+      <DependentUpon>UC_TaskInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_TaskPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_TaskPanel.Designer.cs">
+      <DependentUpon>UC_TaskPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_TopActionsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_TopActionsPanel.Designer.cs">
+      <DependentUpon>UC_TopActionsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_TopMainPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_TopMainPanel.Designer.cs">
+      <DependentUpon>UC_TopMainPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC_UserStartPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_UserStartPanel.Designer.cs">
+      <DependentUpon>UC_UserStartPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UST_CloseButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="EditPercentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditPercentForm.Designer.cs">
+      <DependentUpon>EditPercentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UST_HorizontalTabControl_Settings.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UST_HorizontalTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UST_MaximizeButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UST_MinimizeButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UST_TaskButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UST_VerticalTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <EmbeddedResource Include="EditSetForm.resx">
+      <DependentUpon>EditSetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProcessForm.resx">
+      <DependentUpon>ProcessForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="StartForm.resx">
+      <DependentUpon>StartForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_AddProjectSetPanel.resx">
+      <DependentUpon>UC_AddProjectSetPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_AdmiPanel.resx">
+      <DependentUpon>UC_AdmiPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_Approvals.resx">
+      <DependentUpon>UC_Approvals.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_CalendarPanel.resx">
+      <DependentUpon>UC_CalendarPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_Comments.resx">
+      <DependentUpon>UC_Comments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_CoordinationPanel.resx">
+      <DependentUpon>UC_CoordinationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_CreatePositionPanel.resx">
+      <DependentUpon>UC_CreatePositionPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_CreateStagePanel.resx">
+      <DependentUpon>UC_CreateStagePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_HistoryPanel.resx">
+      <DependentUpon>UC_HistoryPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_NavigationPanel.resx">
+      <DependentUpon>UC_NavigationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_NewSetRelisePanel.resx">
+      <DependentUpon>UC_NewSetRelisePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_PositionItemPanel.resx">
+      <DependentUpon>UC_PositionItemPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_ProjectNaviPanel.resx">
+      <DependentUpon>UC_ProjectNaviPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_ProjectPanel.resx">
+      <DependentUpon>UC_ProjectPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_ProjectSchedulePanel.resx">
+      <DependentUpon>UC_ProjectSchedulePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_SearchPanel.resx">
+      <DependentUpon>UC_SearchPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_Search_Projects.resx">
+      <DependentUpon>UC_Search_Projects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_StartPanel.resx">
+      <DependentUpon>UC_StartPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_TaskInfo.resx">
+      <DependentUpon>UC_TaskInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_TaskPanel.resx">
+      <DependentUpon>UC_TaskPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_TopActionsPanel.resx">
+      <DependentUpon>UC_TopActionsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_TopMainPanel.resx">
+      <DependentUpon>UC_TopMainPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_UserStartPanel.resx">
+      <DependentUpon>UC_UserStartPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditPercentForm.resx">
+      <DependentUpon>EditPercentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UnyCar_Blue_50c50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UnyCar_White_50c50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Track_50x50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Word">
+      <Guid>{00020905-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Promote_35x35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Demote_35x35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btn_Print_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btn_Print_35x35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btn_Print_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btn_Edit_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Approve_Grey_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btn_Print_30x301.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Save_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Save_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Cancel_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Folder_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Demote_White_35x35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Promote_35x35_White.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\LibraryDB.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BtnEdit_White_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Add_White_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BtnEdit_White_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Add_White_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Left_Whit_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Right_Whit_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Left_Whit_15x15.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Right_Whit_15x15.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Promote_White_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Arrow_Gray_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Arrow_White_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_OpenCard_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Promote_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Add_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Delegate_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Finish_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Refresh_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Reset_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Start_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddLink_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetPath.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\UST_DataGridLibrary\UST_DataGridLibrary.csproj">
+      <Project>{46095ba2-9f0c-4a3a-886f-7051423e44bf}</Project>
+      <Name>UST_DataGridLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UST_UILibrary\UST_UILibrary.csproj">
+      <Project>{f98cbc05-bb68-4758-9f12-097a7f48cfda}</Project>
+      <Name>UST_UILibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UST_Logo_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Account_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_EditSchedule_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnEditSelected_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAdd_RemoveSett_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnEditSelected_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAdd_RemoveSett_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Demote_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Promote_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Promote_35x35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Demote_35x35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Percent_35x35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Promote_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Demote_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Percent_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Percent_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Percent_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OpenNavisworks_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Help_30x30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Btn_Help_25x25.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
