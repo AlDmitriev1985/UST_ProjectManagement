@@ -583,16 +583,6 @@
     <None Include="Resources\GetPath.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\UST_DataGridLibrary\UST_DataGridLibrary.csproj">
-      <Project>{46095ba2-9f0c-4a3a-886f-7051423e44bf}</Project>
-      <Name>UST_DataGridLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UST_UILibrary\UST_UILibrary.csproj">
-      <Project>{f98cbc05-bb68-4758-9f12-097a7f48cfda}</Project>
-      <Name>UST_UILibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\UST_Logo_30x30.png" />
   </ItemGroup>
   <ItemGroup>

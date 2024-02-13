@@ -5,12 +5,6 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UST_ProjectManagement", "UST_ProjectManagement\UST_ProjectManagement.csproj", "{2AF304A4-9F28-47D1-91D4-E1FF14CAEF47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UST_UILibrary", "UST_UILibrary\UST_UILibrary.csproj", "{F98CBC05-BB68-4758-9F12-097A7F48CFDA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UST_DataGridLibrary", "..\UST_DataGridLibrary\UST_DataGridLibrary.csproj", "{46095BA2-9F0C-4A3A-886F-7051423E44BF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardTask", "..\CardTask\CardTask.csproj", "{4D3BBED6-6696-4907-B165-0A249DF84870}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,18 +15,6 @@ Global
 		{2AF304A4-9F28-47D1-91D4-E1FF14CAEF47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AF304A4-9F28-47D1-91D4-E1FF14CAEF47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AF304A4-9F28-47D1-91D4-E1FF14CAEF47}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F98CBC05-BB68-4758-9F12-097A7F48CFDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F98CBC05-BB68-4758-9F12-097A7F48CFDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F98CBC05-BB68-4758-9F12-097A7F48CFDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F98CBC05-BB68-4758-9F12-097A7F48CFDA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{46095BA2-9F0C-4A3A-886F-7051423E44BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46095BA2-9F0C-4A3A-886F-7051423E44BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46095BA2-9F0C-4A3A-886F-7051423E44BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46095BA2-9F0C-4A3A-886F-7051423E44BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4D3BBED6-6696-4907-B165-0A249DF84870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4D3BBED6-6696-4907-B165-0A249DF84870}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4D3BBED6-6696-4907-B165-0A249DF84870}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4D3BBED6-6696-4907-B165-0A249DF84870}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
