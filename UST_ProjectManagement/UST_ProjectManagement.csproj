@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CardTask, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Z:\BIM01\01_Библиотеки\06_Приложения\05_UST ProjectManagement\CardTask.exe</HintPath>
-    </Reference>
     <Reference Include="LibraryDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Z:\BIM01\01_Библиотеки\06_Приложения\05_UST ProjectManagement\LibraryDB.dll</HintPath>
@@ -85,6 +81,17 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="UST_DataGridLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\UST_DataGridLibrary\bin\Debug\UST_DataGridLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="UST_UILibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\UST_UILibrary\bin\Debug\UST_UILibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="UST_UI_Librory">
+      <HintPath>..\..\UST_UI_Librory\UST_UI_Librory\bin\Debug\UST_UI_Librory.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateProject.cs" />
@@ -641,6 +648,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Btn_Help_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GitHub\bardushkoUST\CardTask\CardTask.csproj">
+      <Project>{4d3bbed6-6696-4907-b165-0a249df84870}</Project>
+      <Name>CardTask</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

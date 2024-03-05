@@ -19,6 +19,7 @@ namespace UST_ProjectManagement
         public UC_CoordinationPanel()
         {
             InitializeComponent();
+            richTextBox1.SelectionAlignment = HorizontalAlignment.Center;
         }
 
         public void UpdateCoordinates()
@@ -70,6 +71,15 @@ namespace UST_ProjectManagement
             if (GlobalData.SelectedProject != null)
             {
                 positionInfo = new PositionInfo(GlobalData.SelectedProject, GlobalData.SelectedStage, GlobalData.SelectedPosition);
+                if (positionInfo.BasePoint != null && positionInfo.BasePoint != "")
+                {
+                    richTextBox1.Text = positionInfo.BasePoint;
+                }
+                else
+                {
+                    richTextBox1.Text = "<Не определено>";
+                }
+
                 var history = positionInfo.coordinationHistory.OrderByDescending(x => x.Date);
 
                 int i = history.Count();
@@ -83,10 +93,10 @@ namespace UST_ProjectManagement
                     if (user != null && user.FunctionId == 7)
                     {
                         _row.Cells[2].Value = "скоорд.";
-                        for (int c = 0; c < _row.Cells.Count; c++)
-                        {
-                            _row.Cells[c].Style.BackColor = Color.LightGray;
-                        }
+                        //for (int c = 0; c < _row.Cells.Count; c++)
+                        //{
+                        //    _row.Cells[c].Style.BackColor = Color.LightGray;
+                        //}
                     }
                     else
                     {
@@ -103,11 +113,6 @@ namespace UST_ProjectManagement
                     i -= 1;
                 } 
             }
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

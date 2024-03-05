@@ -62,7 +62,7 @@ namespace UST_ProjectManagement
         public static bool CloseStart = false;
 
         Thread StratThread;
-        Thread ProcasThread;        
+        Thread ProcasThread;
         static StartForm sForm;
         static ProcessForm pForm;
         DateTime startTime;
@@ -84,13 +84,13 @@ namespace UST_ProjectManagement
 
         public MainForm()
         {
+            InitializeComponent();
+
             firstStart = true;
             StartProcess();
             startTime = DateTime.Today;
             lastUpdate = DateTime.Now;
 
-
-            InitializeComponent();
             System.Threading.Tasks.Task UpdateUpdate = System.Threading.Tasks.Task.Factory.StartNew(UpUpdate);
 
             try
@@ -121,10 +121,6 @@ namespace UST_ProjectManagement
             uC_TaskInfo.Dock = DockStyle.Fill;
 
             #region --- ReadFromSQL ---
-
-
-
-
             try
             {
                 GlobalData.loadInfo = "Формирование диспетчера проектов...";
@@ -141,7 +137,7 @@ namespace UST_ProjectManagement
             UpdateCreatePanel();
             if (!UpdateUserAxes(GetUserName()))
             {
-                CloseProcessForm();
+                GlobalMethodes._stop = true;
                 this.Close();
             }
             GlobalData.User_GIPList = GetUsersFIObyFunctionId(1);
@@ -191,6 +187,7 @@ namespace UST_ProjectManagement
             uC_TopActionsPanel1.EditSetsList += EditSetsList;
 
             uC_StartPanel1.UpdateForm += UpdateStartForm;
+            uC_StartPanel1.StartProcess += StartProcess;
 
             uC_AdmiPanel1.ValeraStart += ValeraStart;
             uC_AdmiPanel1.NWFStart += NWFStart;
@@ -256,18 +253,7 @@ namespace UST_ProjectManagement
             uC_TaskPanel.TaskOpen += OpenTaskInfo;
             uC_TaskInfo.OpenTaskRoute += OpenTaskRoute;
             uC_TaskInfo.ChangeTaskStatus += ChangeTaskStatus;
-            uC_TaskPanel.EditTask += EditTask;
-
-            //try
-            //{
-            //    uC_StartPanel1.StartProcess += StartProcess;
-            //}
-            //catch
-            //{
-            //}
-
-            //sForm._Close += CloseStartForm;
-            
+            uC_TaskPanel.EditTask += EditTask;            
 
             #region --- StartValues ---
             tableLayoutPanel5.ColumnStyles[2].Width = 0;
@@ -290,7 +276,6 @@ namespace UST_ProjectManagement
 
             #endregion
            
-;
 
             
         }
@@ -446,40 +431,6 @@ namespace UST_ProjectManagement
             return FIO;
         }
 
-
-        private void CloseStartForm()
-        {
-            DateTime nowTime = DateTime.Today;
-            while (startTime == nowTime)
-            {
-                Thread.Sleep(36000000);
-                CloseStartForm();
-            }
-
-            System.Diagnostics.Process[] local_proc = System.Diagnostics.Process.GetProcesses();
-            var target_proc = local_proc.Where(p => p.ProcessName == "UST_ProjectManagement");
-            GlobalMethodes.CreateLog("Принудительное заткрытие программы");
-            foreach (Process pr in target_proc)
-            {
-                pr.Kill();
-            }
-            
-            //StratThread.Abort();
-            //StratThread.Join();
-        }
-        
-        public void CloseProcessForm()
-        {
-            try
-            {
-                ProcasThread.Abort();
-                ProcasThread.Join();
-            }
-            catch
-            {
-            }
-        }
-
         public void StartProcessPanel()
         {
             try
@@ -509,7 +460,7 @@ namespace UST_ProjectManagement
             {
                 usT_HorizontalTab_ActionsPanel.Visible = false;
             }
-            WindowState = FormWindowState.Normal;
+            //WindowState = FormWindowState.Normal;
 
             if (request != null && request != "")
             {
@@ -524,6 +475,11 @@ namespace UST_ProjectManagement
                     throw;
                 }
             }
+            //Thread.Sleep(3000);
+            
+            this.Visible = true;
+            this.Show();
+            //this.WindowState = FormWindowState.Normal;
         }
 
         private void ExecuteRequest()
@@ -576,18 +532,18 @@ namespace UST_ProjectManagement
 
         private void RefreshForm()
         {
-            this.BringToFront();
-            //GlobalData.NaviTreeView.SelectTreeNode(GlobalData.NaviTreeView.mainFolders[0]);
-            this.uC_NavigationPanel2.Focus();
+            //this.BringToFront();
+            ////GlobalData.NaviTreeView.SelectTreeNode(GlobalData.NaviTreeView.mainFolders[0]);
+            //this.uC_NavigationPanel2.Focus();
         }
 
         private void UpdateForm()
         {
             StartProcess();
             lastUpdate = DateTime.Now;
-
-            InitializeComponent();
-            System.Threading.Tasks.Task UpdateUpdate = System.Threading.Tasks.Task.Factory.StartNew(UpUpdate);
+            GlobalData.BuferDirPath = GlobalData.SelectedDirPath;
+            //InitializeComponent();
+            ///System.Threading.Tasks.Task UpdateUpdate = System.Threading.Tasks.Task.Factory.StartNew(UpUpdate);
 
             try
             {
@@ -595,17 +551,15 @@ namespace UST_ProjectManagement
                 try
                 {
                     GlobalData.loadInfo = "Формирование диспетчера проектов...";
-                    RequestInfo.requestInfoThree();
+                    //RequestInfo.requestInfoThree();
                     GlobalData.NaviTreeView.CreateTreeView_New();
                     GlobalData.SelectedDirPath = GlobalData.BuferDirPath;
                     GlobalData.NaviTreeView.SelectTreeNode_New();
-                    GlobalMethodes._stop = true;
                 }
                 catch
                 {
 
                 }
-
             }
             catch
             {
@@ -624,8 +578,8 @@ namespace UST_ProjectManagement
         private void ThisClick(object sender, EventArgs e)
         {
             
-            StratThread.Abort();
-            MainForm.CheckForIllegalCrossThreadCalls = true;
+            //StratThread.Abort();
+            //MainForm.CheckForIllegalCrossThreadCalls = true;
         }
         private void usT_MaximizeButton1_Click(object sender, EventArgs e)
         {
@@ -1022,40 +976,7 @@ namespace UST_ProjectManagement
         /// <param name="e"></param>
         private void usT_VerticalTabControl2_Click(object sender, EventArgs e)
         {
-            if (NaviPanel == false)
-            {
-                tableLayoutPanel5.ColumnStyles[2].Width = 200;
-                tableLayoutPanel5.ColumnStyles[3].Width = 5;
 
-                NaviPanel = true;
-                NaviSettPanel = true;
-                usT_VerticalTabControl1.PressedStatus = false;
-                usT_VerticalTabControl1.Invalidate();
-            }
-            else
-            {
-                if (NaviSettPanel == false)
-                {
-                    NaviPanel = true;
-                    NaviSettPanel = true;
-
-                    usT_VerticalTabControl1.PressedStatus = false;
-                    usT_VerticalTabControl1.Invalidate();
-                }
-                else
-                {
-                    NaviPanel = false;
-                    NaviSettPanel = false;
-
-                    tableLayoutPanel5.ColumnStyles[2].Width = 0;
-                    tableLayoutPanel5.ColumnStyles[3].Width = 0;
-
-                    usT_VerticalTabControl1.PressedStatus = false;
-                    usT_VerticalTabControl1.Invalidate();
-
-                }
-               
-            }
         }
 
         private void panel6_MouseDown(object sender, MouseEventArgs e)
@@ -1510,7 +1431,7 @@ namespace UST_ProjectManagement
             }
             else
             {
-                CloseProcessForm();
+               
             }
         }
 

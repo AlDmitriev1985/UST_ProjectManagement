@@ -31,23 +31,28 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.panelGrid = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.usT_HorizontalTabControl2 = new UST_ProjectManagement.UST_HorizontalTabControl();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.button_Help = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.panelGrid = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button_Help = new System.Windows.Forms.Button();
+            this.panel6 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -88,32 +93,23 @@
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Controls.Add(this.panelGrid, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.panel1, 0, 2);
-            this.tableLayoutPanel3.Controls.Add(this.panel3, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.panel1, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.panel3, 0, 4);
             this.tableLayoutPanel3.Controls.Add(this.panel4, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.panel6, 0, 1);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowCount = 5;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(999, 803);
             this.tableLayoutPanel3.TabIndex = 2;
-            // 
-            // panelGrid
-            // 
-            this.panelGrid.AutoScroll = true;
-            this.panelGrid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelGrid.Location = new System.Drawing.Point(5, 35);
-            this.panelGrid.Margin = new System.Windows.Forms.Padding(5);
-            this.panelGrid.Name = "panelGrid";
-            this.panelGrid.Size = new System.Drawing.Size(989, 633);
-            this.panelGrid.TabIndex = 1;
             // 
             // panel1
             // 
@@ -165,6 +161,20 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(999, 30);
             this.panel4.TabIndex = 4;
+            // 
+            // button_Help
+            // 
+            this.button_Help.Dock = System.Windows.Forms.DockStyle.Right;
+            this.button_Help.FlatAppearance.BorderSize = 0;
+            this.button_Help.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_Help.Image = global::UST_ProjectManagement.Properties.Resources.Btn_Help_25x25;
+            this.button_Help.Location = new System.Drawing.Point(939, 0);
+            this.button_Help.Margin = new System.Windows.Forms.Padding(0);
+            this.button_Help.Name = "button_Help";
+            this.button_Help.Size = new System.Drawing.Size(30, 30);
+            this.button_Help.TabIndex = 5;
+            this.button_Help.UseVisualStyleBackColor = true;
+            this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
             // 
             // button1
             // 
@@ -226,6 +236,57 @@
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButtonFilter_CheckedChanged);
             // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Controls.Add(this.panelGrid, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.label1, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.panel5, 0, 1);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 35);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 2;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(999, 638);
+            this.tableLayoutPanel4.TabIndex = 5;
+            // 
+            // panelGrid
+            // 
+            this.panelGrid.AutoScroll = true;
+            this.panelGrid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelGrid.Location = new System.Drawing.Point(25, 25);
+            this.panelGrid.Margin = new System.Windows.Forms.Padding(0);
+            this.panelGrid.Name = "panelGrid";
+            this.panelGrid.Size = new System.Drawing.Size(974, 613);
+            this.panelGrid.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(476, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 18);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Для кого:";
+            // 
+            // panel5
+            // 
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel5.Location = new System.Drawing.Point(0, 25);
+            this.panel5.Margin = new System.Windows.Forms.Padding(0);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(25, 613);
+            this.panel5.TabIndex = 3;
+            this.panel5.SizeChanged += new System.EventHandler(this.panel5_SizeChanged);
+            this.panel5.Paint += new System.Windows.Forms.PaintEventHandler(this.panel5_Paint);
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Silver;
@@ -236,19 +297,15 @@
             this.panel2.Size = new System.Drawing.Size(1, 803);
             this.panel2.TabIndex = 1;
             // 
-            // button_Help
+            // panel6
             // 
-            this.button_Help.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button_Help.FlatAppearance.BorderSize = 0;
-            this.button_Help.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_Help.Image = global::UST_ProjectManagement.Properties.Resources.Btn_Help_25x25;
-            this.button_Help.Location = new System.Drawing.Point(939, 0);
-            this.button_Help.Margin = new System.Windows.Forms.Padding(0);
-            this.button_Help.Name = "button_Help";
-            this.button_Help.Size = new System.Drawing.Size(30, 30);
-            this.button_Help.TabIndex = 5;
-            this.button_Help.UseVisualStyleBackColor = true;
-            this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
+            this.panel6.BackColor = System.Drawing.Color.SteelBlue;
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(0, 30);
+            this.panel6.Margin = new System.Windows.Forms.Padding(0);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(999, 5);
+            this.panel6.TabIndex = 6;
             // 
             // UC_TaskPanel
             // 
@@ -265,6 +322,8 @@
             this.panel1.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -286,5 +345,9 @@
         private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button_Help;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Panel panel6;
     }
 }

@@ -295,6 +295,7 @@ namespace UST_ProjectManagement
                                 row.Cells[6].Value = $"{userFrom.UserSurname} {userFrom.UserName}";
                                 row.Cells[7].Value = $"{userTo.UserSurname} {userTo.UserName}";
                                 row.Cells[8].Value = status.StatusName;
+                                row.Cells[8].Style.BackColor = GlobalMethodes.GetCellColor(status.StatusId, 0);
                                 row.Cells[9].Value = task.TaskId;
                                 row.Cells[10].Value = taskDepartment.TaskDepartmentId;
                                 row.Height = CardTask.Methodes_DataGrid.RowHeight;

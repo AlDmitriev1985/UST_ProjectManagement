@@ -54,6 +54,7 @@ namespace UST_ProjectManagement
         ToolStripMenuItem toolStripMenuItem_AddTask = new ToolStripMenuItem();
         ToolStripMenuItem toolStripMenuItem_OpenTask = new ToolStripMenuItem();
         ToolStripMenuItem toolStripMenuItem_PromoteTask = new ToolStripMenuItem();
+        ToolStripMenuItem toolStripMenuItem_AddOutTask = new ToolStripMenuItem();
 
         public UC_TaskPanel()
         {
@@ -102,7 +103,14 @@ namespace UST_ProjectManagement
             toolStripMenuItem_PromoteTask.Click += new EventHandler(toolStripMenuItem_Click);
             contextMenuStrip.Items.Add(toolStripMenuItem_PromoteTask);
 
+            toolStripMenuItem_AddOutTask.Text = "Создать исходящую задачу";
+            toolStripMenuItem_AddOutTask.Image = Properties.Resources.Btn_Add_20x20;
+            toolStripMenuItem_AddOutTask.Click += new EventHandler(toolStripMenuItem_Click);
+            contextMenuStrip.Items.Add(toolStripMenuItem_AddOutTask);
+
         }
+
+
 
         private void UC_TaskPanel_Load(object sender, EventArgs e)
         {
@@ -200,8 +208,10 @@ namespace UST_ProjectManagement
             int rowsCount = rSections.Count;
 
             //int secNumber = Sections.Count;
-            if (columnsCount > cNumber) cNumber = columnsCount;
-            if (rowsCount > rNumber) rNumber = rowsCount;
+            //if (columnsCount > cNumber) cNumber = columnsCount;
+            //if (rowsCount > rNumber) rNumber = rowsCount;
+            cNumber = columnsCount + 1;
+            rNumber = rowsCount + 2;
 
             //GetGridStep(Number, out gridWidth, out gridHeight); 
 
@@ -596,15 +606,34 @@ namespace UST_ProjectManagement
             int gridWidth = 0;
             int gridHeight = 0;
             GetGridStep(dataGridView.Columns.Count, out gridWidth, out gridHeight);
-
-            for(int i = 1; i < dataGridView.Columns.Count; i++)
+            int cSumm = headerSize;
+            for(int i = 1; i < dataGridView.Columns.Count - 1; i++)
             {
                 dataGridView.Columns[i].Width = gridWidth;
+                cSumm += gridWidth;
+            }
+            try
+            {
+                dataGridView.Columns[dataGridView.Columns.Count - 1].Width = dataGridView.Width - cSumm;
+            }
+            catch
+            {
+                dataGridView.Columns[dataGridView.Columns.Count - 1].Width = gridWidth;
             }
 
-            for (int i = 1; i < dataGridView.Rows.Count; i++)
+            int rSumm = headerSize;
+            for (int i = 1; i < dataGridView.Rows.Count - 1; i++)
             {
                 dataGridView.Rows[i].Height = gridHeight;
+                rSumm += gridHeight;
+            }
+            try
+            {
+                dataGridView.Rows[dataGridView.Rows.Count - 1].Height = dataGridView.Height - rSumm;
+            }
+            catch
+            {
+                dataGridView.Rows[dataGridView.Rows.Count - 1].Height = gridHeight;
             }
         }
 
@@ -1059,10 +1088,16 @@ namespace UST_ProjectManagement
         {
             if (e.Button == MouseButtons.Right)
             {
+
                 var ht = dataGridView.HitTest(e.X, e.Y);
 
                 if (ht.RowIndex != 0 && ht.ColumnIndex != 0 && ht.RowIndex != ht.ColumnIndex)
                 {
+                    contextMenuStrip.Items[0].Visible = true;
+                    contextMenuStrip.Items[1].Visible = true;
+                    contextMenuStrip.Items[2].Visible = true;
+                    contextMenuStrip.Items[3].Visible = false;
+
                     int status = -1;
                     List<int> ids = new List<int>();
                     List<int> tdids = new List<int>();
@@ -1093,6 +1128,15 @@ namespace UST_ProjectManagement
                         contextMenuStrip.Items[1].Enabled = true;
                         contextMenuStrip.Items[2].Enabled = true;
                     }
+                    contextMenuStrip.Items[3].Visible = false;
+                    contextMenuStrip.Show(MousePosition);
+                }
+                else if (ht.ColumnIndex == 0)
+                {
+                    contextMenuStrip.Items[0].Visible = false;
+                    contextMenuStrip.Items[1].Visible = false;
+                    contextMenuStrip.Items[2].Visible = false;
+                    contextMenuStrip.Items[3].Visible = true;
                     contextMenuStrip.Show(MousePosition);
                 }
             }
@@ -1374,6 +1418,31 @@ namespace UST_ProjectManagement
                 } 
             }
             return false;
+        }
+
+        private void CreateVerticalText(PaintEventArgs e)
+        {
+            string myText = "От кого:";
+            FontFamily fontFamily = new FontFamily("Bahnschrift");
+            Font font = new Font(fontFamily, 12, FontStyle.Regular, GraphicsUnit.Point);
+            Rectangle rectangle = e.ClipRectangle;
+            PointF pointF = new PointF(rectangle.Width/2, rectangle.Height / 2);
+            StringFormat stringFormat = new StringFormat();
+            SolidBrush solidBrush = new SolidBrush(Color.Black);
+            stringFormat.FormatFlags = StringFormatFlags.DirectionVertical;
+            stringFormat.Alignment = StringAlignment.Center;
+            stringFormat.LineAlignment = StringAlignment.Center;
+            e.Graphics.DrawString(myText, font, solidBrush, pointF, stringFormat);
+        }
+
+        private void panel5_Paint(object sender, PaintEventArgs e)
+        {
+            CreateVerticalText(e);
+        }
+
+        private void panel5_SizeChanged(object sender, EventArgs e)
+        {
+            panel5.Invalidate();
         }
     }
 }

@@ -26,6 +26,7 @@ namespace UST_ProjectManagement
         public int LanguageId;
         public bool SetListeInRelease;
         public string CoordinationStatus;
+        public string BasePoint;
 
         public List<SectionsPosition> SectionsPositions = new List<SectionsPosition>();
         public Dictionary<SectionsPosition, SectionsThree> SectionsDict = new Dictionary<SectionsPosition, SectionsThree>();
@@ -38,6 +39,7 @@ namespace UST_ProjectManagement
         public PositionInfo(Project project, Stage stage,Position position)
         {
             Code = position.PositionCode;
+            BasePoint = position.PositionBasePointIntersection;
             ID = position.PositionId;
             StageTag = stage.StageTag;
             StageId = stage.StageId;

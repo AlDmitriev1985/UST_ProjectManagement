@@ -103,6 +103,7 @@ namespace UST_ProjectManagement
                 if (InvokeRequired) Invoke(new Action(CloseForm));
                 else
                 {
+                    DialogResult = DialogResult.OK;
                     this.Close();
                 }
             }

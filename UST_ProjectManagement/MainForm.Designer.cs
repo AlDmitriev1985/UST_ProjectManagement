@@ -37,6 +37,7 @@
             this.labelUserName = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.usT_HorizontalTab_MainPanel = new UST_ProjectManagement.UST_HorizontalTabControl();
@@ -71,7 +72,6 @@
             this.panel9 = new System.Windows.Forms.Panel();
             this.uC_TopMainPanel1 = new UST_ProjectManagement.UC_TopMainPanel();
             this.uC_TopActionsPanel1 = new UST_ProjectManagement.UC_TopActionsPanel();
-            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -142,7 +142,6 @@
             // usT_CloseButton1
             // 
             this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.usT_CloseButton1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.usT_CloseButton1.Location = new System.Drawing.Point(1468, 0);
             this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0);
             this.usT_CloseButton1.Name = "usT_CloseButton1";
@@ -232,6 +231,21 @@
             this.pictureBox2.TabStop = false;
             this.pictureBox2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel2_MouseDown);
             this.pictureBox2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel2_MouseMove);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.label1.Location = new System.Drawing.Point(590, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(138, 16);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "UST Project Manager";
+            this.label1.Click += new System.EventHandler(this.tableLayoutPanel2_Click);
+            this.label1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel2_MouseDoubleClick);
+            this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel2_MouseDown);
+            this.label1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel2_MouseMove);
             // 
             // tableLayoutPanel3
             // 
@@ -674,21 +688,6 @@
             this.uC_TopActionsPanel1.Name = "uC_TopActionsPanel1";
             this.uC_TopActionsPanel1.Size = new System.Drawing.Size(1488, 80);
             this.uC_TopActionsPanel1.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.label1.Location = new System.Drawing.Point(590, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(138, 16);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "UST Project Manager";
-            this.label1.Click += new System.EventHandler(this.tableLayoutPanel2_Click);
-            this.label1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel2_MouseDoubleClick);
-            this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel2_MouseDown);
-            this.label1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel2_MouseMove);
             // 
             // MainForm
             // 
