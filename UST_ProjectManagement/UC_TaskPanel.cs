@@ -264,6 +264,7 @@ namespace UST_ProjectManagement
                 row.CreateCells(dataGridView);
                 row.Height = gridHeight;
                 row.Cells[0].Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                ToolTip tt = new ToolTip();
                 if (!incomingSectionIds.ContainsKey(_row.Key))
                 {
                     row.Cells[0].Style.BackColor = Color.AliceBlue;
@@ -1429,9 +1430,11 @@ namespace UST_ProjectManagement
             PointF pointF = new PointF(rectangle.Width/2, rectangle.Height / 2);
             StringFormat stringFormat = new StringFormat();
             SolidBrush solidBrush = new SolidBrush(Color.Black);
+
             stringFormat.FormatFlags = StringFormatFlags.DirectionVertical;
             stringFormat.Alignment = StringAlignment.Center;
             stringFormat.LineAlignment = StringAlignment.Center;
+            //e.Graphics.RotateTransform(-90F);
             e.Graphics.DrawString(myText, font, solidBrush, pointF, stringFormat);
         }
 

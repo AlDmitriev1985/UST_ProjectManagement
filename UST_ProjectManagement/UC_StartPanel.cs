@@ -30,7 +30,7 @@ namespace UST_ProjectManagement
         ToolStripMenuItem stripItemOpenDir = new ToolStripMenuItem();
         ToolStripMenuItem stripItemGetPath = new ToolStripMenuItem();
         static MainForm mainForm;
-        bool openFiltersPanel = false;
+        bool openFiltersPanel = true;
         List<string> header1;
         List<string> header2;
         int Mode = 0;
@@ -47,8 +47,8 @@ namespace UST_ProjectManagement
             dataGrid.SizeChanged += new EventHandler(DG_SizeChanged);
             dataGrid.MouseDown += dataGridView_MouseDown;
             tableLayoutPanel1.Controls.Add(dataGrid, 0, 3);
-            header1 = new List<string>() { "Шифр", "Наименование", "Стадия", "ГИП", "ГАП", "Начало", "Конец", "%", "Тип", "", "" };
-            header2 = new List<string>() { "Шифр", "Стадия", "Номер задания", "Наименование", "От раздела", "Для раздела", "Выдал", "Получил", "Статус", "taskId", "taskdepId" };
+            header1 = new List<string>() { "Шифр", "Наименование", "Стадия", "ГИП", "ГАП", "Начало", "Конец", "%", "Тип", "ID", "" };
+            header2 = new List<string>() { "Шифр", "Стадия", "Номер задания", "Наименование", "От раздела", "Для раздела", "Выдал", "Получил", "Статус", "Task Id", "Task Dep Id" };
             CardTask.Methodes_DataGrid.CreateDataGrid(dataGrid, header1);
 
             stripItemOpen.Text = "Открыть карточку";
@@ -105,8 +105,8 @@ namespace UST_ProjectManagement
 
         public void UpdatePanels(string[,] filters = null)
         {
-            //GlobalData.loadInfo = "Поиск...";
-            //StartProcess?.Invoke();
+            GlobalData.loadInfo = "Поиск...";
+            StartProcess?.Invoke();
 
             UpdateFilterPanel(openFiltersPanel, Mode);
             uC_Search_Projects.Visible = false;
@@ -159,6 +159,7 @@ namespace UST_ProjectManagement
                                 row.Cells[6].Value = positionInfo.EndDate;
                                 row.Cells[7].Value = positionInfo.PersentComplete;
                                 row.Cells[8].Value = "Проекты";
+                                row.Cells[9].Value = positionInfo.ID;
                                 row.Height = CardTask.Methodes_DataGrid.RowHeight;
                                 dataGrid.Rows.Add(row);
                             } 
@@ -190,6 +191,7 @@ namespace UST_ProjectManagement
                         row.Cells[6].Value = productInfo.EndDate;
                         row.Cells[7].Value = productInfo.PersentComplete;
                         row.Cells[8].Value = "Продукты";
+                        row.Cells[9].Value = productInfo.ID;
                         row.Height = CardTask.Methodes_DataGrid.RowHeight;
                         dataGrid.Rows.Add(row);
 
@@ -219,6 +221,7 @@ namespace UST_ProjectManagement
                         row.Cells[6].Value = techSolutionInfo.EndDate;
                         row.Cells[7].Value = techSolutionInfo.PersentComplete;
                         row.Cells[8].Value = "Тех.решения";
+                        row.Cells[9].Value = techSolutionInfo.ID;
                         row.Height = CardTask.Methodes_DataGrid.RowHeight;
                         dataGrid.Rows.Add(row);
 
@@ -332,13 +335,41 @@ namespace UST_ProjectManagement
             for (int c = 0; c < dataGrid.Columns.Count; c++)
             {
                 dataGrid.Columns[c].HeaderText = header[c];
-                if (c < 9)
+                if (GlobalData.UserRole != "Admin")
                 {
-                    dataGrid.Columns[c].Visible = true; 
+                    if (c < 9)
+                    {
+                        dataGrid.Columns[c].Visible = true;
+                    }
+                    else
+                    {
+                        dataGrid.Columns[c].Visible = false;
+                    } 
                 }
                 else
                 {
-                    dataGrid.Columns[c].Visible = false;
+                    if (Mode < 3)
+                    {
+                        if (c < 10)
+                        {
+                            dataGrid.Columns[c].Visible = true;
+                        }
+                        else
+                        {
+                            dataGrid.Columns[c].Visible = false;
+                        } 
+                    }
+                    else
+                    {
+                        if (c < 11)
+                        {
+                            dataGrid.Columns[c].Visible = true;
+                        }
+                        else
+                        {
+                            dataGrid.Columns[c].Visible = false;
+                        }
+                    }
                 }
             }
             if (Mode == 1 || Mode == 2)
@@ -415,6 +446,14 @@ namespace UST_ProjectManagement
                         dataGrid.Columns[8].Width = 100;
                         cWidth += dataGrid.Columns[8].Width;
                     };
+                    if (GlobalData.UserRole == "Admin")
+                    {
+                        if (dataGrid.Columns[9].Visible)
+                        {
+                            dataGrid.Columns[9].Width = 80;
+                            cWidth += dataGrid.Columns[9].Width;
+                        };
+                    }
                     dataGrid.Columns[1].Width = dataGrid.Width - (cWidth + 0);
 
                 }
@@ -464,6 +503,19 @@ namespace UST_ProjectManagement
                         dataGrid.Columns[8].Width = 120;
                         cWidth += dataGrid.Columns[8].Width;
                     };
+                    if (GlobalData.UserRole == "Admin")
+                    {
+                        if (dataGrid.Columns[9].Visible)
+                        {
+                            dataGrid.Columns[9].Width = 80;
+                            cWidth += dataGrid.Columns[9].Width;
+                        };
+                        if (dataGrid.Columns[10].Visible)
+                        {
+                            dataGrid.Columns[10].Width = 80;
+                            cWidth += dataGrid.Columns[10].Width;
+                        };
+                    }
                     dataGrid.Columns[3].Width = dataGrid.Width - (cWidth + 0);
 
                 }

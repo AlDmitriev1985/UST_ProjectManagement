@@ -111,6 +111,7 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1, 30);
             this.panel3.TabIndex = 4;
+            this.panel3.Visible = false;
             // 
             // button1
             // 
@@ -123,6 +124,7 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "˅";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // radioButton3

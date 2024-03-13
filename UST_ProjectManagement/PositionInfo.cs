@@ -27,6 +27,7 @@ namespace UST_ProjectManagement
         public bool SetListeInRelease;
         public string CoordinationStatus;
         public string BasePoint;
+        public LibraryDB.DB.Task axistask;
 
         public List<SectionsPosition> SectionsPositions = new List<SectionsPosition>();
         public Dictionary<SectionsPosition, SectionsThree> SectionsDict = new Dictionary<SectionsPosition, SectionsThree>();
@@ -40,6 +41,7 @@ namespace UST_ProjectManagement
         {
             Code = position.PositionCode;
             BasePoint = position.PositionBasePointIntersection;
+            axistask = TryGetTaskAxis(position);
             ID = position.PositionId;
             StageTag = stage.StageTag;
             StageId = stage.StageId;
@@ -176,6 +178,38 @@ namespace UST_ProjectManagement
                 PersentComplete = "0%";
             }
             GetCoordinationHistory(position, out coordinationHistory, out CoordinationStatus);
+        }
+
+        private LibraryDB.DB.Task TryGetTaskAxis(Position position)
+        {
+            HistoryLog historyLog = null;
+            try
+            {
+                historyLog = JsonConvert.DeserializeObject<HistoryLog>(position.PositionHistory);
+            }
+            catch { }
+
+            if (historyLog != null)
+            {
+                for (int i = historyLog.spHistory.Count - 1; i >= 0; i--)
+                {
+                    string[] split = historyLog.spHistory[i].Info.Split('|');
+                    if (split[0] == "Передана информация по разбивочному плану.")
+                    {
+                        try
+                        {
+                            int taskId = Convert.ToInt32(split[1]);
+                            LibraryDB.DB.Task task = RequestInfo.lb.Tasks.FirstOrDefault(x => x.TaskId == taskId);
+                            return task;
+                        }
+                        catch 
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         private void GetCoordinationHistory(Position position, out List<HistoryInfo> historyInfo, out string status)

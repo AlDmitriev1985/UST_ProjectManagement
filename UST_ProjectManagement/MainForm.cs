@@ -85,7 +85,7 @@ namespace UST_ProjectManagement
         public MainForm()
         {
             InitializeComponent();
-
+            
             firstStart = true;
             StartProcess();
             startTime = DateTime.Today;
@@ -101,6 +101,7 @@ namespace UST_ProjectManagement
             {
                 MessageBox.Show("Сервер не доступен!");
             }
+            UpdateUserAxes(GetUserName());
 
             panel10.Controls.Add(uC_Coordination);
             uC_Coordination.Dock = DockStyle.Fill;

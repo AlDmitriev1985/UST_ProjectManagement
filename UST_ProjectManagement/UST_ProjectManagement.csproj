@@ -314,6 +314,12 @@
     <Compile Include="EditPercentForm.Designer.cs">
       <DependentUpon>EditPercentForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_MessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_MessageBox.Designer.cs">
+      <DependentUpon>Form_MessageBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="UST_HorizontalTabControl_Settings.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -425,6 +431,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EditPercentForm.resx">
       <DependentUpon>EditPercentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_MessageBox.resx">
+      <DependentUpon>Form_MessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using UST_UILibrary;
 using POSTServer.History;
 using Newtonsoft.Json;
+using CardTask;
 
 namespace UST_ProjectManagement
 {
@@ -80,6 +81,19 @@ namespace UST_ProjectManagement
                     richTextBox1.Text = "<Не определено>";
                 }
 
+                if (positionInfo.axistask != null)
+                {
+                    linkLabel1.ForeColor = Color.Blue;
+                    linkLabel1.Text = "Разбивочый файл";
+                    linkLabel1.TabIndex = positionInfo.axistask.TaskId;
+                }
+                else
+                {
+                    linkLabel1.ForeColor = Color.Black;
+                    linkLabel1.Text = "<Не определено>";
+                    linkLabel1.TabIndex = 0;
+                }
+
                 var history = positionInfo.coordinationHistory.OrderByDescending(x => x.Date);
 
                 int i = history.Count();
@@ -112,6 +126,45 @@ namespace UST_ProjectManagement
                     dataGridView_History.Rows.Add(_row);
                     i -= 1;
                 } 
+            }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                LinkLabel linkLabel = sender as LinkLabel;
+                if (linkLabel.TabIndex != 0)
+                {
+                    int taskId = linkLabel.TabIndex;
+                    var TD = RequestInfo.lb.TaskDepartments.Where(x => x.TaskId == taskId).FirstOrDefault(y => y.PositionId == positionInfo.ID);
+                    if (TD != null)
+                    {
+                        PublishForm general;
+                        PublishForm.mode = 2;
+                        PublishForm.modeApplication = 1;
+                        general = new PublishForm();
+                        general.StartPosition = FormStartPosition.CenterParent;
+                        general.dataGridView_Files.CellContentDoubleClick += new DataGridViewCellEventHandler(general.dataGridView_Files_CellMouseDoubleClick);
+
+
+                        general.GetTaskInfo(TD.TaskDepartmentId);
+
+                        if (general.ShowDialog() == DialogResult.OK)
+                        {
+
+                        }
+                    }
+                }
+                else
+                {
+                    Form_MessageBox messageBox = new Form_MessageBox("Разбивочный файл не опубликован.\nОбратитесь в отдел Генерального плана.", "Предупреждение", 0);
+                    messageBox.ShowDialog();
+                    //MessageBox.Show("Разбивочный файл не опубликован.\nОбратитесь в отдел Генерального плана.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch
+            {
             }
         }
     }
