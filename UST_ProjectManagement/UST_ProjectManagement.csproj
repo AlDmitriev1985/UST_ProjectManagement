@@ -121,6 +121,7 @@
     <Compile Include="CreateNWF.cs" />
     <Compile Include="CreateTechSolution.cs" />
     <Compile Include="CreateProduct.cs" />
+    <Compile Include="globalKeyboardHook.cs" />
     <Compile Include="HistoryInfo.cs" />
     <Compile Include="HistoryLog.cs" />
     <Compile Include="oldSectionsSolution.cs" />

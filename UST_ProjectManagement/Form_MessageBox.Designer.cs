@@ -36,16 +36,15 @@
             this.panel_Left = new System.Windows.Forms.Panel();
             this.panel_Right = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel_Top = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
-            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
-            this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -154,6 +153,16 @@
             this.panel1.TabIndex = 5;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(4, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 16);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "label2";
+            // 
             // panel_Top
             // 
             this.panel_Top.BackColor = System.Drawing.Color.SteelBlue;
@@ -194,10 +203,28 @@
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
+            // usT_CloseButton1
+            // 
+            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_CloseButton1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.usT_CloseButton1.Location = new System.Drawing.Point(320, 0);
+            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0);
+            this.usT_CloseButton1.Name = "usT_CloseButton1";
+            this.usT_CloseButton1.Size = new System.Drawing.Size(30, 30);
+            this.usT_CloseButton1.TabIndex = 0;
+            this.usT_CloseButton1.Text = "usT_CloseButton1";
+            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
+            this.usT_CloseButton1.UST_IconLineSize = 1.5F;
+            this.usT_CloseButton1.UST_IconOffset = 10;
+            this.usT_CloseButton1.UST_PressedAlpha = 200;
+            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectionAlpha = 150;
+            this.usT_CloseButton1.Click += new System.EventHandler(this.usT_CloseButton1_Click);
+            // 
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.SteelBlue;
-            this.panel4.Controls.Add(this.panel2);
             this.panel4.Controls.Add(this.button2);
             this.panel4.Controls.Add(this.panel3);
             this.panel4.Controls.Add(this.button1);
@@ -207,16 +234,7 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(350, 24);
             this.panel4.TabIndex = 3;
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(148, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1, 24);
-            this.panel2.TabIndex = 1;
+            this.panel4.SizeChanged += new System.EventHandler(this.panel4_SizeChanged);
             // 
             // button2
             // 
@@ -258,35 +276,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // usT_CloseButton1
-            // 
-            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.usT_CloseButton1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.usT_CloseButton1.Location = new System.Drawing.Point(320, 0);
-            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0);
-            this.usT_CloseButton1.Name = "usT_CloseButton1";
-            this.usT_CloseButton1.Size = new System.Drawing.Size(30, 30);
-            this.usT_CloseButton1.TabIndex = 0;
-            this.usT_CloseButton1.Text = "usT_CloseButton1";
-            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
-            this.usT_CloseButton1.UST_IconLineSize = 1.5F;
-            this.usT_CloseButton1.UST_IconOffset = 10;
-            this.usT_CloseButton1.UST_PressedAlpha = 200;
-            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectionAlpha = 150;
-            this.usT_CloseButton1.Click += new System.EventHandler(this.usT_CloseButton1_Click);
-            // 
-            // label2
-            // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 16);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "label2";
-            // 
             // Form_MessageBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -299,6 +288,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form_MessageBox";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form_MessageBox_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -327,7 +317,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label2;
     }

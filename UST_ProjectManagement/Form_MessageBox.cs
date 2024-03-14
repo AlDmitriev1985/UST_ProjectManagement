@@ -18,6 +18,10 @@ namespace UST_ProjectManagement
         Point sPoint;
         string Header = "";
         byte Mode = 0;
+        //static Hook
+        static globalKeyboardHook gkh = new globalKeyboardHook();
+
+
 
         public Form_MessageBox(string text, string headertext, byte mode)
         {
@@ -27,6 +31,37 @@ namespace UST_ProjectManagement
             label2.Text = text;
             label1.Text = headertext;
             Mode = mode;
+            switch (Mode)
+            {
+                case 0:
+                    button1.Text = "OK";
+                    button1.DialogResult = DialogResult.OK;
+                    button2.Visible = false;
+                    break;
+                case 1:
+                    button1.Text = "Да";
+                    button1.DialogResult = DialogResult.Yes;
+                    button2.Text = "Нет";
+                    button2.DialogResult = DialogResult.No;
+                    break;
+            }
+
+        }
+        private void Form_MessageBox_Load(object sender, EventArgs e)
+        {
+            gkh.HookedKeys.Add(Keys.Enter);
+            gkh.HookedKeys.Add(Keys.Escape);
+            gkh.KeyUp += new KeyEventHandler(gkh_KeyUp);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            gkh.unhook();
+        }
+
+        void gkh_KeyUp(object sender, KeyEventArgs e)
+        {            
+            button1_Click(button1, EventArgs.Empty);
         }
 
         #region --- FormEvents ---
@@ -149,7 +184,7 @@ namespace UST_ProjectManagement
 
         public void RefreshControls()
         {
-           
+            
         }
 
 
@@ -169,7 +204,7 @@ namespace UST_ProjectManagement
         /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
+            //DialogResult = DialogResult.Cancel;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -198,5 +233,14 @@ namespace UST_ProjectManagement
             label2.Location = new Point(label2.Location.X, (H - titleSize.Height) / 2);
             
         }
+
+        private void panel4_SizeChanged(object sender, EventArgs e)
+        {
+            int w = (panel4.Width - 1) / 2;
+            button1.Width = w;
+            button2.Width = w;
+        }
+
+        
     }
 }
