@@ -19,7 +19,7 @@ namespace UST_ProjectManagement
         string Header = "";
         byte Mode = 0;
         //static Hook
-        static globalKeyboardHook gkh = new globalKeyboardHook();
+        globalKeyboardHook gkh = new globalKeyboardHook();
 
 
 
