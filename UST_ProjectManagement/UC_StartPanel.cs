@@ -33,6 +33,7 @@ namespace UST_ProjectManagement
         bool openFiltersPanel = true;
         List<string> header1;
         List<string> header2;
+        List<string> header3;
         int Mode = 0;
         public UC_StartPanel()
         {
@@ -49,6 +50,7 @@ namespace UST_ProjectManagement
             tableLayoutPanel1.Controls.Add(dataGrid, 0, 3);
             header1 = new List<string>() { "Шифр", "Наименование", "Стадия", "ГИП", "ГАП", "Начало", "Конец", "%", "Тип", "ID", "" };
             header2 = new List<string>() { "Шифр", "Стадия", "Номер задания", "Наименование", "От раздела", "Для раздела", "Выдал", "Получил", "Статус", "Task Id", "Task Dep Id" };
+            header3 = new List<string>() { "Шифр", "Наименование", "Стадия", "Автор", "Наименование элемента", "Обновлено", "Id", "", "", "", ""};
             CardTask.Methodes_DataGrid.CreateDataGrid(dataGrid, header1);
 
             stripItemOpen.Text = "Открыть карточку";
@@ -242,7 +244,7 @@ namespace UST_ProjectManagement
                     List<LibraryDB.DB.Task> tasks = RequestInfo.lb.Tasks.ToList().OrderByDescending(x => x.TaskId).ToList();
                     foreach (LibraryDB.DB.Task task in tasks)
                     {
-                        if(filters != null && filters[0,4] != null && filters[0, 4] != "<Нет>" && task.SectionThreeId.ToString() != filters[0, 4])
+                        if (filters != null && filters[0, 4] != null && filters[0, 4] != "<Нет>" && task.SectionThreeId.ToString() != filters[0, 4])
                         {
                             continue;
                         }
@@ -266,7 +268,7 @@ namespace UST_ProjectManagement
 
                         if (project != null && stage != null)
                         {
-                            var taskDepartments = RequestInfo.lb.TaskDepartments.Where(x => x.TaskId == task.TaskId);  
+                            var taskDepartments = RequestInfo.lb.TaskDepartments.Where(x => x.TaskId == task.TaskId);
                             SectionsThree sectionFrom = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == task.SectionThreeId);
                             User userFrom = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == task.TaskUserId);
                             foreach (TaskDepartment taskDepartment in taskDepartments)
@@ -303,21 +305,123 @@ namespace UST_ProjectManagement
                                 row.Cells[10].Value = taskDepartment.TaskDepartmentId;
                                 row.Height = CardTask.Methodes_DataGrid.RowHeight;
                                 dataGrid.Rows.Add(row);
-                            } 
+                            }
                         }
-
-
-
                     }
                 }
                 catch
                 {
 
                 }
-               
+            }
+            else if (Mode == 4)
+            {
+                uC_Search_Projects.Visible = true;
+                var invNWDs = RequestInfo.lb.InventorToNwds.Where(x => x.PositionId != null);
+                List<int> pIds = invNWDs.Select(x => x.PositionId.Value).Distinct().ToList();
+
+                //if (filters != null)
+                //{
+                //    sortP = uC_Search_Projects.GetProjectsByFilter(filters, sortP);
+                //}
+                try
+                {
+                    foreach (int id in pIds)
+                    {
+                        try
+                        {
+                            Position position = RequestInfo.lb.Positions.FirstOrDefault(x => x.PositionId == id);
+                            Stage stage = RequestInfo.lb.Stages.FirstOrDefault(x => x.StageId == position.StageId);
+                            List < InventorToNwd > inventors = RequestInfo.lb.InventorToNwds.Where(z => z.Account != "-").Where(x => x.PositionId == id).OrderByDescending(x => x.InventorToNwdId).ToList();
+
+                            foreach (InventorToNwd nwd in inventors)
+                            {
+                                DataGridViewRow row = new DataGridViewRow();
+                                row.CreateCells(dataGrid);
+                                row.Cells[0].Value = position.PositionCode;
+                                row.Cells[1].Value = position.PositionName;
+                                row.Cells[2].Value = stage.StageTag;
+                                row.Cells[3].Value = nwd.UserSurname + " " + nwd.Name + " " + nwd.MidlName;
+                                string name = "-";
+                                string path = "";
+                                GetInventorInfo(nwd.InventorToNwdInfo, out name, out path);
+                                row.Cells[4].Value = name;
+                                row.Cells[5].Value = nwd.InventorToNwdLastWriteTime;
+                                row.Cells[6].Value = nwd.InventorToNwdId;
+                                row.Cells[7].Value = path;
+                                row.Height = 30;
+                                dataGrid.Rows.Add(row);
+                            }
+                        }
+                        catch {}
+                    }
+                }
+                catch
+                {
+
+                }
+
             }
             DG_SizeChanged(dataGrid, EventArgs.Empty);
             GlobalMethodes._stop = true;
+        }
+
+        private void GetInventorInfo(string path, out string name, out string nwdpath)
+        {
+            name = "";
+            nwdpath = "";
+
+            string[] spPath = path.Split('\\');
+            if (spPath != null && spPath.Length > 0)
+            {
+                bool start = false;
+                for(int i = 0; i < spPath.Length; i++)
+                {
+                    if (!start)
+                    {
+                        start = spPath[i] == "BIM02";
+                    }
+                    if (start)
+                    {
+                        if (i < spPath.Length -1)
+                        {
+                            nwdpath += spPath[i] + "\\"; 
+                        }
+                        else
+                        {
+                            name = GetName(spPath[i]);
+                            nwdpath += name + ".nwd";
+                        }
+                    }
+                }
+            }
+            
+        }
+
+        private string GetName(string name)
+        {
+            string result = "";
+            string[] spName = name.Split('.');
+            if (spName != null)
+            {
+                if (spName.Length < 3)
+                {
+                    result = spName[0];
+                }
+                else
+                {
+                    for(int i = 0; i < spName.Length - 1; i ++)
+                    {
+                        result += spName[i];
+                        if (i < spName.Length - 2)
+                        {
+                            result += ".";
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
 
         private void UpdateDataGridColumns()
@@ -328,9 +432,13 @@ namespace UST_ProjectManagement
             {
                 header = header1;   
             }
-            else
+            else if (Mode == 3)
             {
                 header = header2;
+            }
+            else
+            {
+                header = header3;
             }
             for (int c = 0; c < dataGrid.Columns.Count; c++)
             {
@@ -359,13 +467,22 @@ namespace UST_ProjectManagement
                             dataGrid.Columns[c].Visible = false;
                         } 
                     }
-                    else
+                    else if (Mode == 3)
                     {
                         if (c < 11)
                         {
                             dataGrid.Columns[c].Visible = true;
                         }
                         else
+                        {
+                            dataGrid.Columns[c].Visible = false;
+                        }
+                    }
+                    else
+                    {
+                        int num = 5;
+                        if (GlobalData.UserRole == "Admin") num += 1;
+                            if (c > num)
                         {
                             dataGrid.Columns[c].Visible = false;
                         }
@@ -459,7 +576,7 @@ namespace UST_ProjectManagement
                 }
                 catch { } 
             }
-            else
+            else if (Mode == 3)
             {
                 try
                 {
@@ -521,7 +638,44 @@ namespace UST_ProjectManagement
                 }
                 catch { }
             }
-            
+            else
+            {
+                try
+                {
+                    if (dataGrid.Columns[0].Visible)
+                    {
+                        dataGrid.Columns[0].Width = 120;
+                        cWidth += dataGrid.Columns[0].Width;
+                    }
+                    
+                    if (dataGrid.Columns[2].Visible)
+                    {
+                        dataGrid.Columns[2].Width = 80;
+                        cWidth += dataGrid.Columns[2].Width;
+                    }
+                    if (dataGrid.Columns[3].Visible)
+                    {
+                        dataGrid.Columns[3].Width = 200;
+                        cWidth += dataGrid.Columns[3].Width;
+                    }
+                    if (dataGrid.Columns[5].Visible)
+                    {
+                        dataGrid.Columns[5].Width = 120;
+                        cWidth += dataGrid.Columns[5].Width;
+                    } 
+                    if (GlobalData.UserRole == "Admin")
+                    {
+                        if (dataGrid.Columns[6].Visible)
+                        {
+                            dataGrid.Columns[6].Width = 80;
+                            cWidth += dataGrid.Columns[6].Width;
+                        };
+                    }
+                    dataGrid.Columns[1].Width = (dataGrid.Width - cWidth) / 3;
+                    dataGrid.Columns[4].Width = ((dataGrid.Width - cWidth) / 3) * 2;
+                }
+                catch { }
+            }
         }
 
         public void radioButton_CheckedChanged(object sender, EventArgs e)
