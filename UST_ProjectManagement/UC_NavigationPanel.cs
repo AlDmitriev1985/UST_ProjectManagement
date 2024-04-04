@@ -503,19 +503,19 @@ namespace UST_ProjectManagement
             {
                 PositionInfo info = new PositionInfo(GlobalData.SelectedProject, GlobalData.SelectedStage, GlobalData.SelectedPosition);
                 string path = NodePath + @"00.01_CRD\08_NWD\" + GlobalData.SelectedPosition.PositionCode + "_UST_"+ info.StageTag +"_GF_22.nwd";
-                if (File.Exists(path))
-                {
-                    using(Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + path)))
-                    {
+                //if (File.Exists(path))
+                //{
+                //    using(Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + path)))
+                //    {
 
-                    }
-                    
-                }
-                else
-                {
-                    MessageBox.Show("Отсутствует координационная моодель:\n\n" + path + "\n\nОбратитесь в BIM-отдел.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                
+                //    }
+
+                //}
+                //else
+                //{
+                //    MessageBox.Show("Отсутствует координационная моодель:\n\n" + path + "\n\nОбратитесь в BIM-отдел.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //}
+                GlobalMethodes.CopyAndOpenFile(path);
                 GlobalMethodes.CreateLog("Открыть в Проводнике");
                 open = true;
             }

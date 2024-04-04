@@ -58,9 +58,9 @@
             this.comboBoxGAP = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
             this.label9 = new System.Windows.Forms.Label();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
             this.uC_CalendarPanel1 = new UST_ProjectManagement.UC_CalendarPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanelButtons.SuspendLayout();
@@ -494,24 +494,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Создать поз. по ГП";
             // 
-            // usT_CloseButton1
-            // 
-            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.usT_CloseButton1.Location = new System.Drawing.Point(225, 0);
-            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0);
-            this.usT_CloseButton1.Name = "usT_CloseButton1";
-            this.usT_CloseButton1.Size = new System.Drawing.Size(25, 25);
-            this.usT_CloseButton1.TabIndex = 3;
-            this.usT_CloseButton1.Text = "usT_CloseButton1";
-            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
-            this.usT_CloseButton1.UST_IconLineSize = 1F;
-            this.usT_CloseButton1.UST_IconOffset = 7;
-            this.usT_CloseButton1.UST_PressedAlpha = 200;
-            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectionAlpha = 150;
-            this.usT_CloseButton1.Click += new System.EventHandler(this.usT_CloseButton1_Click);
-            // 
             // label9
             // 
             this.label9.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -531,6 +513,24 @@
             this.richTextBox2.Size = new System.Drawing.Size(244, 94);
             this.richTextBox2.TabIndex = 19;
             this.richTextBox2.Text = "";
+            // 
+            // usT_CloseButton1
+            // 
+            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_CloseButton1.Location = new System.Drawing.Point(225, 0);
+            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0);
+            this.usT_CloseButton1.Name = "usT_CloseButton1";
+            this.usT_CloseButton1.Size = new System.Drawing.Size(25, 25);
+            this.usT_CloseButton1.TabIndex = 3;
+            this.usT_CloseButton1.Text = "usT_CloseButton1";
+            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
+            this.usT_CloseButton1.UST_IconLineSize = 1F;
+            this.usT_CloseButton1.UST_IconOffset = 7;
+            this.usT_CloseButton1.UST_PressedAlpha = 200;
+            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectionAlpha = 150;
+            this.usT_CloseButton1.Click += new System.EventHandler(this.usT_CloseButton1_Click);
             // 
             // uC_CalendarPanel1
             // 

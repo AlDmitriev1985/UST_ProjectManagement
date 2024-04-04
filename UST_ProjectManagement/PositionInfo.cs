@@ -236,12 +236,23 @@ namespace UST_ProjectManagement
 
             if (historyInfo.Count > 0)
             {
-                string account = historyInfo[0].User;
-                User user = RequestInfo.lb.Users.FirstOrDefault(a => a.UserAccount == account);
-                if (user != null)
+                try
                 {
-                    if (user.FunctionId == 7) status = "Позиция скоординирована";
-                    else status = "Позиция не скоординированы";
+                    string account = historyInfo.Last().User;
+                    User user = RequestInfo.lb.Users.FirstOrDefault(a => a.UserAccount == account);
+                    if (user != null)
+                    {
+                        if (user.FunctionId == 7) status = "Позиция скоординирована";
+                        else status = "Позиция не скоординирована";
+                    }
+                    else
+                    {
+                        status = "Координаты не переданы";
+                    }
+                }
+                catch
+                {
+                    status = "Ошибка чтения истории";
                 }
             }
         }

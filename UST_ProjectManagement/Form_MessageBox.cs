@@ -36,6 +36,7 @@ namespace UST_ProjectManagement
                 case 0:
                     button1.Text = "OK";
                     button1.DialogResult = DialogResult.OK;
+                    panel2.Visible = false;
                     button2.Visible = false;
                     break;
                 case 1:
@@ -236,9 +237,9 @@ namespace UST_ProjectManagement
 
         private void panel4_SizeChanged(object sender, EventArgs e)
         {
-            int w = (panel4.Width - 1) / 2;
-            button1.Width = w;
-            button2.Width = w;
+            //int w = (panel4.Width - 1) / 2;
+            //button1.Width = w;
+            //button2.Width = w;
         }
 
         

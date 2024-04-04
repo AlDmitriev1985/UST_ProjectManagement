@@ -40,11 +40,12 @@
             this.panel_Top = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -203,28 +204,10 @@
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
-            // usT_CloseButton1
-            // 
-            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.usT_CloseButton1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.usT_CloseButton1.Location = new System.Drawing.Point(320, 0);
-            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0);
-            this.usT_CloseButton1.Name = "usT_CloseButton1";
-            this.usT_CloseButton1.Size = new System.Drawing.Size(30, 30);
-            this.usT_CloseButton1.TabIndex = 0;
-            this.usT_CloseButton1.Text = "usT_CloseButton1";
-            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
-            this.usT_CloseButton1.UST_IconLineSize = 1.5F;
-            this.usT_CloseButton1.UST_IconOffset = 10;
-            this.usT_CloseButton1.UST_PressedAlpha = 200;
-            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectionAlpha = 150;
-            this.usT_CloseButton1.Click += new System.EventHandler(this.usT_CloseButton1_Click);
-            // 
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.SteelBlue;
+            this.panel4.Controls.Add(this.panel2);
             this.panel4.Controls.Add(this.button2);
             this.panel4.Controls.Add(this.panel3);
             this.panel4.Controls.Add(this.button1);
@@ -276,6 +259,35 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(148, 0);
+            this.panel2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1, 24);
+            this.panel2.TabIndex = 4;
+            // 
+            // usT_CloseButton1
+            // 
+            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_CloseButton1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.usT_CloseButton1.Location = new System.Drawing.Point(320, 0);
+            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0);
+            this.usT_CloseButton1.Name = "usT_CloseButton1";
+            this.usT_CloseButton1.Size = new System.Drawing.Size(30, 30);
+            this.usT_CloseButton1.TabIndex = 0;
+            this.usT_CloseButton1.Text = "usT_CloseButton1";
+            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
+            this.usT_CloseButton1.UST_IconLineSize = 1.5F;
+            this.usT_CloseButton1.UST_IconOffset = 10;
+            this.usT_CloseButton1.UST_PressedAlpha = 200;
+            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectionAlpha = 150;
+            this.usT_CloseButton1.Click += new System.EventHandler(this.usT_CloseButton1_Click);
+            // 
             // Form_MessageBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -319,6 +331,7 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel panel2;
     }
 }
 

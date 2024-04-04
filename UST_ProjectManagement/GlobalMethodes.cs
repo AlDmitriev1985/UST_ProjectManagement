@@ -1355,6 +1355,63 @@ namespace UST_ProjectManagement
         }
 
 
+        public static bool AddProjectLink(string ProjectId, string ProjectAuthor, string ProjectLinkId)
+        {
+            bool result = false;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"http://10.10.25.130:8085/AddProjectLink/");
+                request.UseDefaultCredentials = true;
+                request.ContentType = "text/html";
+                request.Method = "POST";
+
+                AddProjectLink addProjectLink = new AddProjectLink();
+                addProjectLink.ProjectId = ProjectId;
+                addProjectLink.ProjectAuthor = ProjectAuthor;
+                addProjectLink.ProjectLinkId = ProjectLinkId;
+
+                byte[] byteArray = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(addProjectLink, Formatting.Indented));
+                request.ContentLength = byteArray.Length;
+
+                using (Stream dataStream = request.GetRequestStream())
+                {
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                }
+
+                try
+                {
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                    using (Stream stream = response.GetResponseStream())
+                    {
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            string line = "";
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                if (line == "Успех!")
+                                    result = true;
+                            }
+                        }
+                    }
+                    response.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + Environment.NewLine + ex.StackTrace);
+                    MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + Environment.NewLine + ex.StackTrace);
+                MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+            }
+
+
+            return result;
+        }
+
         /// <summary>
         /// Пост-запрос на создание Разделов
         /// </summary>
@@ -1860,6 +1917,60 @@ namespace UST_ProjectManagement
             //Console.WriteLine("Готово");
             _stop = true;
             cNWF = null;
+        }
+
+        public static void CopyAndOpenFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                string dirpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ProjectManagement\Temp\OpenNWD\";
+                if (!System.IO.Directory.Exists(dirpath))
+                {
+                    System.IO.Directory.CreateDirectory(dirpath);
+                }
+
+                string[] spPath = path.Split('\\');
+                if (spPath != null && spPath.Length > 0)
+                {
+                    string _path = dirpath + spPath[spPath.Length - 1];
+                    try
+                    {
+                        File.Copy(path, _path, true);
+                        if (File.Exists(_path))
+                        {
+                            GlobalData.CreatedFiles.Add(_path);
+                            using (Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + _path))) ;
+                        }
+                        else
+                        {
+                            Form_MessageBox messageBox = new Form_MessageBox($"Не удалось открыть файл: {spPath[spPath.Length - 1]}", "Предупреждение", 0);
+                            messageBox.ShowDialog();
+                        }
+                    }
+                    catch
+                    {
+                        Form_MessageBox messageBox = new Form_MessageBox($"Не получилось скопировать файл в папку: {dirpath}\n Закройте файл: {spPath[spPath.Length - 1]}\n и попробуйте еще раз.", "Предупреждение", 0);
+                        messageBox.ShowDialog();
+                    }
+                }     
+            }
+            else
+            {
+                Form_MessageBox messageBox = new Form_MessageBox("Моодель элемента отсутствует. Обратитесь в BIM-отдел.", "Предупреждение",0);
+                messageBox.ShowDialog();
+            }
+        }
+
+        public static void DeleteCreatedFiles()
+        {
+            foreach(string path in GlobalData.CreatedFiles)
+            {
+                try
+                {
+                    File.Delete(path);
+                }
+                catch { }
+            }
         }
 
 

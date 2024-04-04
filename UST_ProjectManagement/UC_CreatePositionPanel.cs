@@ -113,6 +113,54 @@ namespace UST_ProjectManagement
                     GlobalMethodes.UpdateCombaBox(GlobalData.User_GAPList, comboBoxGAP);
                     comboBoxGAP.SelectedIndex = 0;  
                 }
+                else if (mode == 3)
+                {
+                    label1.Text = "Создать подпроекта";
+
+                    textBoxProjectNo.Text = GlobalData.SelectedProject.ProjectId;
+                    textBoxStage.Text = GlobalData.SelectedStage.StageTag;
+
+                    maskedTextBoxStartDate.Text = GlobalData.SelectedProject.ProjectDataStart;
+                    maskedTextBoxEndDate.Text = GlobalData.SelectedProject.ProjectDataEnd;
+
+                    label8.Visible = true;
+                    comboBoxGAP.Visible = true;
+
+                    ProjectStageInfo projectStageInfo = new ProjectStageInfo(GlobalData.SelectedProject, GlobalData.SelectedStage);
+
+                    if (GlobalData.SelectedProject.ProjectId.IndexOf('-') != -1)
+                    {
+                        labelDropOrNot.Text = ".";
+                        var pos = RequestInfo.lb.Positions.Where(p => p.ProjectId == GlobalData.SelectedProject.ProjectId).ToList();
+                        //textBoxPositionNo.Text = (pos.Count + 1).ToString();
+                        textBoxPositionNo.Text = projectStageInfo.CreateNewPositionId(true);
+                    }
+                    else
+                    {
+                        labelDropOrNot.Text = "-";
+                        textBoxPositionNo.Text = projectStageInfo.CreateNewPositionId(false);
+                    }
+                    textBoxPositionNo.Enabled = true;
+                    //label2.Text = "Наименование:";
+
+                    //richTextBox2.Visible = false;
+                    //label9.Visible = false;
+                    //tableLayoutPanel1.RowStyles[8].Height = 0;
+                    //tableLayoutPanel1.RowStyles[9].Height = 0;
+
+                    GlobalMethodes.UpdateCombaBox(GlobalData.User_GIPList, comboBoxGIP);
+                    if (GlobalData.SelectedProject.ProjectGIP != "")
+                    {
+                        comboBoxGIP.Text = GlobalData.SelectedProject.ProjectGIP;
+                    }
+                    else
+                    {
+                        comboBoxGIP.SelectedIndex = 0;
+                    }
+                    GlobalMethodes.UpdateCombaBox(GlobalData.User_GAPList, comboBoxGAP);
+                    comboBoxGAP.SelectedIndex = 0;
+                }
+
             }
             else if (GlobalData.SelectedProductCatalog != null)
             {
@@ -501,9 +549,9 @@ namespace UST_ProjectManagement
 
                     if (GlobalMethodes.CreateProject(maskedTextBoxStartDate.Text,
                                                     maskedTextBoxEndDate.Text,
-                                                    responsible, 
-                                                    GlobalData.SelectedCountry.NationFullName, 
-                                                    GlobalData.SelectedCountry.NationName, 
+                                                    responsible,
+                                                    GlobalData.SelectedCountry.NationFullName,
+                                                    GlobalData.SelectedCountry.NationName,
                                                     GlobalData.SelectedCountry.NationId,
                                                     richTextBox1.Text,
                                                     richTextBox2.Text,
@@ -521,6 +569,55 @@ namespace UST_ProjectManagement
                         Errores = Errores + "\n" + err;
                     }
                     MessageBox.Show(Errores, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else if (Mode == 3)
+            {
+                try
+                {
+                    Project parentProject = RequestInfo.lb.Projects.FirstOrDefault(x => x.ProjectId == textBoxProjectNo.Text);
+                    Nation nation = RequestInfo.lb.Nations.FirstOrDefault(x => x.NationId == parentProject.NationId);
+
+                    string projectId = textBoxProjectNo.Text + "-" + textBoxPositionNo.Text;
+                    List<string> projectIds = RequestInfo.lb.Projects.Select(x => x.ProjectId).ToList();
+                    GlobalData.BuferDirPath = GlobalData.SelectedDirPath + projectId + "\\";
+                    if (projectIds.Contains(projectId)) ErroreList.Add("Проект с таким шифром уже существует");
+                    if (ValidatePositionPanel(2) == true)
+                    {
+                        StartProcess?.Invoke();
+                        string responsible = "";
+                        if (comboBoxGIP.SelectedIndex > 0) responsible = comboBoxGIP.Text;
+
+                        if (GlobalMethodes.CreateProject(maskedTextBoxStartDate.Text,
+                                                        maskedTextBoxEndDate.Text,
+                                                        responsible,
+                                                        nation.NationFullName,
+                                                        nation.NationName,
+                                                        nation.NationId,
+                                                        richTextBox1.Text,
+                                                        richTextBox2.Text,
+                                                        projectId) == true)
+                        {
+                            if (GlobalMethodes.AddProjectLink(projectId, responsible, textBoxProjectNo.Text))
+                            {
+                                CancelPosition?.Invoke();
+                                CreatePosition?.Invoke();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string Errores = "";
+                        foreach (string err in ErroreList)
+                        {
+                            Errores = Errores + "\n" + err;
+                        }
+                        MessageBox.Show(Errores, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch
+                {
+
                 }
             }
         }

@@ -11,6 +11,7 @@ using LibraryDB.DB;
 using System.Diagnostics;
 using CardTask;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace UST_ProjectManagement
 {
@@ -50,7 +51,7 @@ namespace UST_ProjectManagement
             tableLayoutPanel1.Controls.Add(dataGrid, 0, 3);
             header1 = new List<string>() { "Шифр", "Наименование", "Стадия", "ГИП", "ГАП", "Начало", "Конец", "%", "Тип", "ID", "" };
             header2 = new List<string>() { "Шифр", "Стадия", "Номер задания", "Наименование", "От раздела", "Для раздела", "Выдал", "Получил", "Статус", "Task Id", "Task Dep Id" };
-            header3 = new List<string>() { "Шифр", "Наименование", "Стадия", "Автор", "Наименование элемента", "Обновлено", "Id", "", "", "", ""};
+            header3 = new List<string>() { "Шифр", "Наименование", "Стадия", "Автор", "Наименование элемента", "Обновлено", "Тип", "Id",  "", "", ""};
             CardTask.Methodes_DataGrid.CreateDataGrid(dataGrid, header1);
 
             stripItemOpen.Text = "Открыть карточку";
@@ -72,6 +73,7 @@ namespace UST_ProjectManagement
             uC_Search_Projects.Dock = DockStyle.Fill;
             uC_Search_Projects.Margin = new Padding(0);
             panel4.Controls.Add(uC_Search_Projects);
+            uC_Search_Projects.comboBoxSelectIndexChanged += UpdatePanels_1;
             uC_Search_Projects.SearchObjects += UpdatePanels;
             if (!MainForm.firstStart)
             {
@@ -105,6 +107,11 @@ namespace UST_ProjectManagement
             }
         }
 
+        private void UpdatePanels_1()
+        {
+            UpdatePanels();
+        }
+
         public void UpdatePanels(string[,] filters = null)
         {
             GlobalData.loadInfo = "Поиск...";
@@ -115,56 +122,77 @@ namespace UST_ProjectManagement
             dataGrid.Rows.Clear();
             UpdateDataGridColumns();
 
+            try
+            {
+                for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                {
+                    Filters.filterItems[Mode][f].Clear();
+                }
+            }
+            catch { }
+
             if (Mode == 0)
             {
                 uC_Search_Projects.Visible = true;
                 List<Project> sortP = RequestInfo.lb.Projects.OrderByDescending(x => x.ProjectId).ToList();
-                if(filters != null)
-                {
-                    sortP = uC_Search_Projects.GetProjectsByFilter(filters, sortP);
-                }
-                
-                
                 foreach (Project project in sortP)
                 {
                     var stagesList = RequestInfo.lb.StageProjects.FindAll(x => x.ProjectId == project.ProjectId);
                     foreach (StageProject stageProject in stagesList)
                     {
-                        if (filters == null || filters[0,2] == "<Нет>" || filters[0, 2] == null || stageProject.StageId.Value.ToString() == filters[0,2])
-                        {
-                            Stage stage = RequestInfo.lb.Stages.FirstOrDefault(x => x.StageId == stageProject.StageId);
-                            var positions = RequestInfo.lb.Positions.Where(p => p.ProjectId == project.ProjectId).Where(s => s.StageId == stage.StageId).OrderByDescending(i => i.PositionId).ToList();
-                            if (filters != null && filters[0, 3] != null && filters[0, 3] != "<Нет>")
-                            {
-                                positions = positions.Where(x => x.PositionId.ToString() == filters[0, 3]).ToList();
-                            }
-                            if (filters != null && filters[0,4] != null && filters[0,4] != "<Нет>")
-                            {
-                                positions = positions.Where(x => x.PositionUserIdGIP.ToString() == filters[0, 4]).ToList();
-                            }
-                            if (filters != null && filters[0, 5] != null && filters[0, 5] != "<Нет>")
-                            {
-                                positions = positions.Where(x => x.PositionUserIdGAP.ToString() == filters[0, 5]).ToList();
-                            }
+                        Stage stage = RequestInfo.lb.Stages.FirstOrDefault(x => x.StageId == stageProject.StageId);
+                        var positions = RequestInfo.lb.Positions.Where(p => p.ProjectId == project.ProjectId).Where(s => s.StageId == stage.StageId).OrderByDescending(i => i.PositionId).ToList();
 
-                            foreach (Position position in positions)
+                        foreach (Position position in positions)
+                        {
+                            PositionInfo positionInfo = new PositionInfo(project, stage, position);
+                            DataGridViewRow row = new DataGridViewRow();
+                            row.CreateCells(dataGrid);
+                            row.Cells[0].Value = positionInfo.Code;
+                            row.Cells[1].Value = positionInfo.PositionName;
+                            row.Cells[2].Value = positionInfo.StageTag;
+                            row.Cells[3].Value = positionInfo.GIP;
+                            row.Cells[4].Value = positionInfo.GAP;
+                            row.Cells[5].Value = positionInfo.StartDate;
+                            row.Cells[6].Value = positionInfo.EndDate;
+                            row.Cells[7].Value = positionInfo.PersentComplete;
+                            row.Cells[8].Value = "Проекты";
+                            row.Cells[9].Value = positionInfo.ID;
+                            row.Height = CardTask.Methodes_DataGrid.RowHeight;
+                            dataGrid.Rows.Add(row);
+
+                            for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
                             {
-                                PositionInfo positionInfo = new PositionInfo(project, stage, position);
-                                DataGridViewRow row = new DataGridViewRow();
-                                row.CreateCells(dataGrid);
-                                row.Cells[0].Value = positionInfo.Code;
-                                row.Cells[1].Value = positionInfo.PositionName;
-                                row.Cells[2].Value = positionInfo.StageTag;
-                                row.Cells[3].Value = positionInfo.GIP;
-                                row.Cells[4].Value = positionInfo.GAP;
-                                row.Cells[5].Value = positionInfo.StartDate;
-                                row.Cells[6].Value = positionInfo.EndDate;
-                                row.Cells[7].Value = positionInfo.PersentComplete;
-                                row.Cells[8].Value = "Проекты";
-                                row.Cells[9].Value = positionInfo.ID;
-                                row.Height = CardTask.Methodes_DataGrid.RowHeight;
-                                dataGrid.Rows.Add(row);
-                            } 
+                                int index = Filters.filterColumns[Mode][f];
+                                if (Filters.filters[Mode].ContainsKey(f))
+                                {
+                                    if (Filters.filters[Mode][f] != "" && Filters.filters[Mode][f] != "<Нет>")
+                                    {
+                                        if (row.Cells[index].Value.ToString() != Filters.filters[Mode][f])
+                                        {
+                                            row.Visible = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (row.Visible)
+                            {
+                                for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                                {
+                                    int index = Filters.filterColumns[Mode][f];
+                                    if (!Filters.filterItems[Mode].ContainsKey(f))
+                                    {
+                                        Filters.filterItems[Mode].Add(f, new List<string>());
+                                        //Filters.filterItems[Mode][f] = new List<string>();
+                                    }
+
+                                    if (!Filters.filterItems[Mode][f].Contains(row.Cells[index].Value.ToString()))
+                                    {
+                                        Filters.filterItems[Mode][f].Add(row.Cells[index].Value.ToString());
+                                    }
+                                }
+                            }
                         }
 
                     }
@@ -197,6 +225,38 @@ namespace UST_ProjectManagement
                         row.Height = CardTask.Methodes_DataGrid.RowHeight;
                         dataGrid.Rows.Add(row);
 
+                        for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                        {
+                            int index = Filters.filterColumns[Mode][f];
+                            if (Filters.filters[Mode].ContainsKey(f))
+                            {
+                                if (Filters.filters[Mode][f] != "" && Filters.filters[Mode][f] != "<Нет>")
+                                {
+                                    if (row.Cells[index].Value.ToString() != Filters.filters[Mode][f])
+                                    {
+                                        row.Visible = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (row.Visible)
+                        {
+                            for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                            {
+                                int index = Filters.filterColumns[Mode][f];
+                                if (!Filters.filterItems[Mode].ContainsKey(f))
+                                {
+                                    Filters.filterItems[Mode].Add(f, new List<string>());
+                                    //Filters.filterItems[Mode][f] = new List<string>();
+                                }
+
+                                if (!Filters.filterItems[Mode][f].Contains(row.Cells[index].Value.ToString()))
+                                {
+                                    Filters.filterItems[Mode][f].Add(row.Cells[index].Value.ToString());
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -227,6 +287,38 @@ namespace UST_ProjectManagement
                         row.Height = CardTask.Methodes_DataGrid.RowHeight;
                         dataGrid.Rows.Add(row);
 
+                        for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                        {
+                            int index = Filters.filterColumns[Mode][f];
+                            if (Filters.filters[Mode].ContainsKey(f))
+                            {
+                                if (Filters.filters[Mode][f] != "" && Filters.filters[Mode][f] != "<Нет>")
+                                {
+                                    if (row.Cells[index].Value.ToString() != Filters.filters[Mode][f])
+                                    {
+                                        row.Visible = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (row.Visible)
+                        {
+                            for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                            {
+                                int index = Filters.filterColumns[Mode][f];
+                                if (!Filters.filterItems[Mode].ContainsKey(f))
+                                {
+                                    Filters.filterItems[Mode].Add(f, new List<string>());
+                                    //Filters.filterItems[Mode][f] = new List<string>();
+                                }
+
+                                if (!Filters.filterItems[Mode][f].Contains(row.Cells[index].Value.ToString()))
+                                {
+                                    Filters.filterItems[Mode][f].Add(row.Cells[index].Value.ToString());
+                                }
+                            }
+                        }
                     }
                 }
                 
@@ -234,37 +326,52 @@ namespace UST_ProjectManagement
             else if (Mode == 3)
             {
                 uC_Search_Projects.Visible = true;
-                List<Project> sortP = RequestInfo.lb.Projects.OrderByDescending(x => x.ProjectId).ToList();
-                if (filters != null)
+                
+                //if (filters != null)
+                //{
+                //    sortP = uC_Search_Projects.GetProjectsByFilter(filters, sortP);
+                //}
+
+                try
                 {
-                    sortP = uC_Search_Projects.GetProjectsByFilter(filters, sortP);
+                    for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                    {
+                        Filters.filterItems[Mode][f].Clear();
+                        //Filters.filterItems[Mode][f].Add("<Нет>");
+                    }
                 }
+                catch { }
+
                 try
                 {
                     List<LibraryDB.DB.Task> tasks = RequestInfo.lb.Tasks.ToList().OrderByDescending(x => x.TaskId).ToList();
                     foreach (LibraryDB.DB.Task task in tasks)
                     {
-                        if (filters != null && filters[0, 4] != null && filters[0, 4] != "<Нет>" && task.SectionThreeId.ToString() != filters[0, 4])
-                        {
-                            continue;
-                        }
+                        //if (filters != null && filters[0, 4] != null && filters[0, 4] != "<Нет>" && task.SectionThreeId.ToString() != filters[0, 4])
+                        //{
+                        //    continue;
+                        //}
 
+                        //
+                        //if (filters != null && filters[0, 3] != null && filters[0, 3] != "<Нет>" && position.PositionId.ToString() != filters[0, 3])
+                        //{
+                        //    continue;
+                        //}
+
+
+
+                        //if (filters != null && filters[0, 2] != null && filters[0, 2] != "<Нет>")
+                        //{
+                        //    if (stage.StageId.ToString() != filters[0, 2])
+                        //    {
+                        //        stage = null;
+                        //    }
+                        //}
+
+                        List<Project> sortP = RequestInfo.lb.Projects.OrderByDescending(x => x.ProjectId).ToList();
                         Position position = RequestInfo.lb.Positions.FirstOrDefault(x => x.PositionId == task.PositionId);
-                        if (filters != null && filters[0, 3] != null && filters[0, 3] != "<Нет>" && position.PositionId.ToString() != filters[0, 3])
-                        {
-                            continue;
-                        }
                         Project project = sortP.FirstOrDefault(x => x.ProjectId == position.ProjectId);
                         Stage stage = RequestInfo.lb.Stages.FirstOrDefault(x => x.StageId == position.StageId);
-
-
-                        if (filters != null && filters[0, 2] != null && filters[0, 2] != "<Нет>")
-                        {
-                            if (stage.StageId.ToString() != filters[0, 2])
-                            {
-                                stage = null;
-                            }
-                        }
 
                         if (project != null && stage != null)
                         {
@@ -305,6 +412,39 @@ namespace UST_ProjectManagement
                                 row.Cells[10].Value = taskDepartment.TaskDepartmentId;
                                 row.Height = CardTask.Methodes_DataGrid.RowHeight;
                                 dataGrid.Rows.Add(row);
+
+                                for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                                {
+                                    int index = Filters.filterColumns[Mode][f];
+                                    if (Filters.filters[Mode].ContainsKey(f))
+                                    {
+                                        if (Filters.filters[Mode][f] != "" && Filters.filters[Mode][f] != "<Нет>")
+                                        {
+                                            if (row.Cells[index].Value.ToString() != Filters.filters[Mode][f])
+                                            {
+                                                row.Visible = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (row.Visible)
+                                {
+                                    for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                                    {
+                                        int index = Filters.filterColumns[Mode][f];
+                                        if (!Filters.filterItems[Mode].ContainsKey(f))
+                                        {
+                                            Filters.filterItems[Mode].Add(f, new List<string>());
+                                            //Filters.filterItems[Mode][f] = new List<string>();
+                                        }
+
+                                        if (!Filters.filterItems[Mode][f].Contains(row.Cells[index].Value.ToString()))
+                                        {
+                                            Filters.filterItems[Mode][f].Add(row.Cells[index].Value.ToString());
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -320,10 +460,14 @@ namespace UST_ProjectManagement
                 var invNWDs = RequestInfo.lb.InventorToNwds.Where(x => x.PositionId != null);
                 List<int> pIds = invNWDs.Select(x => x.PositionId.Value).Distinct().ToList();
 
-                //if (filters != null)
-                //{
-                //    sortP = uC_Search_Projects.GetProjectsByFilter(filters, sortP);
-                //}
+                try
+                {
+                    for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                    {
+                        Filters.filterItems[Mode][f].Clear();
+                    }
+                }
+                catch {}
                 try
                 {
                     foreach (int id in pIds)
@@ -331,8 +475,66 @@ namespace UST_ProjectManagement
                         try
                         {
                             Position position = RequestInfo.lb.Positions.FirstOrDefault(x => x.PositionId == id);
+                            Project project = RequestInfo.lb.Projects.FirstOrDefault(x => x.ProjectId == position.ProjectId);
                             Stage stage = RequestInfo.lb.Stages.FirstOrDefault(x => x.StageId == position.StageId);
                             List < InventorToNwd > inventors = RequestInfo.lb.InventorToNwds.Where(z => z.Account != "-").Where(x => x.PositionId == id).OrderByDescending(x => x.InventorToNwdId).ToList();
+
+                            if (inventors != null && inventors.Count > 0)
+                            {
+                                string _path = inventors.FirstOrDefault().InventorToNwdInfo;
+                                string path = "";
+                                string date = "";
+                                if (GetNWDfileInfo(project.ProjectId, stage.StageTag, out date, out path))
+                                {
+                                    DataGridViewRow row = new DataGridViewRow();
+
+                                    row.CreateCells(dataGrid);
+                                    row.Cells[0].Value = project.ProjectId;
+                                    row.Cells[1].Value = project.ProjectName;
+                                    row.Cells[2].Value = stage.StageTag;
+                                    row.Cells[3].Value = "BIM-модель";
+                                    row.Cells[4].Value = project.ProjectName;
+                                    row.Cells[5].Value = date;
+                                    row.Cells[6].Value = "Проект";
+                                    row.Cells[7].Value = "-";
+                                    row.Cells[8].Value = path;
+                                    row.Height = 30;
+                                    dataGrid.Rows.Add(row);
+
+                                    for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                                    {
+                                        int index = Filters.filterColumns[Mode][f];
+                                        if (Filters.filters[Mode].ContainsKey(f))
+                                        {
+                                            if (Filters.filters[Mode][f] != "" && Filters.filters[Mode][f] != "<Нет>")
+                                            {
+                                                if (row.Cells[index].Value.ToString() != Filters.filters[Mode][f])
+                                                {
+                                                    row.Visible = false;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (row.Visible)
+                                    {
+                                        for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                                        {
+                                            int index = Filters.filterColumns[Mode][f];
+                                            if (!Filters.filterItems[Mode].ContainsKey(f))
+                                            {
+                                                Filters.filterItems[Mode].Add(f, new List<string>());
+                                            }
+
+                                            if (!Filters.filterItems[Mode][f].Contains(row.Cells[index].Value.ToString()))
+                                            {
+                                                Filters.filterItems[Mode][f].Add(row.Cells[index].Value.ToString());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
 
                             foreach (InventorToNwd nwd in inventors)
                             {
@@ -344,13 +546,47 @@ namespace UST_ProjectManagement
                                 row.Cells[3].Value = nwd.UserSurname + " " + nwd.Name + " " + nwd.MidlName;
                                 string name = "-";
                                 string path = "";
-                                GetInventorInfo(nwd.InventorToNwdInfo, out name, out path);
+                                string type = "";
+                                GetInventorInfo(nwd.InventorToNwdInfo, out name, out path, out type);
                                 row.Cells[4].Value = name;
                                 row.Cells[5].Value = nwd.InventorToNwdLastWriteTime;
-                                row.Cells[6].Value = nwd.InventorToNwdId;
-                                row.Cells[7].Value = path;
+                                row.Cells[6].Value = type;
+                                row.Cells[7].Value = nwd.InventorToNwdId;
+                                row.Cells[8].Value = path;
                                 row.Height = 30;
                                 dataGrid.Rows.Add(row);
+
+                                for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                                {
+                                    int index = Filters.filterColumns[Mode][f];
+                                    if (Filters.filters[Mode].ContainsKey(f))
+                                    {
+                                        if (Filters.filters[Mode][f] != "" && Filters.filters[Mode][f] != "<Нет>")
+                                        {
+                                            if (row.Cells[index].Value.ToString() != Filters.filters[Mode][f])
+                                            {
+                                                row.Visible = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (row.Visible)
+                                {
+                                    for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+                                    {
+                                        int index = Filters.filterColumns[Mode][f];
+                                        if (!Filters.filterItems[Mode].ContainsKey(f))
+                                        {
+                                            Filters.filterItems[Mode].Add(f, new List<string>());
+                                        }
+
+                                        if (!Filters.filterItems[Mode][f].Contains(row.Cells[index].Value.ToString()))
+                                        {
+                                            Filters.filterItems[Mode][f].Add(row.Cells[index].Value.ToString());
+                                        }
+                                    }
+                                }
                             }
                         }
                         catch {}
@@ -366,10 +602,86 @@ namespace UST_ProjectManagement
             GlobalMethodes._stop = true;
         }
 
-        private void GetInventorInfo(string path, out string name, out string nwdpath)
+        private bool GetNWDfileInfo(string code, string stage, out string date, out string nwdpath)
+        {
+            nwdpath = "";
+            date = "";
+            try
+            {
+                List<TreeNode> existingNodes = SearchTreeNodes(code, GlobalData.NaviTreeView.View.Nodes[0], 0);
+                TreeNode node = existingNodes.FirstOrDefault();
+                nwdpath += MainForm.MainPath_rezerv + node.FullPath + @"\";
+                nwdpath += $"{node.Text}_CRD\\07_NWF\\{node.Text}_UST_{stage}_GF_22.nwd";
+
+                if (File.Exists(nwdpath))
+                {
+                    date = File.GetLastWriteTime(nwdpath).ToString();
+                }
+                else
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+            }
+            return false;
+        }
+
+
+        //public void ApplyFilters()
+        //{
+        //    try
+        //    {
+        //        for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+        //        {
+        //            Filters.filterItems[Mode][f].Clear();
+        //        }
+        //    }
+        //    catch { }
+
+        //    for (int r = 0; r < dataGrid.Rows.Count; r++)
+        //    {
+        //        for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+        //        {
+        //            int index = Filters.filterColumns[Mode][f];
+        //            if (Filters.filters[Mode].ContainsKey(f))
+        //            {
+        //                if (Filters.filters[Mode][f] != "" && Filters.filters[Mode][f] != "<Нет>")
+        //                {
+        //                    if (dataGrid.Rows[r].Cells[index].Value.ToString() != Filters.filters[Mode][f])
+        //                    {
+        //                        dataGrid.Rows[r].Visible = false;
+        //                        break;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        if (dataGrid.Rows[r].Visible)
+        //        {
+        //            for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
+        //            {
+        //                int index = Filters.filterColumns[Mode][f];
+        //                if (!Filters.filterItems[Mode].ContainsKey(f))
+        //                {
+        //                    Filters.filterItems[Mode].Add(f, new List<string>());
+        //                }
+
+        //                if (!Filters.filterItems[Mode][f].Contains(dataGrid.Rows[r].Cells[index].Value.ToString()))
+        //                {
+        //                    Filters.filterItems[Mode][f].Add(dataGrid.Rows[r].Cells[index].Value.ToString());
+        //                }
+        //            }
+        //        } 
+        //    }
+        //}
+
+        private void GetInventorInfo(string path, out string name, out string nwdpath, out string type)
         {
             name = "";
-            nwdpath = "";
+            nwdpath = "z:\\";
+            type = "-";
 
             string[] spPath = path.Split('\\');
             if (spPath != null && spPath.Length > 0)
@@ -389,7 +701,7 @@ namespace UST_ProjectManagement
                         }
                         else
                         {
-                            name = GetName(spPath[i]);
+                            name = GetName(spPath[i], out type);
                             nwdpath += name + ".nwd";
                         }
                     }
@@ -398,11 +710,12 @@ namespace UST_ProjectManagement
             
         }
 
-        private string GetName(string name)
+        private string GetName(string name, out string type)
         {
             string result = "";
+            type = "-";
             string[] spName = name.Split('.');
-            if (spName != null)
+            if (spName != null && spName.Length > 1)
             {
                 if (spName.Length < 3)
                 {
@@ -418,6 +731,15 @@ namespace UST_ProjectManagement
                             result += ".";
                         }
                     }
+                }
+                switch(spName.LastOrDefault())
+                {
+                    case "iam":
+                        type = "Сборка";
+                        break;
+                    case "ipt":
+                        type = "Деталь";
+                        break;
                 }
             }
 
@@ -480,7 +802,7 @@ namespace UST_ProjectManagement
                     }
                     else
                     {
-                        int num = 5;
+                        int num = 6;
                         if (GlobalData.UserRole == "Admin") num += 1;
                             if (c > num)
                         {
@@ -662,13 +984,18 @@ namespace UST_ProjectManagement
                     {
                         dataGrid.Columns[5].Width = 120;
                         cWidth += dataGrid.Columns[5].Width;
-                    } 
+                    }
+                    if (dataGrid.Columns[6].Visible)
+                    {
+                        dataGrid.Columns[6].Width = 80;
+                        cWidth += dataGrid.Columns[6].Width;
+                    }
                     if (GlobalData.UserRole == "Admin")
                     {
-                        if (dataGrid.Columns[6].Visible)
+                        if (dataGrid.Columns[7].Visible)
                         {
-                            dataGrid.Columns[6].Width = 80;
-                            cWidth += dataGrid.Columns[6].Width;
+                            dataGrid.Columns[7].Width = 80;
+                            cWidth += dataGrid.Columns[7].Width;
                         };
                     }
                     dataGrid.Columns[1].Width = (dataGrid.Width - cWidth) / 3;
@@ -688,16 +1015,18 @@ namespace UST_ProjectManagement
                 {
                     Mode = radioButton.TabIndex;
                     //uC_Search_Projects.CleareFilters(Mode);
-                    uC_Search_Projects.CreatePanels(Mode);
+                    
                 }
 
                 try
                 {
                     UpdatePanels(GlobalData.FilterList[Mode]);
+                    uC_Search_Projects.CreatePanels(Mode);
                 }
                 catch
                 {
                     UpdatePanels();
+                    uC_Search_Projects.CreatePanels(Mode);
                 }
             }
             
@@ -718,6 +1047,14 @@ namespace UST_ProjectManagement
 
                     stripItemGetPath.Text = "Изменить статус";
                     stripItemGetPath.Image = Properties.Resources.Btn_Promote_20x20;
+                }
+                else if (radioButton5.Checked)
+                {
+                    stripItemOpen.Text = "Открыть в Navisworks";
+                    stripItemOpen.Image = Properties.Resources.OpenNavisworks_25x25;
+
+                    stripItemOpenDir.Visible = false;
+                    stripItemGetPath.Visible = false;
                 }
                 else
                 {
@@ -774,154 +1111,172 @@ namespace UST_ProjectManagement
                 code = dataGrid.SelectedRows[0].Cells[0].Value.ToString();
                 stage = dataGrid.SelectedRows[0].Cells[1].Value.ToString();
             }
-
-            List<TreeNode> existingNodes = SearchTreeNodes(code, GlobalData.NaviTreeView.View.Nodes[index], 0);
-
-            if (existingNodes.Count > 0)
+            else if (radioButton5.Checked)
             {
-                foreach (TreeNode node in existingNodes)
+                if (sender.ToString() == stripItemOpen.Text && dataGrid.SelectedRows.Count > 0)
                 {
-                    if (index == 0)
+                    string path = dataGrid.SelectedRows[0].Cells[8].Value.ToString();
+                    GlobalMethodes.CopyAndOpenFile(path);
+                }
+            }
+
+
+            if (!radioButton5.Checked)
+            {
+                try
+                {
+                    List<TreeNode> existingNodes = SearchTreeNodes(code, GlobalData.NaviTreeView.View.Nodes[index], 0);
+
+                    if (existingNodes.Count > 0)
                     {
-                        string[] sPath = node.FullPath.Split('\\');
-                        string stageCode = sPath[sPath.Length - 2];
-                        string[] sStageCode = stageCode.Split('_');
-                        string Stage = sStageCode[sStageCode.Length - 1];
-                        if (Stage == stage)
+                        foreach (TreeNode node in existingNodes)
                         {
-                            if (sender.ToString() == stripItemOpen.Text)
+                            if (index == 0)
                             {
-                                GlobalData.NaviTreeView.View.SelectedNode = node;
-                                GlobalData.NaviTreeView.View.Focus();
-                            }
-                            else if (sender.ToString() == stripItemOpenDir.Text)
-                            {
-                                if (!radioButton4.Checked)
+                                string[] sPath = node.FullPath.Split('\\');
+                                string stageCode = sPath[sPath.Length - 2];
+                                string[] sStageCode = stageCode.Split('_');
+                                string Stage = sStageCode[sStageCode.Length - 1];
+                                if (Stage == stage)
                                 {
-                                    string NodePath = MainForm.MainPath_rezerv + node.FullPath + @"\";
-                                    Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + NodePath));
-                                    GlobalMethodes.CreateLog("Открыть в Проводнике"); 
-                                }
-                                else
-                                {
-                                    try
+                                    if (sender.ToString() == stripItemOpen.Text)
                                     {
-                                        int tdId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells[10].Value);
-                                        var TD = RequestInfo.lb.TaskDepartments.FirstOrDefault(x => x.TaskDepartmentId == tdId);
-                                        if (TD != null)
+                                        GlobalData.NaviTreeView.View.SelectedNode = node;
+                                        GlobalData.NaviTreeView.View.Focus();
+                                    }
+                                    else if (sender.ToString() == stripItemOpenDir.Text)
+                                    {
+                                        if (!radioButton4.Checked)
                                         {
-                                            PublishForm general;
-                                            PublishForm.mode = 2;
-                                            PublishForm.modeApplication = 1;
-                                            general = new PublishForm();
-                                            general.StartPosition = FormStartPosition.CenterParent;
-                                            general.dataGridView_Files.CellContentDoubleClick += new DataGridViewCellEventHandler(general.dataGridView_Files_CellMouseDoubleClick);
-
-
-                                            general.GetTaskInfo(TD.TaskDepartmentId);
-
-                                            if (general.ShowDialog() == DialogResult.OK)
+                                            string NodePath = MainForm.MainPath_rezerv + node.FullPath + @"\";
+                                            Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + NodePath));
+                                            GlobalMethodes.CreateLog("Открыть в Проводнике");
+                                        }
+                                        else
+                                        {
+                                            try
                                             {
+                                                int tdId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells[10].Value);
+                                                var TD = RequestInfo.lb.TaskDepartments.FirstOrDefault(x => x.TaskDepartmentId == tdId);
+                                                if (TD != null)
+                                                {
+                                                    PublishForm general;
+                                                    PublishForm.mode = 2;
+                                                    PublishForm.modeApplication = 1;
+                                                    general = new PublishForm();
+                                                    general.StartPosition = FormStartPosition.CenterParent;
+                                                    general.dataGridView_Files.CellContentDoubleClick += new DataGridViewCellEventHandler(general.dataGridView_Files_CellMouseDoubleClick);
 
+
+                                                    general.GetTaskInfo(TD.TaskDepartmentId);
+
+                                                    if (general.ShowDialog() == DialogResult.OK)
+                                                    {
+
+                                                    }
+                                                }
+                                            }
+                                            catch
+                                            {
                                             }
                                         }
                                     }
-                                    catch 
+                                    else if (sender.ToString() == stripItemGetPath.Text)
                                     {
+                                        if (!radioButton4.Checked)
+                                        {
+                                            Clipboard.SetText(MainForm.MainPath_rezerv + node.FullPath + @"\");
+                                        }
+                                        else
+                                        {
+                                            string[] infos = PublishForm.PostRequest("InfoThree", null, @"http://10.10.25.130:8085/Info/");
+
+                                            LibraryDB.LibraryDB lb = null;
+                                            if (infos[0] == "Готово")
+                                            {
+                                                lb = JsonConvert.DeserializeObject<LibraryDB.LibraryDB>(infos[1]);
+                                            }
+
+                                            GetTaskForm.modeTest = "0";
+                                            GetTaskForm general = new GetTaskForm();
+                                            general.StartPosition = FormStartPosition.CenterParent;
+                                            general.lb = lb;
+                                            general.textBox1.Text = dataGrid.SelectedRows[0].Cells[0].Value.ToString();
+                                            general.textBox2.Text = dataGrid.SelectedRows[0].Cells[1].Value.ToString();
+                                            general.textBox3.Text = dataGrid.SelectedRows[0].Cells[2].Value.ToString();
+                                            general.textBox4.Text = dataGrid.SelectedRows[0].Cells[4].Value.ToString();
+
+                                            general.Test();
+
+                                            DialogResult result = general.ShowDialog();
+                                            if (result == DialogResult.OK)
+                                            {
+                                                RequestInfo.requestInfoThree();
+                                                try
+                                                {
+                                                    UpdatePanels(GlobalData.FilterList[radioButton4.TabIndex]);
+                                                }
+                                                catch
+                                                {
+                                                    UpdatePanels();
+                                                }
+                                            }
+                                        }
                                     }
+                                    break;
                                 }
                             }
-                            else if (sender.ToString() == stripItemGetPath.Text)
+                            else
                             {
-                                if (!radioButton4.Checked)
+                                if (node.Nodes != null && node.Nodes.Count > 0)
                                 {
-                                    Clipboard.SetText(MainForm.MainPath_rezerv + node.FullPath + @"\"); 
+                                    if (sender.ToString() == stripItemOpen.Text)
+                                    {
+                                        GlobalData.NaviTreeView.View.SelectedNode = node.Nodes[0];
+                                        GlobalData.NaviTreeView.View.Focus();
+                                    }
+                                    else if (sender.ToString() == stripItemOpenDir.Text)
+                                    {
+                                        string NodePath = MainForm.MainPath_rezerv + node.Nodes[0].FullPath + @"\";
+                                        Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + NodePath));
+                                        GlobalMethodes.CreateLog("Открыть в Проводнике");
+                                    }
+                                    else if (sender.ToString() == stripItemGetPath.Text)
+                                    {
+                                        Clipboard.SetText(MainForm.MainPath_rezerv + node.Nodes[0].FullPath + @"\");
+                                    }
                                 }
                                 else
                                 {
-                                    string[] infos = PublishForm.PostRequest("InfoThree", null, @"http://10.10.25.130:8085/Info/");
-
-                                    LibraryDB.LibraryDB lb = null;
-                                    if (infos[0] == "Готово")
+                                    if (sender.ToString() == stripItemOpen.Text)
                                     {
-                                        lb = JsonConvert.DeserializeObject<LibraryDB.LibraryDB>(infos[1]);
+                                        GlobalData.NaviTreeView.View.SelectedNode = node;
+                                        GlobalData.NaviTreeView.View.Focus();
                                     }
-
-                                    GetTaskForm.modeTest = "0";
-                                    GetTaskForm general = new GetTaskForm();
-                                    general.StartPosition = FormStartPosition.CenterParent;
-                                    general.lb = lb;
-                                    general.textBox1.Text = dataGrid.SelectedRows[0].Cells[0].Value.ToString();
-                                    general.textBox2.Text = dataGrid.SelectedRows[0].Cells[1].Value.ToString();
-                                    general.textBox3.Text = dataGrid.SelectedRows[0].Cells[2].Value.ToString();
-                                    general.textBox4.Text = dataGrid.SelectedRows[0].Cells[4].Value.ToString();
-
-                                    general.Test();
-
-                                    DialogResult result = general.ShowDialog();
-                                    if (result == DialogResult.OK)
+                                    else if (sender.ToString() == stripItemOpenDir.Text)
                                     {
-                                        RequestInfo.requestInfoThree();
-                                        try
-                                        {
-                                            UpdatePanels(GlobalData.FilterList[radioButton4.TabIndex]);
-                                        }
-                                        catch
-                                        {
-                                            UpdatePanels();
-                                        }
+                                        string NodePath = MainForm.MainPath_rezerv + node.FullPath + @"\";
+                                        Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + NodePath));
+                                        GlobalMethodes.CreateLog("Открыть в Проводнике");
+                                    }
+                                    else if (sender.ToString() == stripItemGetPath.Text)
+                                    {
+                                        Clipboard.SetText(MainForm.MainPath_rezerv + node.FullPath + @"\");
                                     }
                                 }
+                                break;
                             }
-                            break;
                         }
+
                     }
                     else
                     {
-                        if (node.Nodes != null && node.Nodes.Count > 0)
-                        {
-                            if (sender.ToString() == stripItemOpen.Text)
-                            {
-                                GlobalData.NaviTreeView.View.SelectedNode = node.Nodes[0];
-                                GlobalData.NaviTreeView.View.Focus();
-                            }
-                            else if (sender.ToString() == stripItemOpenDir.Text)
-                            {
-                                string NodePath = MainForm.MainPath_rezerv + node.Nodes[0].FullPath + @"\";
-                                Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + NodePath));
-                                GlobalMethodes.CreateLog("Открыть в Проводнике");
-                            }
-                            else if (sender.ToString() == stripItemGetPath.Text)
-                            {
-                                Clipboard.SetText(MainForm.MainPath_rezerv + node.Nodes[0].FullPath + @"\");
-                            }
-                        }
-                        else
-                        {
-                            if (sender.ToString() == stripItemOpen.Text)
-                            {
-                                GlobalData.NaviTreeView.View.SelectedNode = node;
-                                GlobalData.NaviTreeView.View.Focus();
-                            }
-                            else if (sender.ToString() == stripItemOpenDir.Text)
-                            {
-                                string NodePath = MainForm.MainPath_rezerv + node.FullPath + @"\";
-                                Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + NodePath));
-                                GlobalMethodes.CreateLog("Открыть в Проводнике");
-                            }
-                            else if (sender.ToString() == stripItemGetPath.Text)
-                            {
-                                Clipboard.SetText(MainForm.MainPath_rezerv + node.FullPath + @"\");
-                            }
-                        }
-                        break;
+                        MessageBox.Show($"{code} не найден", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
-
-            }
-            else
-            {
-                MessageBox.Show($"{code} не найден", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                catch
+                {
+                } 
             }
         }
 

@@ -366,7 +366,7 @@ namespace UST_ProjectManagement
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    string[,] filter = new string[2, GlobalData.Filters0.Count];
+                    string[,] filter = new string[2, UST_ProjectManagement.Filters.filtersSets[0].Count];
                     for (int c = 0; c < filter.Length; c++)
                     {
                         try
@@ -719,7 +719,8 @@ namespace UST_ProjectManagement
             if (firstStart)
             {
                 firstStart = false;
-                uC_StartPanel1.UpdatePanels();
+                uC_StartPanel1.radioButton_CheckedChanged(uC_StartPanel1.radioButton1, EventArgs.Empty);
+                //uC_StartPanel1.UpdatePanels();
             }
             else
             {
@@ -1527,6 +1528,8 @@ namespace UST_ProjectManagement
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
+            GlobalMethodes.DeleteCreatedFiles();
+            GlobalData.CreatedFiles.Clear();
             GlobalMethodes.CreateLog("Заткрытие программы");
         }
 

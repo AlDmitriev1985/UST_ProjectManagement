@@ -165,7 +165,10 @@ namespace UST_ProjectManagement
 
         public static string FiltersFileName = "filters.txt";
 
-        public static List<string> Filters0 = new List<string>() { "Страна", "Шифр", "Стадия", "Позиция по ГП", "ГИП", "ГАП" };
-        public static List<string> Filters3 = new List<string>() { "Страна", "Шифр", "Стадия", "Позиция по ГП", "От раздела", "Для раздела" };
+        //public static List<string> Filters0 = new List<string>() { "Страна", "Шифр", "Стадия", "Позиция по ГП", "ГИП", "ГАП" };
+        //public static List<string> Filters3 = new List<string>() { "Страна", "Шифр", "Стадия", "Позиция по ГП", "От раздела", "Для раздела" };
+        //public static List<string> Filters4 = new List<string>() { "Шифр", "Автор", "Тип" };
+
+        public static List<string> CreatedFiles = new List<string>();
     }
 }
