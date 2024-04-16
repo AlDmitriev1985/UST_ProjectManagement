@@ -35,16 +35,21 @@
             this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.usT_HorizontalTabControl5 = new UST_ProjectManagement.UST_HorizontalTabControl();
+            this.usT_HorizontalTabControl4 = new UST_ProjectManagement.UST_HorizontalTabControl();
+            this.usT_HorizontalTabControl3 = new UST_ProjectManagement.UST_HorizontalTabControl();
+            this.usT_HorizontalTabControl2 = new UST_ProjectManagement.UST_HorizontalTabControl();
+            this.usT_HorizontalTabControl1 = new UST_ProjectManagement.UST_HorizontalTabControl();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -60,8 +65,8 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 4F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(847, 495);
@@ -82,7 +87,6 @@
             this.panel2.Controls.Add(this.radioButton5);
             this.panel2.Controls.Add(this.radioButton4);
             this.panel2.Controls.Add(this.panel3);
-            this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.radioButton3);
             this.panel2.Controls.Add(this.radioButton2);
             this.panel2.Controls.Add(this.radioButton1);
@@ -90,8 +94,9 @@
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(847, 30);
+            this.panel2.Size = new System.Drawing.Size(847, 1);
             this.panel2.TabIndex = 1;
+            this.panel2.Visible = false;
             // 
             // radioButton5
             // 
@@ -119,26 +124,12 @@
             // 
             this.panel3.BackColor = System.Drawing.Color.Silver;
             this.panel3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel3.Location = new System.Drawing.Point(816, 0);
+            this.panel3.Location = new System.Drawing.Point(846, 0);
             this.panel3.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1, 30);
+            this.panel3.Size = new System.Drawing.Size(1, 1);
             this.panel3.TabIndex = 4;
             this.panel3.Visible = false;
-            // 
-            // button1
-            // 
-            this.button1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(817, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(30, 30);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "˅";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // radioButton3
             // 
@@ -179,21 +170,101 @@
             // 
             this.panel4.Controls.Add(this.panel5);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(0, 30);
+            this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Margin = new System.Windows.Forms.Padding(0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(847, 60);
+            this.panel4.Size = new System.Drawing.Size(847, 90);
             this.panel4.TabIndex = 2;
             // 
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.Silver;
+            this.panel5.Controls.Add(this.usT_HorizontalTabControl5);
+            this.panel5.Controls.Add(this.usT_HorizontalTabControl4);
+            this.panel5.Controls.Add(this.usT_HorizontalTabControl3);
+            this.panel5.Controls.Add(this.usT_HorizontalTabControl2);
+            this.panel5.Controls.Add(this.usT_HorizontalTabControl1);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Margin = new System.Windows.Forms.Padding(0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(847, 5);
+            this.panel5.Size = new System.Drawing.Size(847, 25);
             this.panel5.TabIndex = 0;
+            // 
+            // usT_HorizontalTabControl5
+            // 
+            this.usT_HorizontalTabControl5.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_HorizontalTabControl5.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl5.Location = new System.Drawing.Point(600, 0);
+            this.usT_HorizontalTabControl5.Name = "usT_HorizontalTabControl5";
+            this.usT_HorizontalTabControl5.Size = new System.Drawing.Size(150, 25);
+            this.usT_HorizontalTabControl5.TabIndex = 4;
+            this.usT_HorizontalTabControl5.Text = "Сборки";
+            this.usT_HorizontalTabControl5.UST_PressedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl5.UST_PressedForeColor = System.Drawing.Color.Black;
+            this.usT_HorizontalTabControl5.UST_SelectedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl5.Click += new System.EventHandler(this.usT_HorizontalTabControl_Click);
+            // 
+            // usT_HorizontalTabControl4
+            // 
+            this.usT_HorizontalTabControl4.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_HorizontalTabControl4.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl4.Location = new System.Drawing.Point(450, 0);
+            this.usT_HorizontalTabControl4.Name = "usT_HorizontalTabControl4";
+            this.usT_HorizontalTabControl4.Size = new System.Drawing.Size(150, 25);
+            this.usT_HorizontalTabControl4.TabIndex = 3;
+            this.usT_HorizontalTabControl4.Text = "Задания";
+            this.usT_HorizontalTabControl4.UST_PressedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl4.UST_PressedForeColor = System.Drawing.Color.Black;
+            this.usT_HorizontalTabControl4.UST_SelectedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl4.Click += new System.EventHandler(this.usT_HorizontalTabControl_Click);
+            // 
+            // usT_HorizontalTabControl3
+            // 
+            this.usT_HorizontalTabControl3.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_HorizontalTabControl3.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl3.Location = new System.Drawing.Point(300, 0);
+            this.usT_HorizontalTabControl3.Name = "usT_HorizontalTabControl3";
+            this.usT_HorizontalTabControl3.Size = new System.Drawing.Size(150, 25);
+            this.usT_HorizontalTabControl3.TabIndex = 2;
+            this.usT_HorizontalTabControl3.Text = "Тех. решения";
+            this.usT_HorizontalTabControl3.UST_PressedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl3.UST_PressedForeColor = System.Drawing.Color.Black;
+            this.usT_HorizontalTabControl3.UST_SelectedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl3.Click += new System.EventHandler(this.usT_HorizontalTabControl_Click);
+            // 
+            // usT_HorizontalTabControl2
+            // 
+            this.usT_HorizontalTabControl2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_HorizontalTabControl2.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl2.Location = new System.Drawing.Point(150, 0);
+            this.usT_HorizontalTabControl2.Name = "usT_HorizontalTabControl2";
+            this.usT_HorizontalTabControl2.Size = new System.Drawing.Size(150, 25);
+            this.usT_HorizontalTabControl2.TabIndex = 1;
+            this.usT_HorizontalTabControl2.Text = "Продукты";
+            this.usT_HorizontalTabControl2.UST_PressedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl2.UST_PressedForeColor = System.Drawing.Color.Black;
+            this.usT_HorizontalTabControl2.UST_SelectedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl2.Click += new System.EventHandler(this.usT_HorizontalTabControl_Click);
+            // 
+            // usT_HorizontalTabControl1
+            // 
+            this.usT_HorizontalTabControl1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_HorizontalTabControl1.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl1.Location = new System.Drawing.Point(0, 0);
+            this.usT_HorizontalTabControl1.Name = "usT_HorizontalTabControl1";
+            this.usT_HorizontalTabControl1.Size = new System.Drawing.Size(150, 25);
+            this.usT_HorizontalTabControl1.TabIndex = 0;
+            this.usT_HorizontalTabControl1.Text = "Проекты";
+            this.usT_HorizontalTabControl1.UST_PressedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl1.UST_PressedForeColor = System.Drawing.Color.Black;
+            this.usT_HorizontalTabControl1.UST_SelectedColor = System.Drawing.Color.WhiteSmoke;
+            this.usT_HorizontalTabControl1.Click += new System.EventHandler(this.usT_HorizontalTabControl_Click);
             // 
             // UC_StartPanel
             // 
@@ -209,6 +280,7 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel4.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -221,12 +293,16 @@
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel5;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.RadioButton radioButton4;
         public System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton5;
+        public UST_HorizontalTabControl usT_HorizontalTabControl1;
+        public UST_HorizontalTabControl usT_HorizontalTabControl5;
+        public UST_HorizontalTabControl usT_HorizontalTabControl4;
+        public UST_HorizontalTabControl usT_HorizontalTabControl3;
+        public UST_HorizontalTabControl usT_HorizontalTabControl2;
     }
 }

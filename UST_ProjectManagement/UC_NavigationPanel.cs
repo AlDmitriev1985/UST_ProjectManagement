@@ -406,6 +406,11 @@ namespace UST_ProjectManagement
                 else if (GlobalData.SelectedStage != null && e.Node.Tag == "Stage"||
                     GlobalData.SelectedProject !=null && e.Node.Tag == "SubProject")
                 {
+                    toolStripItem3.Text = "Открыть в Navisworks";
+                    toolStripItem3.Image = Properties.Resources.OpenNavisworks_25x25 as Bitmap;
+                    toolStripItem3.Click += new EventHandler(toolStripItem3_Click);
+                    e.Node.ContextMenuStrip.Items.Add(toolStripItem3);
+
                     if (GlobalData.UserRole == "Admin" || GlobalData.UserRole == "Manager")
                     {
                         toolStripItem6.Text = "Создать поз.по ГП";
@@ -501,8 +506,23 @@ namespace UST_ProjectManagement
         {
             if (open == false)
             {
-                PositionInfo info = new PositionInfo(GlobalData.SelectedProject, GlobalData.SelectedStage, GlobalData.SelectedPosition);
-                string path = NodePath + @"00.01_CRD\08_NWD\" + GlobalData.SelectedPosition.PositionCode + "_UST_"+ info.StageTag +"_GF_22.nwd";
+                string path = "";
+                try
+                {
+                    PositionInfo info = new PositionInfo(GlobalData.SelectedProject, GlobalData.SelectedStage, GlobalData.SelectedPosition);
+                    path = NodePath + @"00.01_CRD\07_NWF\" + GlobalData.SelectedPosition.PositionCode + "_UST_" + info.StageTag + "_GF_22.nwd";
+                }
+                catch
+                {
+                    try
+                    {
+                        ProjectStageInfo info = new ProjectStageInfo(GlobalData.SelectedProject, GlobalData.SelectedStage);
+                        path = NodePath + GlobalData.SelectedProject.ProjectId + @"_CRD\07_NWF\" + GlobalData.SelectedProject.ProjectId + "_UST_" + info.StageTag + "_GF_22.nwd";
+                    }
+                    catch 
+                    {
+                    }
+                }
                 //if (File.Exists(path))
                 //{
                 //    using(Process.Start(new ProcessStartInfo("explorer.exe", " /e, " + path)))
@@ -515,9 +535,12 @@ namespace UST_ProjectManagement
                 //{
                 //    MessageBox.Show("Отсутствует координационная моодель:\n\n" + path + "\n\nОбратитесь в BIM-отдел.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //}
-                GlobalMethodes.CopyAndOpenFile(path);
-                GlobalMethodes.CreateLog("Открыть в Проводнике");
-                open = true;
+                if (path !="")
+                {
+                    GlobalMethodes.CopyAndOpenFile(path);
+                    GlobalMethodes.CreateLog("Открыть в Проводнике");
+                    open = true; 
+                }
             }
 
         }

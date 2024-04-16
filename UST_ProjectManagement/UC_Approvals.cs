@@ -215,17 +215,26 @@ namespace UST_ProjectManagement
             List<ScheduleItem> editedItems = new List<ScheduleItem>();
             foreach (DataGridViewRow row in dataGridView_Approvals.SelectedRows)
             {
-                if (GlobalData.UserSets.Contains(row.Cells[0].Value))
+                ScheduleItem item = positionInfo.scheduleItems.FirstOrDefault(x => x.SecThreeTag + x.SecThreePostfix == row.Cells[1].Value.ToString());
+                if (item != null)
                 {
-                    try
+                    if (GlobalData.user.FunctionId == 7 && item.Status.StatusId == 3)
                     {
-                        editedItems.Add(positionInfo.scheduleItems.FirstOrDefault(x => x.SecThreeTag + x.SecThreePostfix == row.Cells[1].Value));
+                        editedItems.Add(item);
                     }
-                    catch
+                    else if (GlobalData.user.FunctionId < 3 && item.Status.StatusId > 0 && item.Status.StatusId < 3)
                     {
-
+                        editedItems.Add(item);
                     }
+                    else
+                    {
+                        if (GlobalData.UserSets.Contains(row.Cells[0].Value))
+                        {
+                            editedItems.Add(item);
+                        }
+                    } 
                 }
+                
             }
             return editedItems;
         }
@@ -236,6 +245,7 @@ namespace UST_ProjectManagement
             if (item.Progress < 100) id = 1;
             else if (item.Progress == 100 && item.Status.StatusId == 1) id = 2;
             else if (item.Progress == 100 && item.Status.StatusId == 2) id = 4;
+            else if (item.Progress == 100 && item.Status.StatusId == 3 && GetRole() == 3) id = 11;
             else if (item.Progress == 100 && item.Status.StatusId == 4 && GetRole() == 2) id = 0;
             Status status = RequestInfo.lb.Status.FirstOrDefault(x => x.StatusId == id);
             return status;
@@ -289,58 +299,65 @@ namespace UST_ProjectManagement
 
                     int progress = group.Sum(x => x.Progress.Value) / group.Count();
                     secTowRow.Cells[4].Value = progress.ToString() + "%";
-                    Status status = group.FirstOrDefault(x => x.Status.StatusId == group.Min(y => y.Status.StatusId)).Status;
-                    secTowRow.Cells[5].Value = status.StatusName;
-
-                    Methodes.ApplyRowBackColor(secTowRow, Color.LightBlue);
-
-                    switch (status.StatusId)
+                    try
                     {
-                        case 0: Methodes.ApplyRowBackColor(secTowRow, Color.Gainsboro); break;
-                        case 1: Methodes.ApplyRowBackColor(secTowRow, Color.LightBlue); break;
-                        case 2: Methodes.ApplyRowBackColor(secTowRow, Color.Orange); break;
-                        case 3: Methodes.ApplyRowBackColor(secTowRow, Color.LightCoral); break;
-                        case 4: Methodes.ApplyRowBackColor(secTowRow, Color.MediumSeaGreen); break;
-                    }
-                    dataGridView_Approvals.Rows.Add(secTowRow);
+                        Status status = group.FirstOrDefault(x => x.Status.StatusId == group.Min(y => y.Status.StatusId)).Status;
+                        secTowRow.Cells[5].Value = status.StatusName;
 
-                    foreach (var section in group)
-                    {
-                        DataGridViewRow row = new DataGridViewRow();
-                        row.CreateCells(dataGridView_Approvals);
-                        row.ReadOnly = true;
-                        row.Height = rowh;
+                        Methodes.ApplyRowBackColor(secTowRow, Color.LightBlue);
 
-                        row.Cells[0].Value = section.SecThreeNum;
-                        row.Cells[1].Value = section.SecThreeTag + section.SecThreePostfix;
-                        row.Cells[2].Value = section.SecThreeName;
-                        row.Cells[4].Value = section.Progress + "%";
-                        row.Cells[5].Value = section.Status.StatusName;
-                        HistoryLog historyLog = null;
-                        if (section.History != null)
+                        switch (status.StatusId)
                         {
-                            historyLog = JsonConvert.DeserializeObject<HistoryLog>(section.History);
+                            case 0: Methodes.ApplyRowBackColor(secTowRow, Color.Gainsboro); break;
+                            case 1: Methodes.ApplyRowBackColor(secTowRow, Color.LightBlue); break;
+                            case 2: Methodes.ApplyRowBackColor(secTowRow, Color.Orange); break;
+                            case 3: Methodes.ApplyRowBackColor(secTowRow, Color.LightCoral); break;
+                            case 4: Methodes.ApplyRowBackColor(secTowRow, Color.MediumSeaGreen); break;
                         }
-                        if (historyLog != null)
+                        dataGridView_Approvals.Rows.Add(secTowRow);
+
+                        foreach (var section in group)
                         {
-                            POSTServer.History.HistoryInfo history = historyLog.spHistory.Last();
-                            try
+                            DataGridViewRow row = new DataGridViewRow();
+                            row.CreateCells(dataGridView_Approvals);
+                            row.ReadOnly = true;
+                            row.Height = rowh;
+
+                            row.Cells[0].Value = section.SecThreeNum;
+                            row.Cells[1].Value = section.SecThreeTag + section.SecThreePostfix;
+                            row.Cells[2].Value = section.SecThreeName;
+                            row.Cells[4].Value = section.Progress + "%";
+                            row.Cells[5].Value = section.Status.StatusName;
+                            HistoryLog historyLog = null;
+                            if (section.History != null)
                             {
-                                row.Cells[6].Value = (history.Date.Split(' '))[0];
-                                row.Cells[7].Value = history.User;
+                                historyLog = JsonConvert.DeserializeObject<HistoryLog>(section.History);
                             }
-                            catch
+                            if (historyLog != null)
+                            {
+                                POSTServer.History.HistoryInfo history = historyLog.spHistory.Last();
+                                try
+                                {
+                                    row.Cells[6].Value = (history.Date.Split(' '))[0];
+                                    row.Cells[7].Value = history.User;
+                                }
+                                catch
+                                {
+                                    row.Cells[6].Value = "";
+                                    row.Cells[7].Value = "";
+                                }
+                            }
+                            else
                             {
                                 row.Cells[6].Value = "";
                                 row.Cells[7].Value = "";
                             }
+                            dataGridView_Approvals.Rows.Add(row);
+
                         }
-                        else
-                        {
-                            row.Cells[6].Value = "";
-                            row.Cells[7].Value = "";
-                        }
-                        dataGridView_Approvals.Rows.Add(row);
+                    }
+                    catch
+                    {
 
                     }
                 }

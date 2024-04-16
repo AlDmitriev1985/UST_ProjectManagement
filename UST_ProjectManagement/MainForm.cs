@@ -719,6 +719,7 @@ namespace UST_ProjectManagement
             if (firstStart)
             {
                 firstStart = false;
+                uC_StartPanel1.usT_HorizontalTabControl_Click(uC_StartPanel1.usT_HorizontalTabControl1, EventArgs.Empty);
                 uC_StartPanel1.radioButton_CheckedChanged(uC_StartPanel1.radioButton1, EventArgs.Empty);
                 //uC_StartPanel1.UpdatePanels();
             }
@@ -1530,7 +1531,7 @@ namespace UST_ProjectManagement
         {
             GlobalMethodes.DeleteCreatedFiles();
             GlobalData.CreatedFiles.Clear();
-            GlobalMethodes.CreateLog("Заткрытие программы");
+            GlobalMethodes.CreateLog("Закрытие программы");
         }
 
         private void uC_NavigationPanel2_MouseClick()

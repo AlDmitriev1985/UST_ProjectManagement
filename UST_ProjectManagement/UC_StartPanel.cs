@@ -70,7 +70,8 @@ namespace UST_ProjectManagement
             contextMenu.Items.Add(stripItemGetPath);
 
             uC_Search_Projects = new UC_Search_Projects();
-            uC_Search_Projects.Dock = DockStyle.Fill;
+            uC_Search_Projects.Dock = DockStyle.Bottom;
+            uC_Search_Projects.Height = panel4.Height - panel5.Height;
             uC_Search_Projects.Margin = new Padding(0);
             panel4.Controls.Add(uC_Search_Projects);
             uC_Search_Projects.comboBoxSelectIndexChanged += UpdatePanels_1;
@@ -470,6 +471,7 @@ namespace UST_ProjectManagement
                 catch {}
                 try
                 {
+                    List<string> nwdpathList = new List<string>();
                     foreach (int id in pIds)
                     {
                         try
@@ -484,10 +486,10 @@ namespace UST_ProjectManagement
                                 string _path = inventors.FirstOrDefault().InventorToNwdInfo;
                                 string path = "";
                                 string date = "";
-                                if (GetNWDfileInfo(project.ProjectId, stage.StageTag, out date, out path))
+                                if (GetNWDfileInfo(project.ProjectId, stage.StageTag, out date, out path) && !nwdpathList.Contains(path))
                                 {
                                     DataGridViewRow row = new DataGridViewRow();
-
+                                    nwdpathList.Add(path);
                                     row.CreateCells(dataGrid);
                                     row.Cells[0].Value = project.ProjectId;
                                     row.Cells[1].Value = project.ProjectName;
@@ -823,19 +825,19 @@ namespace UST_ProjectManagement
 
         private void UpdateFilterPanel(bool open, int mode)
         {
-            if (open)
-            {
-                button1.Text = "˄";
-                panel4.Visible = true;
-                tableLayoutPanel1.RowStyles[1].Height = 70;
-                if (uC_Search_Projects.IsCreatePanels) uC_Search_Projects.CreatePanels(mode);
-            }
-            else
-            {
-                button1.Text = "˅";
-                panel4.Visible = false;
-                tableLayoutPanel1.RowStyles[1].Height = 0;
-            }
+            //if (open)
+            //{
+            //    button1.Text = "˄";
+            //    panel4.Visible = true;
+            //    tableLayoutPanel1.RowStyles[1].Height = 70;
+            //    if (uC_Search_Projects.IsCreatePanels) uC_Search_Projects.CreatePanels(mode);
+            //}
+            //else
+            //{
+            //    button1.Text = "˅";
+            //    panel4.Visible = false;
+            //    tableLayoutPanel1.RowStyles[1].Height = 0;
+            //}
         }
 
         public void DG_SizeChanged(object sender, EventArgs e)
@@ -1134,7 +1136,15 @@ namespace UST_ProjectManagement
                             if (index == 0)
                             {
                                 string[] sPath = node.FullPath.Split('\\');
-                                string stageCode = sPath[sPath.Length - 2];
+                                string stageCode = "";
+                                if (node.Tag.ToString() == "SubPosition")
+                                {
+                                    stageCode = sPath[sPath.Length - 3];
+                                }
+                                else
+                                {
+                                    stageCode = sPath[sPath.Length - 2];
+                                }
                                 string[] sStageCode = stageCode.Split('_');
                                 string Stage = sStageCode[sStageCode.Length - 1];
                                 if (Stage == stage)
@@ -1320,6 +1330,32 @@ namespace UST_ProjectManagement
                 openFiltersPanel = true;
             }
             UpdateFilterPanel(openFiltersPanel, Mode);
+        }
+
+        public void usT_HorizontalTabControl_Click(object sender, EventArgs e)
+        {
+            int index = (sender as UST_HorizontalTabControl).TabIndex;
+            foreach (Control control in panel2.Controls)
+            {
+                if (control.TabIndex == index)
+                {
+                    (control as RadioButton).Checked = true;
+                    break;
+                }
+            }
+            foreach(Control btn in panel5.Controls)
+            {
+                UST_HorizontalTabControl tabControl = btn as UST_HorizontalTabControl;
+                if (tabControl.TabIndex == index)
+                {
+                    tabControl.PressedStatus = true;
+                }
+                else
+                {
+                    tabControl.PressedStatus = false;
+                }
+                tabControl.Invalidate();
+            }
         }
     }
 }

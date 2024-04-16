@@ -1923,6 +1923,7 @@ namespace UST_ProjectManagement
         {
             if (File.Exists(path))
             {
+                
                 string dirpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ProjectManagement\Temp\OpenNWD\";
                 if (!System.IO.Directory.Exists(dirpath))
                 {
@@ -1952,12 +1953,14 @@ namespace UST_ProjectManagement
                         Form_MessageBox messageBox = new Form_MessageBox($"Не получилось скопировать файл в папку: {dirpath}\n Закройте файл: {spPath[spPath.Length - 1]}\n и попробуйте еще раз.", "Предупреждение", 0);
                         messageBox.ShowDialog();
                     }
-                }     
+                }
+                GlobalMethodes.CreateLog($"Открытие NWD: {path}");
             }
             else
             {
                 Form_MessageBox messageBox = new Form_MessageBox("Моодель элемента отсутствует. Обратитесь в BIM-отдел.", "Предупреждение",0);
                 messageBox.ShowDialog();
+                GlobalMethodes.CreateLog($"Отсутствует NWD: {path}");
             }
         }
 
