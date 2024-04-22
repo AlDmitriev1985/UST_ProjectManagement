@@ -1281,9 +1281,17 @@ namespace UST_ProjectManagement
                                                     general = new PublishForm();
                                                     general.StartPosition = FormStartPosition.CenterParent;
                                                     general.dataGridView_Files.CellContentDoubleClick += new DataGridViewCellEventHandler(general.dataGridView_Files_CellMouseDoubleClick);
-
-
                                                     general.GetTaskInfo(TD.TaskDepartmentId);
+                                                    general.comboBox3.Text = dataGrid.SelectedRows[0].Cells[5].Value.ToString();
+
+                                                    general.textBox1.TextChanged -= new System.EventHandler(general.textBox1_TextChanged);
+                                                    general.textBox3.TextChanged -= new System.EventHandler(general.textBox3_TextChanged);
+                                                    general.textBox4.TextChanged -= new System.EventHandler(general.textBox3_TextChanged);
+                                                    general.comboBox1.SelectedValueChanged -= new System.EventHandler(general.comboBox1_SelectedValueChanged);
+                                                    general.comboBox1.TextChanged -= new System.EventHandler(general.comboBox1_TextChanged);
+                                                    general.comboBox2.SelectedValueChanged -= new System.EventHandler(general.comboBox2_SelectedValueChanged);
+                                                    general.comboBox3.SelectedValueChanged -= new System.EventHandler(general.comboBox3_SelectedValueChanged);
+                                                    general.comboBox3.TextChanged -= new System.EventHandler(general.comboBox3_TextChanged);
 
                                                     if (general.ShowDialog() == DialogResult.OK)
                                                     {
@@ -1316,10 +1324,10 @@ namespace UST_ProjectManagement
                                             GetTaskForm general = new GetTaskForm();
                                             general.StartPosition = FormStartPosition.CenterParent;
                                             general.lb = lb;
-                                            general.textBox1.Text = dataGrid.SelectedRows[0].Cells[0].Value.ToString();
-                                            general.textBox2.Text = dataGrid.SelectedRows[0].Cells[1].Value.ToString();
-                                            general.textBox3.Text = dataGrid.SelectedRows[0].Cells[2].Value.ToString();
-                                            general.textBox4.Text = dataGrid.SelectedRows[0].Cells[4].Value.ToString();
+                                            general.textBox1.Text = dataGrid.SelectedRows[0].Cells[1].Value.ToString();
+                                            general.textBox2.Text = dataGrid.SelectedRows[0].Cells[2].Value.ToString();
+                                            general.textBox3.Text = dataGrid.SelectedRows[0].Cells[3].Value.ToString();
+                                            general.textBox4.Text = dataGrid.SelectedRows[0].Cells[5].Value.ToString();
 
                                             general.Test();
 
