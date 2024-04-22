@@ -35,6 +35,7 @@ namespace UST_ProjectManagement
         List<string> header1;
         List<string> header2;
         List<string> header3;
+        List<string> header4;
         int Mode = 0;
         public UC_StartPanel()
         {
@@ -49,9 +50,10 @@ namespace UST_ProjectManagement
             dataGrid.SizeChanged += new EventHandler(DG_SizeChanged);
             dataGrid.MouseDown += dataGridView_MouseDown;
             tableLayoutPanel1.Controls.Add(dataGrid, 0, 3);
-            header1 = new List<string>() { "Шифр", "Наименование", "Стадия", "ГИП", "ГАП", "Начало", "Конец", "%", "Тип", "ID", "" };
-            header2 = new List<string>() { "Шифр", "Стадия", "Номер задания", "Наименование", "От раздела", "Для раздела", "Выдал", "Получил", "Статус", "Task Id", "Task Dep Id" };
-            header3 = new List<string>() { "Шифр", "Наименование", "Стадия", "Автор", "Наименование элемента", "Обновлено", "Тип", "Id",  "", "", ""};
+            header1 = new List<string>() { "Проект", "Шифр", "Наименование", "Стадия", "ГИП", "ГАП", "Начало", "Конец", "%", "Тип", "ID", "" };
+            header2 = new List<string>() { "Проект", "Шифр", "Стадия", "Номер задания", "Наименование", "От раздела", "Для раздела", "Выдал", "Получил", "Статус", "Task Id", "Task Dep Id" };
+            header3 = new List<string>() { "Шифр", "Наименование", "Стадия", "Автор", "Наименование элемента", "Обновлено", "Тип", "Id",  "", "", "", ""};
+            header4 = new List<string>() { "Шифр", "Наименование", "Стадия", "ГИП", "ГАП", "Начало", "Конец", "%", "Тип", "ID", "", ""};
             CardTask.Methodes_DataGrid.CreateDataGrid(dataGrid, header1);
 
             stripItemOpen.Text = "Открыть карточку";
@@ -118,7 +120,7 @@ namespace UST_ProjectManagement
             GlobalData.loadInfo = "Поиск...";
             StartProcess?.Invoke();
 
-            UpdateFilterPanel(openFiltersPanel, Mode);
+            //UpdateFilterPanel(openFiltersPanel, Mode);
             uC_Search_Projects.Visible = false;
             dataGrid.Rows.Clear();
             UpdateDataGridColumns();
@@ -149,16 +151,17 @@ namespace UST_ProjectManagement
                             PositionInfo positionInfo = new PositionInfo(project, stage, position);
                             DataGridViewRow row = new DataGridViewRow();
                             row.CreateCells(dataGrid);
-                            row.Cells[0].Value = positionInfo.Code;
-                            row.Cells[1].Value = positionInfo.PositionName;
-                            row.Cells[2].Value = positionInfo.StageTag;
-                            row.Cells[3].Value = positionInfo.GIP;
-                            row.Cells[4].Value = positionInfo.GAP;
-                            row.Cells[5].Value = positionInfo.StartDate;
-                            row.Cells[6].Value = positionInfo.EndDate;
-                            row.Cells[7].Value = positionInfo.PersentComplete;
-                            row.Cells[8].Value = "Проекты";
-                            row.Cells[9].Value = positionInfo.ID;
+                            row.Cells[0].Value = position.ProjectId;
+                            row.Cells[1].Value = positionInfo.Code;
+                            row.Cells[2].Value = positionInfo.PositionName;
+                            row.Cells[3].Value = positionInfo.StageTag;
+                            row.Cells[4].Value = positionInfo.GIP;
+                            row.Cells[5].Value = positionInfo.GAP;
+                            row.Cells[6].Value = positionInfo.StartDate;
+                            row.Cells[7].Value = positionInfo.EndDate;
+                            row.Cells[8].Value = positionInfo.PersentComplete;
+                            row.Cells[9].Value = "Проекты";
+                            row.Cells[10].Value = positionInfo.ID;
                             row.Height = CardTask.Methodes_DataGrid.RowHeight;
                             dataGrid.Rows.Add(row);
 
@@ -348,27 +351,6 @@ namespace UST_ProjectManagement
                     List<LibraryDB.DB.Task> tasks = RequestInfo.lb.Tasks.ToList().OrderByDescending(x => x.TaskId).ToList();
                     foreach (LibraryDB.DB.Task task in tasks)
                     {
-                        //if (filters != null && filters[0, 4] != null && filters[0, 4] != "<Нет>" && task.SectionThreeId.ToString() != filters[0, 4])
-                        //{
-                        //    continue;
-                        //}
-
-                        //
-                        //if (filters != null && filters[0, 3] != null && filters[0, 3] != "<Нет>" && position.PositionId.ToString() != filters[0, 3])
-                        //{
-                        //    continue;
-                        //}
-
-
-
-                        //if (filters != null && filters[0, 2] != null && filters[0, 2] != "<Нет>")
-                        //{
-                        //    if (stage.StageId.ToString() != filters[0, 2])
-                        //    {
-                        //        stage = null;
-                        //    }
-                        //}
-
                         List<Project> sortP = RequestInfo.lb.Projects.OrderByDescending(x => x.ProjectId).ToList();
                         Position position = RequestInfo.lb.Positions.FirstOrDefault(x => x.PositionId == task.PositionId);
                         Project project = sortP.FirstOrDefault(x => x.ProjectId == position.ProjectId);
@@ -391,26 +373,34 @@ namespace UST_ProjectManagement
 
                                 DataGridViewRow row = new DataGridViewRow();
                                 row.CreateCells(dataGrid);
-                                row.Cells[0].Value = position.PositionCode;
-                                row.Cells[1].Value = stage.StageTag;
-                                row.Cells[2].Value = $"{task.TaskNumer}-{task.TaskYear}";
-                                row.Cells[3].Value = task.TaskName;
+                                row.Cells[0].Value = position.ProjectId;
+                                row.Cells[1].Value = position.PositionCode;
+                                row.Cells[2].Value = stage.StageTag;
+                                row.Cells[3].Value = $"{task.TaskNumer}-{task.TaskYear}";
+                                row.Cells[4].Value = task.TaskName;
                                 if (stage.LanguageId == 2)
                                 {
-                                    row.Cells[4].Value = sectionFrom.SectionThreeTagEng;
-                                    row.Cells[5].Value = sectionTo.SectionThreeTagEng;
+                                    row.Cells[5].Value = sectionFrom.SectionThreeTagEng;
+                                    row.Cells[6].Value = sectionTo.SectionThreeTagEng;
                                 }
                                 else
                                 {
-                                    row.Cells[4].Value = sectionFrom.SectionThreeTagRus;
-                                    row.Cells[5].Value = sectionTo.SectionThreeTagRus;
+                                    row.Cells[5].Value = sectionFrom.SectionThreeTagRus;
+                                    row.Cells[6].Value = sectionTo.SectionThreeTagRus;
                                 }
-                                row.Cells[6].Value = $"{userFrom.UserSurname} {userFrom.UserName}";
-                                row.Cells[7].Value = $"{userTo.UserSurname} {userTo.UserName}";
-                                row.Cells[8].Value = status.StatusName;
-                                row.Cells[8].Style.BackColor = GlobalMethodes.GetCellColor(status.StatusId, 0);
-                                row.Cells[9].Value = task.TaskId;
-                                row.Cells[10].Value = taskDepartment.TaskDepartmentId;
+                                row.Cells[7].Value = $"{userFrom.UserSurname} {userFrom.UserName}";
+                                if (userTo.UserSurname != "-")
+                                {
+                                    row.Cells[8].Value = $"{userTo.UserSurname} {userTo.UserName}";
+                                }
+                                else
+                                {
+                                    row.Cells[8].Value = GetAsignie(task, taskDepartment, status);
+                                }
+                                row.Cells[9].Value = status.StatusName;
+                                row.Cells[9].Style.BackColor = GlobalMethodes.GetCellColor(status.StatusId, 0);
+                                row.Cells[10].Value = task.TaskId;
+                                row.Cells[11].Value = taskDepartment.TaskDepartmentId;
                                 row.Height = CardTask.Methodes_DataGrid.RowHeight;
                                 dataGrid.Rows.Add(row);
 
@@ -604,6 +594,56 @@ namespace UST_ProjectManagement
             GlobalMethodes._stop = true;
         }
 
+        private string GetAsignie(LibraryDB.DB.Task task, TaskDepartment taskDepartment, Status status)
+        {
+            string user = "--";
+            Department department = null;
+            User header = null;
+
+            switch (status.StatusId)
+            {
+                case 6:
+                    try
+                    {
+                        department = RequestInfo.lb.Departments.FirstOrDefault(x => x.DepartmentId == task.DepartmentId);
+                        header = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == department.DepartmentHeade.Value);
+
+                    }
+                    catch { }
+                    break;
+                case 7:
+                case 20:
+                    try
+                    {
+                        var position = RequestInfo.lb.Positions.FirstOrDefault(x => x.PositionId == task.PositionId);
+                        header = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == position.PositionUserIdGIP);
+                    }
+                    catch { }
+                    break;
+                case 9:
+                    try
+                    {
+                        department = RequestInfo.lb.Departments.FirstOrDefault(x => x.DepartmentId == taskDepartment.DepartmentId);
+                        header = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == department.DepartmentHeade.Value);
+                    }
+                    catch { }
+                    break;
+                case 13:
+                    try
+                    {
+                        header = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId ==task.TaskUserId);
+                    }
+                    catch { }
+                    break;
+
+            }
+            if (header != null)
+            {
+                user = header.UserSurname + " " + header.UserName;
+            }
+            return user;
+        }
+
         private bool GetNWDfileInfo(string code, string stage, out string date, out string nwdpath)
         {
             nwdpath = "";
@@ -752,9 +792,13 @@ namespace UST_ProjectManagement
         {
             List<string> header = new List<string>();
             dataGrid.ColumnHeadersHeight = 40;
-            if (Mode < 3)
+            if (Mode == 0)
             {
-                header = header1;   
+                header = header1;
+            }
+            else if (Mode < 3)
+            {
+                header = header4;   
             }
             else if (Mode == 3)
             {
@@ -769,7 +813,7 @@ namespace UST_ProjectManagement
                 dataGrid.Columns[c].HeaderText = header[c];
                 if (GlobalData.UserRole != "Admin")
                 {
-                    if (c < 9)
+                    if (c < 10)
                     {
                         dataGrid.Columns[c].Visible = true;
                     }
@@ -780,7 +824,18 @@ namespace UST_ProjectManagement
                 }
                 else
                 {
-                    if (Mode < 3)
+                    if (Mode == 0)
+                    {
+                        if (c < 11)
+                        {
+                            dataGrid.Columns[c].Visible = true;
+                        }
+                        else
+                        {
+                            dataGrid.Columns[c].Visible = false;
+                        }
+                    }
+                    else if (Mode < 3)
                     {
                         if (c < 10)
                         {
@@ -793,7 +848,7 @@ namespace UST_ProjectManagement
                     }
                     else if (Mode == 3)
                     {
-                        if (c < 11)
+                        if (c < 12)
                         {
                             dataGrid.Columns[c].Visible = true;
                         }
@@ -823,27 +878,72 @@ namespace UST_ProjectManagement
             }
         }
 
-        private void UpdateFilterPanel(bool open, int mode)
-        {
-            //if (open)
-            //{
-            //    button1.Text = "˄";
-            //    panel4.Visible = true;
-            //    tableLayoutPanel1.RowStyles[1].Height = 70;
-            //    if (uC_Search_Projects.IsCreatePanels) uC_Search_Projects.CreatePanels(mode);
-            //}
-            //else
-            //{
-            //    button1.Text = "˅";
-            //    panel4.Visible = false;
-            //    tableLayoutPanel1.RowStyles[1].Height = 0;
-            //}
-        }
-
         public void DG_SizeChanged(object sender, EventArgs e)
         {
             int cWidth = 0;
-            if (Mode < 3)
+            if (Mode == 0)
+            {
+                try
+                {
+                    if (dataGrid.Columns[0].Visible)
+                    {
+                        dataGrid.Columns[0].Width = 100;
+                        cWidth += dataGrid.Columns[0].Width;
+                    }
+                    if (dataGrid.Columns[1].Visible)
+                    {
+                        dataGrid.Columns[1].Width = 100;
+                        cWidth += dataGrid.Columns[1].Width;
+                    }
+                    if (dataGrid.Columns[3].Visible)
+                    {
+                        dataGrid.Columns[3].Width = 50;
+                        cWidth += dataGrid.Columns[3].Width;
+                    }
+                    if (dataGrid.Columns[4].Visible)
+                    {
+                        dataGrid.Columns[4].Width = 220;
+                        cWidth += dataGrid.Columns[4].Width;
+                    }
+                    if (dataGrid.Columns[5].Visible)
+                    {
+                        dataGrid.Columns[5].Width = 220;
+                        cWidth += dataGrid.Columns[5].Width;
+                    }
+                    if (dataGrid.Columns[6].Visible)
+                    {
+                        dataGrid.Columns[6].Width = 100;
+                        cWidth += dataGrid.Columns[6].Width;
+                    }
+                    if (dataGrid.Columns[7].Visible)
+                    {
+                        dataGrid.Columns[7].Width = 100;
+                        cWidth += dataGrid.Columns[7].Width;
+                    }
+                    if (dataGrid.Columns[8].Visible)
+                    {
+                        dataGrid.Columns[8].Width = 50;
+                        cWidth += dataGrid.Columns[8].Width;
+                    }
+                    if (dataGrid.Columns[9].Visible)
+                    {
+                        dataGrid.Columns[9].Width = 100;
+                        cWidth += dataGrid.Columns[9].Width;
+                    };
+                    if (GlobalData.UserRole == "Admin")
+                    {
+                        if (dataGrid.Columns[10].Visible)
+                        {
+                            dataGrid.Columns[10].Width = 80;
+                            cWidth += dataGrid.Columns[10].Width;
+                        };
+                    }
+                    dataGrid.Columns[2].Width = dataGrid.Width - (cWidth + 0);
+
+                }
+                catch { }
+            }
+            else if (Mode < 3)
             {
                 try
                 {
@@ -911,7 +1011,7 @@ namespace UST_ProjectManagement
                     }
                     if (dataGrid.Columns[1].Visible)
                     {
-                        dataGrid.Columns[1].Width = 80;
+                        dataGrid.Columns[1].Width = 120;
                         cWidth += dataGrid.Columns[1].Width;
                     }
                     if (dataGrid.Columns[2].Visible)
@@ -919,10 +1019,10 @@ namespace UST_ProjectManagement
                         dataGrid.Columns[2].Width = 80;
                         cWidth += dataGrid.Columns[2].Width;
                     }
-                    if (dataGrid.Columns[4].Visible)
+                    if (dataGrid.Columns[3].Visible)
                     {
-                        dataGrid.Columns[4].Width = 80;
-                        cWidth += dataGrid.Columns[4].Width;
+                        dataGrid.Columns[3].Width = 80;
+                        cWidth += dataGrid.Columns[3].Width;
                     }
                     if (dataGrid.Columns[5].Visible)
                     {
@@ -931,7 +1031,7 @@ namespace UST_ProjectManagement
                     }
                     if (dataGrid.Columns[6].Visible)
                     {
-                        dataGrid.Columns[6].Width = 170;
+                        dataGrid.Columns[6].Width = 80;
                         cWidth += dataGrid.Columns[6].Width;
                     }
                     if (dataGrid.Columns[7].Visible)
@@ -941,23 +1041,28 @@ namespace UST_ProjectManagement
                     }
                     if (dataGrid.Columns[8].Visible)
                     {
-                        dataGrid.Columns[8].Width = 120;
+                        dataGrid.Columns[8].Width = 170;
                         cWidth += dataGrid.Columns[8].Width;
+                    }
+                    if (dataGrid.Columns[9].Visible)
+                    {
+                        dataGrid.Columns[9].Width = 120;
+                        cWidth += dataGrid.Columns[9].Width;
                     };
                     if (GlobalData.UserRole == "Admin")
                     {
-                        if (dataGrid.Columns[9].Visible)
-                        {
-                            dataGrid.Columns[9].Width = 80;
-                            cWidth += dataGrid.Columns[9].Width;
-                        };
                         if (dataGrid.Columns[10].Visible)
                         {
                             dataGrid.Columns[10].Width = 80;
                             cWidth += dataGrid.Columns[10].Width;
                         };
+                        if (dataGrid.Columns[11].Visible)
+                        {
+                            dataGrid.Columns[11].Width = 80;
+                            cWidth += dataGrid.Columns[11].Width;
+                        };
                     }
-                    dataGrid.Columns[3].Width = dataGrid.Width - (cWidth + 0);
+                    dataGrid.Columns[4].Width = dataGrid.Width - (cWidth + 0);
 
                 }
                 catch { }
@@ -1091,8 +1196,8 @@ namespace UST_ProjectManagement
             if (radioButton1.Checked)
             {
                 index = 0;
-                code = dataGrid.SelectedRows[0].Cells[0].Value.ToString();
-                stage = dataGrid.SelectedRows[0].Cells[2].Value.ToString();
+                code = dataGrid.SelectedRows[0].Cells[1].Value.ToString();
+                stage = dataGrid.SelectedRows[0].Cells[3].Value.ToString();
             }
             else if (radioButton2.Checked)
             {
@@ -1110,8 +1215,8 @@ namespace UST_ProjectManagement
             else if (radioButton4.Checked)
             {
                 index = 0;
-                code = dataGrid.SelectedRows[0].Cells[0].Value.ToString();
-                stage = dataGrid.SelectedRows[0].Cells[1].Value.ToString();
+                code = dataGrid.SelectedRows[0].Cells[1].Value.ToString();
+                stage = dataGrid.SelectedRows[0].Cells[2].Value.ToString();
             }
             else if (radioButton5.Checked)
             {
@@ -1166,7 +1271,7 @@ namespace UST_ProjectManagement
                                         {
                                             try
                                             {
-                                                int tdId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells[10].Value);
+                                                int tdId = Convert.ToInt32(dataGrid.SelectedRows[0].Cells[11].Value);
                                                 var TD = RequestInfo.lb.TaskDepartments.FirstOrDefault(x => x.TaskDepartmentId == tdId);
                                                 if (TD != null)
                                                 {
@@ -1329,7 +1434,7 @@ namespace UST_ProjectManagement
             {
                 openFiltersPanel = true;
             }
-            UpdateFilterPanel(openFiltersPanel, Mode);
+            //UpdateFilterPanel(openFiltersPanel, Mode);
         }
 
         public void usT_HorizontalTabControl_Click(object sender, EventArgs e)

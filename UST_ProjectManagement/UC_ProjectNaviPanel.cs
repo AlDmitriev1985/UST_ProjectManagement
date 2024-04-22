@@ -199,6 +199,13 @@ namespace UST_ProjectManagement
                 }
 
             }
+            else if (GlobalData.SelectedStage != null && GlobalData.SelectedPosition == null )
+            {
+                usT_HorizontalTabControl2.Visible = true;
+                usT_HorizontalTabControl3.Visible = false;
+                usT_HorizontalTabControl4.Visible = false;
+                usT_HorizontalTabControl5.Visible = false;
+            }
             else
             {
                 usT_HorizontalTabControl2.Visible = false;

@@ -13,10 +13,10 @@ namespace UST_ProjectManagement
         /// </summary>
         public static Dictionary<int, List<string>> filtersSets = new Dictionary<int, List<string>>()
         {
-            {0, new List<string>(){ "Шифр", "Стадия", "ГИП", "ГАП", "% выполнения", "Тип" } },
+            {0, new List<string>(){"Проект", "Шифр", "Стадия", "ГИП", "ГАП", "% выполнения"} },
             {1, new List<string>(){ "Шифр", "Стадия", "ГИП" } },
             {2, new List<string>(){ "Шифр", "Стадия", "ГИП"} },
-            {3, new List<string>(){ "Шифр", "Стадия", "От раздела", "Для раздела", "Выдал", "Получил", "Статус" } },
+            {3, new List<string>(){ "Проект", "Шифр", "Стадия", "От раздела", "Для раздела", "Выдал", "Получил", "Статус" } },
             {4, new List<string>(){ "Шифр", "Автор", "Тип" } },
         };
         /// <summary>
@@ -24,10 +24,10 @@ namespace UST_ProjectManagement
         /// </summary>
         public static Dictionary<int, Dictionary<int, int>> filterColumns = new Dictionary<int, Dictionary<int, int>>()
         {
-            {0, new Dictionary<int, int>(){{0, 0}, {1, 2}, { 2, 3}, { 3, 4 }, {4, 7 }, { 5, 8 } } },
+            {0, new Dictionary<int, int>(){{0, 0}, { 1, 1 }, { 2, 3}, { 3, 4}, { 4, 5 }, {5, 8 } } },
             {1, new Dictionary<int, int>(){{0, 0}, {1, 2}, { 2, 3} } },
             {2, new Dictionary<int, int>(){{0, 0}, {1, 2}, { 2, 3} } },
-            {3, new Dictionary<int, int>(){{0, 0}, {1, 1}, { 2, 4}, { 3, 5 }, {4, 6 }, { 5, 7 }, { 6, 8 } } },
+            {3, new Dictionary<int, int>(){{0, 0}, {1, 1}, { 2, 2 }, { 3, 5}, { 4, 6 }, {5, 7 }, { 6, 8 }, { 7, 9 } } },
             {4, new Dictionary<int, int>(){{0, 0}, {1, 3}, { 2, 6} } }
         };
         /// <summary>

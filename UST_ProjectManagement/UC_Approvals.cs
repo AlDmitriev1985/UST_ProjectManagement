@@ -297,7 +297,12 @@ namespace UST_ProjectManagement
                     }
                     DataGridViewComboBoxCell cbcell = new DataGridViewComboBoxCell();
 
-                    int progress = group.Sum(x => x.Progress.Value) / group.Count();
+                    int progress = 0;
+                    try
+                    {
+                        progress = group.Sum(x => x.Progress.Value) / group.Count();
+                    }
+                    catch { }   
                     secTowRow.Cells[4].Value = progress.ToString() + "%";
                     try
                     {

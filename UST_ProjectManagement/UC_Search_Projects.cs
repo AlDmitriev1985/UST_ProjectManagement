@@ -96,15 +96,15 @@ namespace UST_ProjectManagement
 
                 button = new Button();
 
-                button.Text = "Search";
-                button.TabIndex = 0;
-                button.Width = 70;
-                button.FlatStyle = FlatStyle.Flat;
-                button.FlatAppearance.BorderSize = 0;
-                button.Margin = new Padding(0);
-                button.Dock = DockStyle.Right;
-                button.Click += new EventHandler(Button_Click);
-                this.Controls.Add(button);
+                //button.Text = "Search";
+                //button.TabIndex = 0;
+                //button.Width = 70;
+                //button.FlatStyle = FlatStyle.Flat;
+                //button.FlatAppearance.BorderSize = 0;
+                //button.Margin = new Padding(0);
+                //button.Dock = DockStyle.Right;
+                //button.Click += new EventHandler(Button_Click);
+                //this.Controls.Add(button);
 
                 SerchPanel_SelectedIndexChanged(this, EventArgs.Empty);
                 //UpdateDictionaries(mode);
@@ -139,9 +139,9 @@ namespace UST_ProjectManagement
 
         private void UpdateControls(int index, int mode)
         {
-            if (updateControls && index < this.Controls.Count - 1)
+            if (updateControls && index < this.Controls.Count)
             {
-                for (int i = index; i < this.Controls.Count - 1; i++)
+                for (int i = index; i < this.Controls.Count; i++)
                 {
                     try
                     {
