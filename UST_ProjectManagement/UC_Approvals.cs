@@ -245,7 +245,27 @@ namespace UST_ProjectManagement
             if (item.Progress < 100) id = 1;
             else if (item.Progress == 100 && item.Status.StatusId == 1) id = 2;
             else if (item.Progress == 100 && item.Status.StatusId == 2) id = 4;
-            else if (item.Progress == 100 && item.Status.StatusId == 3 && GetRole() == 3) id = 11;
+            else if (item.Progress == 100 && item.Status.StatusId == 3 && GetRole() == 3)
+            {
+                Form_Approve form_Approve = new Form_Approve();
+                form_Approve.StartPosition = FormStartPosition.CenterParent;
+                if(form_Approve.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        id = RequestInfo.lb.Status.FirstOrDefault(x => x.StatusName == form_Approve.comboBox1.Text).StatusId;
+                    }
+                    catch 
+                    {
+                        id = item.Status.StatusId;
+                    }
+                }
+                else
+                {
+                    id = item.Status.StatusId;
+                }
+                
+            }
             else if (item.Progress == 100 && item.Status.StatusId == 4 && GetRole() == 2) id = 0;
             Status status = RequestInfo.lb.Status.FirstOrDefault(x => x.StatusId == id);
             return status;
@@ -318,6 +338,8 @@ namespace UST_ProjectManagement
                             case 2: Methodes.ApplyRowBackColor(secTowRow, Color.Orange); break;
                             case 3: Methodes.ApplyRowBackColor(secTowRow, Color.LightCoral); break;
                             case 4: Methodes.ApplyRowBackColor(secTowRow, Color.MediumSeaGreen); break;
+                            case 11: Methodes.ApplyRowBackColor(secTowRow, Color.MediumSeaGreen); break;
+                            case 21: Methodes.ApplyRowBackColor(secTowRow, Color.YellowGreen); break;
                         }
                         dataGridView_Approvals.Rows.Add(secTowRow);
 
@@ -448,10 +470,12 @@ namespace UST_ProjectManagement
                     {
                         canedit = true;
                     }
+                    else if (UserRole == 2 && codesplit.Length > 2)
+                    {
+                        canedit = true;
+                    }
                     if (canedit)
                     {
-                        //EditedRows.Add(_row);
-                        //_row.Cells[3].ReadOnly = false;
                         foreach (DataGridViewCell _cell in _row.Cells)
                         {
                             _cell.Style.BackColor = Color.White;
@@ -459,7 +483,6 @@ namespace UST_ProjectManagement
                     }
                     else
                     {
-                        //_row.Cells[3].ReadOnly = true;
                         foreach (DataGridViewCell _cell in _row.Cells)
                         {
                             if (codesplit.Length > 2)

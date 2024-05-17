@@ -2562,5 +2562,30 @@ namespace UST_ProjectManagement
             return result;
         }
 
+        public static void GetHistory(string history, out string date, out string user)
+        {
+            date = "";
+            user = "";
+            HistoryLog historyLog = null;
+            if (history != null && history != "")
+            {
+                historyLog = JsonConvert.DeserializeObject<HistoryLog>(history);
+            }
+            if (historyLog != null)
+            {
+                POSTServer.History.HistoryInfo historylog = historyLog.spHistory.Last();
+                try
+                {
+                    date = historylog.Date.Split(' ')[0];
+                    user = historylog.User;
+                }
+                catch
+                {
+                }
+            }
+            else
+            {
+            }
+        }
     }
 }

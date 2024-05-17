@@ -74,6 +74,7 @@ namespace UST_ProjectManagement
         UC_HistoryPanel UC_HistoryPanel = new UC_HistoryPanel();
         UC_TaskPanel uC_TaskPanel = new UC_TaskPanel();
         UC_TaskInfo uC_TaskInfo = new UC_TaskInfo();
+        UC_StageSchedulePanel uC_StageSchedulePanel = new UC_StageSchedulePanel();
 
         public string PathCheck = @"Z:\BIM01\01_Библиотеки\00_Autodesk Revit\13_SkyWay_вкладка\Version\";
 
@@ -117,6 +118,9 @@ namespace UST_ProjectManagement
 
             panel10.Controls.Add(uC_TaskPanel);
             uC_TaskPanel.Dock = DockStyle.Fill;
+
+            panel10.Controls.Add(uC_StageSchedulePanel);
+            uC_StageSchedulePanel.Dock = DockStyle.Fill;
 
             panel12.Controls.Add(uC_TaskInfo);
             uC_TaskInfo.Dock = DockStyle.Fill;
@@ -488,6 +492,7 @@ namespace UST_ProjectManagement
             this.Visible = false;
             string[] spreques = request.Split(':');
             GlobalData.SelectedDirPath = spreques[1].Trim();
+
             if (GlobalData.NaviTreeView.SelectTreeNode_New(1) && GlobalData.SelectedPosition != null)
             {
                 switch (spreques[2])
@@ -1014,14 +1019,24 @@ namespace UST_ProjectManagement
             
         }
 
-        private void openPosSchedulePanel()
+        private void openPosSchedulePanel(byte mode)
         {
             ProjectNaviPanelIndex = 1;
             OpenSetHistoryPanel(false);
-            uC_ProjectSchedulePanel1.UpdateTopBtnEnabled();
-            uC_ProjectSchedulePanel1.UpdatePrjSchedule();
-            uC_ProjectSchedulePanel1.BringToFront();
-
+            if (mode == 0)
+            {
+                uC_ProjectSchedulePanel1.UpdateTopBtnEnabled();
+                uC_ProjectSchedulePanel1.UpdatePrjSchedule();
+                uC_ProjectSchedulePanel1.BringToFront(); 
+            }
+            else
+            {
+                uC_StageSchedulePanel.RefreshFilters();
+                uC_StageSchedulePanel.UpdateDataGrid();
+                uC_StageSchedulePanel.CreatePanels();
+                //uC_StageSchedulePanel.UpdatePrjSchedule();
+                uC_StageSchedulePanel.BringToFront();
+            }
         }
 
         private void openCoordoinationPanel()
@@ -1135,7 +1150,7 @@ namespace UST_ProjectManagement
         private void UpdateSetSchedule()
         {
             //CreateDisiplinePanel(dict);
-            openPosSchedulePanel();
+            openPosSchedulePanel(0);
             uC_ProjectSchedulePanel1.UpdatePrjSchedule();
             uC_ProjectSchedulePanel1.UpdateTopBtnEnabled(true, 0);
             uC_TopActionsPanel1.UpdateButtonsEnabled();
@@ -1335,7 +1350,7 @@ namespace UST_ProjectManagement
             
 
             uC_ProjectNaviPanel1.BtnSetSchedule_Click();
-            openPosSchedulePanel();
+            openPosSchedulePanel(0);
             GlobalMethodes._stop = true;
             CreatePanel = true;
             CancelSetCreation();

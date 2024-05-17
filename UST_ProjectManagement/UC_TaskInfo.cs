@@ -29,6 +29,10 @@ namespace UST_ProjectManagement
         public delegate void GetTaskTopo(string json, int attachId, int TaskId, string NumberTask);
         public event GetTaskTopo GetTopo;
 
+        public delegate void TaskCoord(object obj);
+        public event TaskCoord EditCoord;
+
+
         /// <summary>
         /// Режим запуска приложения, 0 - Manager; 1 - Revit
         /// </summary>
@@ -381,6 +385,7 @@ namespace UST_ProjectManagement
                 general = new PublishForm();
                 general.GetOpenning += GetOpen;
                 general.GetTOPO += GetTop;
+                general.EditCoord += EditCoordinate;
                 general.StartPosition = FormStartPosition.CenterParent;
                 general.dataGridView_Files.CellContentDoubleClick += new DataGridViewCellEventHandler(general.dataGridView_Files_CellMouseDoubleClick);
 
@@ -408,6 +413,11 @@ namespace UST_ProjectManagement
                 } 
 
             }
+        }
+
+        private void EditCoordinate(object obj)
+        {
+            EditCoord?.Invoke(general);
         }
 
         private void GetOpen(string json, int attachId, int TaskId, string NumberTask, string tagFrom)

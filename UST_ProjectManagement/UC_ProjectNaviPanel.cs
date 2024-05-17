@@ -16,7 +16,7 @@ namespace UST_ProjectManagement
         public delegate void btnMain_Click();
         public event btnMain_Click mainPanel;
 
-        public delegate void btnSchedule_Click();
+        public delegate void btnSchedule_Click(byte mode);
         public event btnSchedule_Click schedulePanel;
 
         public delegate void btnCoordination_Click();
@@ -104,7 +104,15 @@ namespace UST_ProjectManagement
             selBtn = 1;
             UST_HorizontalTabControl btn = sender as UST_HorizontalTabControl;
             UpdateButtonsStatus(btn);
-            schedulePanel?.Invoke();
+            if(GlobalData.SelectedStage != null && GlobalData.SelectedPosition == null)
+            {
+                schedulePanel?.Invoke(1);
+            }
+            else
+            {
+                schedulePanel?.Invoke(0);
+            }
+            
             GlobalData.PrjNaviBtnIndex = 1;
             
         }

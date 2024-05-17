@@ -267,6 +267,7 @@ namespace UST_ProjectManagement
             {
                 int start = 2;
                 if (mode == 1) start = 0;
+                //MessageBox.Show(GlobalData.SelectedDirPath);
                 string[] split = GlobalData.SelectedDirPath.Split('\\');
                 string fullPath = "";
                 TreeNode treeNode = null;
@@ -302,6 +303,7 @@ namespace UST_ProjectManagement
                         }
                     }
                 }
+                //MessageBox.Show(fullPath);
                 if (treeNode != null)
                 {
                     View.SelectedNode = treeNode;

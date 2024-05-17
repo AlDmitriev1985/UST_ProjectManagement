@@ -1293,9 +1293,9 @@ namespace UST_ProjectManagement
                                                     general.comboBox3.SelectedValueChanged -= new System.EventHandler(general.comboBox3_SelectedValueChanged);
                                                     general.comboBox3.TextChanged -= new System.EventHandler(general.comboBox3_TextChanged);
 
-                                                    if (general.ShowDialog() == DialogResult.OK)
+                                                    if (general.ShowDialog() == DialogResult.Retry)
                                                     {
-
+                                                        toolStripItem_Click(stripItemGetPath, EventArgs.Empty);
                                                     }
                                                 }
                                             }

@@ -57,8 +57,9 @@ namespace UST_ProjectManagement
         ToolStripMenuItem stripItemHelp = new ToolStripMenuItem();
 
         EditSetForm setForm;
+        byte Mode = 0;
 
-        public UC_ProjectSchedulePanel()
+        public UC_ProjectSchedulePanel(byte Mode = 0)
         {
             InitializeComponent();
             UpdateTopBtnEnabled();

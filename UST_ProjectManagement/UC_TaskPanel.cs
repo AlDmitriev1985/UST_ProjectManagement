@@ -157,10 +157,31 @@ namespace UST_ProjectManagement
             }
 
 
-
+            Dictionary<string, int> incomingColumns = new Dictionary<string, int>();
        
-            GetIncomingSectionsInfo(out incomingSections, out incomingSectionIds, out incomingTasks);
-            foreach(var pair in incomingSections)
+            GetIncomingSectionsInfo(out incomingSections, out incomingSectionIds, out incomingTasks, out incomingColumns);
+
+            foreach (var pair in incomingColumns)
+            {
+                if (!cSections.ContainsKey(pair.Key))
+                {
+                    cSections.Add(pair.Key, null);
+                }
+                if (!cSectionsId.ContainsKey(pair.Key))
+                {
+                    cSectionsId.Add(pair.Key, pair.Value);
+                }
+                if (!rSections.ContainsKey(pair.Key))
+                {
+                    rSections.Add(pair.Key, null);
+                }
+                if (!rSectionsId.ContainsKey(pair.Key))
+                {
+                    rSectionsId.Add(pair.Key, pair.Value);
+                }
+            }
+
+            foreach (var pair in incomingSections)
             {
                 try
                 {
@@ -177,8 +198,30 @@ namespace UST_ProjectManagement
                 catch { }
             }
 
-            
-            GetOutcomingSectionsInfo(out outcomingSections, out outcomingSectionIds, out outcomingTasks);
+
+            Dictionary<string, int> outcomingRows = new Dictionary<string, int>();
+            GetOutcomingSectionsInfo(out outcomingSections, out outcomingSectionIds, out outcomingTasks, out outcomingRows);
+
+            foreach (var pair in outcomingRows)
+            {
+                if (!cSections.ContainsKey(pair.Key))
+                {
+                    cSections.Add(pair.Key, null);
+                }
+                if (!cSectionsId.ContainsKey(pair.Key))
+                {
+                    cSectionsId.Add(pair.Key, pair.Value);
+                }
+                if (!rSections.ContainsKey(pair.Key))
+                {
+                    rSections.Add(pair.Key, null);
+                }
+                if (!rSectionsId.ContainsKey(pair.Key))
+                {
+                    rSectionsId.Add(pair.Key, pair.Value);
+                }
+            }
+
             foreach (var pair in outcomingSections)
             {
                 try
@@ -195,6 +238,8 @@ namespace UST_ProjectManagement
                 }
                 catch { }
             }
+
+            
 
             foreach (string set in GlobalData.UserSets)
             {
@@ -286,6 +331,19 @@ namespace UST_ProjectManagement
 
                         GetCellTaskStatus(_row.Key, _cell.Key, out status, out ids, out tdids);
 
+                        int num = 0;
+                        foreach(int id in ids)
+                        {
+                            Task task = incomingTasks.FirstOrDefault(x => x.TaskId == id);
+                            if (task != null)
+                            {
+                                num += 1;
+                            }
+                        }
+                        if(num == ids.Count())
+                        {
+                            //status = -1;
+                        }
                         row.Cells[c].Tag = status;
                         row.Cells[c].Style.BackColor = GlobalMethodes.GetCellColor(status, 0);
                     }
@@ -420,16 +478,37 @@ namespace UST_ProjectManagement
             return result;
         }
 
-        private void GetIncomingSectionsInfo(out Dictionary<string, string> sections, out Dictionary<string, int> ids, out List<Task> tasks)
+        private void GetIncomingSectionsInfo(out Dictionary<string, string> sections, out Dictionary<string, int> ids, out List<Task> tasks, out Dictionary<string, int> incColumns)
         {
             sections = new Dictionary<string, string>();
             ids = new Dictionary<string, int>();
             tasks = new List<LibraryDB.DB.Task>();
+            incColumns = new Dictionary<string, int>();
             var taskDeps = RequestInfo.lb.TaskDepartments.Where(x => x.PositionId == positionInfo.ID).ToList();
             foreach(TaskDepartment td in taskDeps)
             {
                 try
                 {
+                    SectionsThree sectionColumn = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == td.SectionThreeId);
+                    string tagColumn = "";
+                    if (positionInfo.LanguageId == 2)
+                    {
+                        tagColumn = sectionColumn.SectionThreeTagEng;
+                    }
+                    else
+                    {
+                        tagColumn = sectionColumn.SectionThreeTagRus;
+                    }
+                    try
+                    {
+                        incColumns.Add(tagColumn, sectionColumn.SectionThreeId);
+                    }
+                    catch
+                    {
+                    }
+
+
+
                     Task task = RequestInfo.lb.Tasks.Where(t => t.PositionId != positionInfo.ID).FirstOrDefault(x => x.TaskId == td.TaskId);
                     SectionsThree section = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == task.SectionThreeId);
                     string tag = "";
@@ -458,17 +537,35 @@ namespace UST_ProjectManagement
             }
         }
 
-        private void GetOutcomingSectionsInfo(out Dictionary<string, string> sections, out Dictionary<string, int> ids, out List<Task> tasks)
+        private void GetOutcomingSectionsInfo(out Dictionary<string, string> sections, out Dictionary<string, int> ids, out List<Task> tasks, out Dictionary<string, int> outRows)
         {
             sections = new Dictionary<string, string>();
             ids = new Dictionary<string, int>();
             tasks = new List<LibraryDB.DB.Task>();
+            outRows = new Dictionary<string, int>();
             var extasks = RequestInfo.lb.Tasks.Where(t => t.PositionId == positionInfo.ID);
             
             foreach (Task tsk in extasks)
             {
                 try
                 {
+                    SectionsThree rowSection = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == tsk.SectionThreeId);
+                    string rowTag = "";
+                    if (positionInfo.LanguageId == 2)
+                    {
+                        rowTag = rowSection.SectionThreeTagEng;
+                    }
+                    else
+                    {
+                        rowTag = rowSection.SectionThreeTagRus;
+                    }
+                    try
+                    {
+                        outRows.Add(rowTag, rowSection.SectionThreeId);
+                    }
+                    catch { }
+
+
                     var taskDeps = RequestInfo.lb.TaskDepartments.Where(x => x.TaskId == tsk.TaskId).Where(y => y.PositionId != null && y.PositionId != positionInfo.ID).ToList();
                     if (taskDeps.Count > 0)
                     {
@@ -555,7 +652,7 @@ namespace UST_ProjectManagement
                             task.TaskDepartments = td.Where(x => x.PositionId == positionInfo.ID).ToList();
                         }
 
-                        if (td != null) taskDepartments.AddRange(td);
+                        if (td != null) taskDepartments.AddRange(task.TaskDepartments);
                     }
 
                     cellTDs = null;

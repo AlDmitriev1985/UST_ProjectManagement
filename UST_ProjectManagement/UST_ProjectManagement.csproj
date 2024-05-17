@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CardTask, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Z:\BIM01\01_Библиотеки\06_Приложения\05_UST ProjectManagement\CardTask.exe</HintPath>
+    </Reference>
     <Reference Include="LibraryDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Z:\BIM01\01_Библиотеки\06_Приложения\05_UST ProjectManagement\LibraryDB.dll</HintPath>
@@ -272,6 +276,12 @@
     <Compile Include="UC_Search_Projects.Designer.cs">
       <DependentUpon>UC_Search_Projects.cs</DependentUpon>
     </Compile>
+    <Compile Include="UC_StageSchedulePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC_StageSchedulePanel.Designer.cs">
+      <DependentUpon>UC_StageSchedulePanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UC_StartPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -322,6 +332,12 @@
     </Compile>
     <Compile Include="Form_MessageBox.Designer.cs">
       <DependentUpon>Form_MessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_Approve.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Approve.Designer.cs">
+      <DependentUpon>Form_Approve.cs</DependentUpon>
     </Compile>
     <Compile Include="UST_HorizontalTabControl_Settings.cs">
       <SubType>Component</SubType>
@@ -414,6 +430,9 @@
     <EmbeddedResource Include="UC_Search_Projects.resx">
       <DependentUpon>UC_Search_Projects.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UC_StageSchedulePanel.resx">
+      <DependentUpon>UC_StageSchedulePanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UC_StartPanel.resx">
       <DependentUpon>UC_StartPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -437,6 +456,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_MessageBox.resx">
       <DependentUpon>Form_MessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Approve.resx">
+      <DependentUpon>Form_Approve.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -660,12 +682,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Btn_Help_25x25.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\GitHub\bardushkoUST\CardTask\CardTask.csproj">
-      <Project>{4d3bbed6-6696-4907-b165-0a249df84870}</Project>
-      <Name>CardTask</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

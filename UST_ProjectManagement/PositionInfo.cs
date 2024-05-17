@@ -11,6 +11,7 @@ namespace UST_ProjectManagement
 {
     public class PositionInfo
     {
+        public string ProjectId;
         public string Code;
         public int ID;
         public string StageTag;
@@ -39,6 +40,7 @@ namespace UST_ProjectManagement
 
         public PositionInfo(Project project, Stage stage,Position position)
         {
+            ProjectId = project.ProjectId;
             Code = position.PositionCode;
             BasePoint = position.PositionBasePointIntersection;
             axistask = TryGetTaskAxis(position);
