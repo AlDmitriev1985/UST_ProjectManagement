@@ -45,8 +45,8 @@ namespace UST_ProjectManagement
         string TaskCode = "";
         Task SelectedTask;
 
-        string From = "";
-        string To = "";
+        public string From = "";
+        public string To = "";
 
         ContextMenuStrip contextMenu = new ContextMenuStrip();
         ToolStripMenuItem stripItemOpen = new ToolStripMenuItem();
@@ -118,7 +118,6 @@ namespace UST_ProjectManagement
             contextMenu.Items.Add(stripItemPromote);
 
             tableLayoutPanel2.BackColor = MainForm.HeaderColor;
-            tableLayoutPanel3.BackColor = MainForm.HeaderColor;
             panel_Color.BackColor = MainForm.HeaderColor;
             //button1.BackColor = MainForm.HeaderColor;
             //button2.BackColor = MainForm.HeaderColor; 
@@ -136,6 +135,10 @@ namespace UST_ProjectManagement
         {
             From = from;
             To = to;
+
+            tableLayoutPanel1.RowStyles[1].Height = (this.Height - 30) / 3;
+            tableLayoutPanel1.RowStyles[2].Height = 5;
+
 
             dataGridView.Rows.Clear();
             Tasks = new List<Task>();
@@ -250,19 +253,25 @@ namespace UST_ProjectManagement
             }
             return false;
         }
-        
+
+        #region HistoryPanel
+       
+        List<string> panelsNum = new List<string>();
+        int num = 0;
+        int Y = 5;
+        int X = 5;
+
         public void UpdateHistory(int id)
         {
-            listView1.Items.Clear();
-            listView1.Groups.Clear();
+            panel_History.Controls.Clear();
+            panelsNum.Clear();
 
-            listView1.Columns[0].Width = 120;
-            listView1.Columns[1].Width = MainForm.CreatePanelWidth - 120;
+
 
             string taskNum = "";
             TD = null;
             int routetype = 0;
-            HistoryLog historyLog = null;
+            HistoryLog history = null;
 
             foreach (Task tsk in Tasks)
             {
@@ -276,50 +285,419 @@ namespace UST_ProjectManagement
 
             if (TD != null && TD.TaskDepartmentHistory != null)
             {
-                historyLog = JsonConvert.DeserializeObject<HistoryLog>(TD.TaskDepartmentHistory);
+                history = JsonConvert.DeserializeObject<HistoryLog>(TD.TaskDepartmentHistory);
             }
-            
-            if (TD != null)
+
+
+            Y = 5;
+            if (history != null)
             {
-                
-            }
-            if (historyLog != null)
-            {
-                historyLog.spHistory.Reverse();
-                foreach (var story in historyLog.spHistory)
+                history.spHistory.Reverse();
+                foreach (var story in history.spHistory)
                 {
-                    ListViewGroup LvGr = new ListViewGroup(story.Date);
-                    LvGr.Name = story.Date;
-                    listView1.Groups.AddRange(new ListViewGroup[] { LvGr });
+                    Panel panel = new Panel();
+                    panel.Name = (num + 1).ToString();
+                    panelsNum.Add((num + 1).ToString());
+                    panel.BackColor = Color.White;
+                    panel.Width = panel_History.Width - 10;
+                    panel.BorderStyle = BorderStyle.FixedSingle;
+                    panel.Location = new Point(5, Y);
 
-                    ListViewItem lvi1 = new ListViewItem(new string[] { "Изменениия внес:", story.User }, LvGr);
-                    listView1.Items.Add(lvi1);
+                    Label label0 = new Label();
+                    label0.Name = "label0";
+                    label0.Text = story.Date;
+                    label0.Width = label0.PreferredWidth;
+                    label0.ForeColor = Color.Gray;
+                    label0.TextAlign = ContentAlignment.TopRight;
+                    label0.Location = new Point(panel.Width - label0.Width - 15, 5);
+                    panel.Controls.Add(label0);
 
-                    ListViewItem lvi2 = new ListViewItem(new string[] { "Статус:", GetStatus(story.Info) }, LvGr);
-                    listView1.Items.Add(lvi2);
+                    List<Label> labels = new List<Label>();
 
-                    ListViewItem lvi3 = new ListViewItem(new string[] { "Комментарий:", story.Description }, LvGr);
-                    listView1.Items.Add(lvi3);
+                    Label label1 = new Label();
+                    label1.Name = "header";
+                    label1.Text = "Изм. внес:";
+                    labels.Add(label1);
+
+                    Label label2 = new Label();
+                    label2.Name = "header";
+                    label2.Text = "Статус:";
+                    labels.Add(label2);
+
+                    Label label3 = new Label();
+                    label3.Name = "header";
+                    label3.Text = "Коммент.:";
+                    labels.Add(label3);
+
+                    foreach (Label label in labels)
+                    {
+                        label.ForeColor = Color.Gray;
+                        panel.Controls.Add(label);
+                    }
+
+                    List<Label> infolabels = new List<Label>();
+
+                    Label label1_1 = new Label();
+                    label1_1.Name = "discription";
+                    User user = RequestInfo.lb.Users.FirstOrDefault(x => x.UserAccount == story.User);
+                    if (user != null)
+                    {
+                        label1_1.Text = user.UserSurname + " " + user.UserName;
+                    }
+                    else
+                    {
+                        label1_1.Text = story.User;
+                    }
+                    infolabels.Add(label1_1);
+
+                    Label label2_1 = new Label();
+                    label2_1.Name = "discription";
+                    label2_1.Text = GetStatus(story.Info, RequestInfo.lb);
+                    infolabels.Add(label2_1);
+
+                    Label label3_1 = new Label();
+                    label3_1.Name = "discription";
+                    label3_1.Text = story.Description;
+                    infolabels.Add(label3_1);
+
+                    foreach (Label label in infolabels)
+                    {
+                        panel.Controls.Add(label);
+                    }
+
+                    panel.Height = 100;
+                    panel_History.Controls.Add(panel);
+                    panel.Paint += new PaintEventHandler(panel_Paint);
+                    num += 1;
                 }
             }
             else
             {
-                ListViewGroup LvGr = new ListViewGroup("История отсутствует");
-                LvGr.Name = "История отсутствует";
-                listView1.Groups.AddRange(new ListViewGroup[] { LvGr });
-
-                ListViewItem lvi1 = new ListViewItem(new string[] { " ", " " }, LvGr);
-                listView1.Items.Add(lvi1);
-            }
-            try
-            {
-                OpenTaskRoute?.Invoke($"{TaskCode} {From}->{To}", TD.StatusId, routetype);
-            }
-            catch
-            {
-                OpenTaskRoute?.Invoke($"{TaskCode} {From}->{To}", -1, routetype);
+                Label label = new Label();
+                label.Text = "<Пусто>";
+                label.Width = panel_History.Width - 10;
+                label.ForeColor = Color.Gray;
+                label.TextAlign = ContentAlignment.MiddleCenter;
+                label.Location = new Point(panel_History.Width / 2 - label.Width / 2, panel_History.Height / 2 - label.Height / 2);
+                panel_History.Controls.Add(label);
             }
         }
+
+        public void UpdateHistory1 (int id, string from, string to)
+        {
+            label1.Text = $"Задание от {from} для {to}";
+            tableLayoutPanel1.RowStyles[1].Height = 0;
+            tableLayoutPanel1.RowStyles[2].Height = 0;
+
+            panel_History.Controls.Clear();
+            panelsNum.Clear();
+
+            TD = RequestInfo.lb.TaskDepartments.FirstOrDefault(X => X.TaskDepartmentId == id);
+            HistoryLog history = null;
+
+            if (TD != null && TD.TaskDepartmentHistory != null)
+            {
+                history = JsonConvert.DeserializeObject<HistoryLog>(TD.TaskDepartmentHistory);
+            }
+
+
+            Y = 5;
+            if (history != null)
+            {
+                history.spHistory.Reverse();
+                foreach (var story in history.spHistory)
+                {
+                    Panel panel = new Panel();
+                    panel.Name = (num + 1).ToString();
+                    panelsNum.Add((num + 1).ToString());
+                    panel.BackColor = Color.White;
+                    panel.Width = panel_History.Width - 10;
+                    panel.BorderStyle = BorderStyle.FixedSingle;
+                    panel.Location = new Point(5, Y);
+
+                    Label label0 = new Label();
+                    label0.Name = "label0";
+                    label0.Text = story.Date;
+                    label0.Width = label0.PreferredWidth;
+                    label0.ForeColor = Color.Gray;
+                    label0.TextAlign = ContentAlignment.TopRight;
+                    label0.Location = new Point(panel.Width - label0.Width - 15, 5);
+                    panel.Controls.Add(label0);
+
+                    List<Label> labels = new List<Label>();
+
+                    Label label1 = new Label();
+                    label1.Name = "header";
+                    label1.Text = "Изм. внес:";
+                    labels.Add(label1);
+
+                    Label label2 = new Label();
+                    label2.Name = "header";
+                    label2.Text = "Статус:";
+                    labels.Add(label2);
+
+                    Label label3 = new Label();
+                    label3.Name = "header";
+                    label3.Text = "Коммент.:";
+                    labels.Add(label3);
+
+                    foreach (Label label in labels)
+                    {
+                        label.ForeColor = Color.Gray;
+                        panel.Controls.Add(label);
+                    }
+
+                    List<Label> infolabels = new List<Label>();
+
+                    Label label1_1 = new Label();
+                    label1_1.Name = "discription";
+                    User user = RequestInfo.lb.Users.FirstOrDefault(x => x.UserAccount == story.User);
+                    if (user != null)
+                    {
+                        label1_1.Text = user.UserSurname + " " + user.UserName;
+                    }
+                    else
+                    {
+                        label1_1.Text = story.User;
+                    }
+                    infolabels.Add(label1_1);
+
+                    Label label2_1 = new Label();
+                    label2_1.Name = "discription";
+                    label2_1.Text = GetStatus(story.Info, RequestInfo.lb);
+                    infolabels.Add(label2_1);
+
+                    Label label3_1 = new Label();
+                    label3_1.Name = "discription";
+                    label3_1.Text = story.Description;
+                    infolabels.Add(label3_1);
+
+                    foreach (Label label in infolabels)
+                    {
+                        panel.Controls.Add(label);
+                    }
+
+                    panel.Height = 100;
+                    panel_History.Controls.Add(panel);
+                    panel.Paint += new PaintEventHandler(panel_Paint);
+                    num += 1;
+                }
+            }
+            else
+            {
+                Label label = new Label();
+                label.Text = "<Пусто>";
+                label.Width = panel_History.Width - 10;
+                label.ForeColor = Color.Gray;
+                label.TextAlign = ContentAlignment.MiddleCenter;
+                label.Location = new Point(panel_History.Width / 2 - label.Width / 2, panel_History.Height / 2 - label.Height / 2);
+                panel_History.Controls.Add(label);
+            }
+        }
+
+        private void panel_Paint(object sender, PaintEventArgs e)
+        {
+
+            int w = panel_History.Width;
+            int step = 25;
+            int height = 0;
+
+            Panel panel = sender as Panel;
+
+            if (panelsNum.Contains(panel.Name))
+            {
+                panelsNum.Remove(panel.Name);
+                List<Label> headers = new List<Label>();
+                List<Label> discriptions = new List<Label>();
+
+                foreach (Control control in panel.Controls)
+                {
+                    try
+                    {
+                        Label label = control as Label;
+                        if (label.Name == "header")
+                        {
+                            headers.Add(label);
+                        }
+                        else if (label.Name == "discription")
+                        {
+                            discriptions.Add(label);
+                        }
+                    }
+                    catch { }
+                }
+
+                try
+                {
+                    int W = 0;
+                    foreach (Label label in headers)
+                    {
+                        label.Width = label.PreferredWidth;
+                        if (W < label.Width) W = label.Width;
+                    }
+
+                    int W1 = panel.Width - W - 15;
+                    foreach (Label label in discriptions)
+                    {
+                        label.Width = W1;
+                        panel.Controls.Add(label);
+                        RefreshLabel(label);
+                    }
+
+                    int rowY = 25;
+                    int columnX = W + 10;
+                    for (int i = 0; i < headers.Count; i++)
+                    {
+                        headers[i].Location = new Point(5, rowY);
+                        discriptions[i].Location = new Point(columnX, rowY);
+
+                        if (discriptions[i].Height > step)
+                        {
+                            rowY += discriptions[i].Height;
+                        }
+                        else
+                        {
+                            rowY += step;
+                        }
+                        if (i == headers.Count - 1)
+                        {
+                            height = discriptions[i].Location.Y + discriptions[i].Height + 10;
+                        }
+                    }
+                    panel.Height = height;
+                    panel.Location = new Point(X, Y);
+                    Y += panel.Height + 5;
+
+                    if (!panel_History.AutoScroll && Y - 5 > panel_History.Height)
+                    {
+                        panel_History.AutoScroll = true;
+                        this.Width += 15;
+                    }
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private void RefreshLabel(Label label)
+        {
+            int limit = label.Width;
+            string txt = "";
+            string txt0 = "";
+
+            if (label.PreferredSize.Width + 5 > limit)
+            {
+                string[] spliter = label.Text.Split(' ');
+                for (int i = 0; i < spliter.Length; i++)
+                {
+                    txt += spliter[i] + " ";
+                    label.Text = txt;
+                    if (label.PreferredSize.Width > limit)
+                    {
+                        label.Text = txt0 + Environment.NewLine + spliter[i] + " ";
+                        txt = label.Text;
+                        txt0 = label.Text;
+                    }
+                    else
+                    {
+                        txt0 = txt;
+                    }
+                }
+            }
+            if (label.Height < label.PreferredSize.Height)
+            {
+                label.Height = label.PreferredSize.Height + 5;
+            }
+        }
+
+        private string GetStatus(string status, LibraryDB.LibraryDB lb)
+        {
+            string[] spl = status.Split(':');
+            int id = -1;
+            try
+            {
+                id = Convert.ToInt32(spl[1]);
+            }
+            catch { }
+            if (id != -1)
+            {
+                var st = lb.Status.FirstOrDefault(x => x.StatusId == id);
+                if (st != null) status = st.StatusName;
+            }
+            return status;
+        } 
+        #endregion
+
+        //public void UpdateHistory(int id)
+        //{
+        //    listView1.Items.Clear();
+        //    listView1.Groups.Clear();
+
+        //    listView1.Columns[0].Width = 120;
+        //    listView1.Columns[1].Width = MainForm.CreatePanelWidth - 120;
+
+        //    string taskNum = "";
+        //    TD = null;
+        //    int routetype = 0;
+        //    HistoryLog historyLog = null;
+
+        //    foreach (Task tsk in Tasks)
+        //    {
+        //        TaskCode = $"{tsk.TaskNumer}-{tsk.TaskYear}";
+        //        SelectedTask = tsk;
+        //        TD = tsk.TaskDepartments.FirstOrDefault(x => x.TaskDepartmentId == id);
+        //        routetype = GlobalMethodes.GetRouteType(tsk, id);
+        //        if (TD != null) break;
+        //    }
+
+
+        //    if (TD != null && TD.TaskDepartmentHistory != null)
+        //    {
+        //        historyLog = JsonConvert.DeserializeObject<HistoryLog>(TD.TaskDepartmentHistory);
+        //    }
+
+        //    if (TD != null)
+        //    {
+
+        //    }
+        //    if (historyLog != null)
+        //    {
+        //        historyLog.spHistory.Reverse();
+        //        foreach (var story in historyLog.spHistory)
+        //        {
+        //            ListViewGroup LvGr = new ListViewGroup(story.Date);
+        //            LvGr.Name = story.Date;
+        //            listView1.Groups.AddRange(new ListViewGroup[] { LvGr });
+
+        //            ListViewItem lvi1 = new ListViewItem(new string[] { "Изменениия внес:", story.User }, LvGr);
+        //            listView1.Items.Add(lvi1);
+
+        //            ListViewItem lvi2 = new ListViewItem(new string[] { "Статус:", GetStatus(story.Info) }, LvGr);
+        //            listView1.Items.Add(lvi2);
+
+        //            ListViewItem lvi3 = new ListViewItem(new string[] { "Комментарий:", story.Description }, LvGr);
+        //            listView1.Items.Add(lvi3);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ListViewGroup LvGr = new ListViewGroup("История отсутствует");
+        //        LvGr.Name = "История отсутствует";
+        //        listView1.Groups.AddRange(new ListViewGroup[] { LvGr });
+
+        //        ListViewItem lvi1 = new ListViewItem(new string[] { " ", " " }, LvGr);
+        //        listView1.Items.Add(lvi1);
+        //    }
+        //    try
+        //    {
+        //        OpenTaskRoute?.Invoke($"{TaskCode} {From}->{To}", TD.StatusId, routetype);
+        //    }
+        //    catch
+        //    {
+        //        OpenTaskRoute?.Invoke($"{TaskCode} {From}->{To}", -1, routetype);
+        //    }
+        //}
 
         private string GetStatus(string status)
         {
@@ -344,35 +722,103 @@ namespace UST_ProjectManagement
         /// <param name="e"></param>
         public void button2_Click(object sender, EventArgs e)
         {
-
             PositionInfo positionInfo = new PositionInfo(GlobalData.SelectedProject, GlobalData.SelectedStage, GlobalData.SelectedPosition);
+            bool OpenCardTask = true;
+            Position position = null;
+            ScheduleItem scheduleItem = null;
+            Form_AddTask form = null;
 
-            PublishForm.mode = 1;
-            PublishForm.modeApplication = modeApplication;
-            PublishForm publishForm = new PublishForm();
-            publishForm.button2.Click -= new System.EventHandler(publishForm.button2_Click);
-            publishForm.textBox3.Text = GlobalData.SelectedPosition.PositionCode;
-            publishForm.textBox4.Text = GlobalData.SelectedStage.StageTag;
-            publishForm.spSectionsThree = positionInfo.ListSecThree;
-            publishForm.CheckPositionCode(From, 1);
-            publishForm.GetDepartmentAndSections(To, GlobalData.SelectedPosition);
-            publishForm.StartPosition = FormStartPosition.CenterParent;
-            if (publishForm.ShowDialog() == DialogResult.OK)
+            var usersets = positionInfo.scheduleItems.Where(x => x.DepId == GlobalData.user.DepartmentId || x.DelegatedDepId == GlobalData.user.DepartmentId).Select(x => x.SecThreeTag + x.SecThreePostfix);
+
+            if (tableLayoutPanel1.RowStyles[1].Height == 0 || !usersets.Contains(From))
             {
-                string[] answers = publishForm.CreateTaskDB();
-                if (answers[0] == "Готово")
+                form = new Form_AddTask();
+                OpenCardTask = false;
+                try
                 {
-                    MessageBox.Show(answers[1], "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ChangeTaskStatus?.Invoke(From, To, dataGridView.Rows.Count);
+                    form.comboBox1.Items.AddRange(usersets.ToArray());
+                    form.comboBox1.SelectedIndex = 0;
                 }
-                else if (answers[0] == "Error")
+                catch { }
+                form.StartPosition = FormStartPosition.CenterParent;
+                form.comboBox2.Items.AddRange(RequestInfo.lb.Projects.Select(x => x.ProjectId).ToArray());
+                form.comboBox2.Text = positionInfo.ProjectId;
+                form.comboBox3.Text = positionInfo.StageTag;
+                form.comboBox4.Text = positionInfo.Code;
+
+                if (form.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show(answers[1], "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (form.comboBox1.Text != "<none>")
+                    {
+                        From = form.comboBox1.Text;
+                        OpenCardTask = true;
+                    }
+                    position = form.Position;
+                    if (position.PositionCode != GlobalData.SelectedPosition.PositionCode)
+                    {
+                        scheduleItem = form.PositionInfo.scheduleItems.FirstOrDefault(x => x.SecThreeTag + x.SecThreePostfix == form.comboBox5.Text);
+                    }
+                    else
+                    {
+                        To = form.comboBox5.Text;
+                    }
+                    
                 }
+            }
+            else
+            {
+                position = GlobalData.SelectedPosition;
+            }
+
+            if (OpenCardTask)
+            {
+                PublishForm.mode = 1;
+                PublishForm.modeApplication = modeApplication;
+                PublishForm publishForm = new PublishForm();
+                publishForm.button2.Click -= new System.EventHandler(publishForm.button2_Click);
+                publishForm.textBox3.Text = GlobalData.SelectedPosition.PositionCode;
+                publishForm.textBox4.Text = GlobalData.SelectedStage.StageTag;
+                publishForm.spSectionsThree = positionInfo.ListSecThree;
+                publishForm.CheckPositionCode(From, 1);
+                if(scheduleItem == null)
+                {
+                    publishForm.GetDepartmentAndSections(To, position);
+                }
+                else
+                {
+                    //scheduleItem = form.PositionInfo.scheduleItems.FirstOrDefault(x => x.SecThreeTag + x.SecThreePostfix == form.comboBox5.Text);
+                    CardTask.DepTaskUsers depTaskUser = new DepTaskUsers();
+                    depTaskUser.SectionThree = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == scheduleItem.SecThreeId);
+                    depTaskUser.Department = RequestInfo.lb.Departments.FirstOrDefault(x => x.DepartmentId == scheduleItem.DepId || x.DepartmentId == scheduleItem.DelegatedDepId);
+                    depTaskUser.Pos = position;
+                    depTaskUser.SectionPositionNumber = scheduleItem.SecThreePostfix.ToString();
+                    //depTaskUser.SectionPositionNumber = form.PositionInfo.SectionsPositions.FirstOrDefault(x => x.SectionThreeId == scheduleItem.SecThreeId).SectionPositionNumber;
+                    depTaskUser.SectionThree.SectionPositionNumber = scheduleItem.SecThreePostfix.ToString();
+                    depTaskUser.HeadDep = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == depTaskUser.Department.DepartmentHeade);
+                    //depTaskUser.TaskUserId = GlobalData.user;
+                    depTaskUser.SectionPositionNumber = scheduleItem.SecThreePostfix.ToString();
+                    publishForm.spTaskDep.Add(depTaskUser);
+                    publishForm.GetDepartmentAndSections(depTaskUser, scheduleItem.SecThreeTag + scheduleItem.SecThreePostfix);
+                }
+
+                publishForm.StartPosition = FormStartPosition.CenterParent;
+                if (publishForm.ShowDialog() == DialogResult.OK)
+                {
+                    string[] answers = publishForm.CreateTaskDB();
+                    if (answers[0] == "Готово")
+                    {
+                        MessageBox.Show(answers[1], "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ChangeTaskStatus?.Invoke(From, To, dataGridView.Rows.Count);
+                    }
+                    else if (answers[0] == "Error")
+                    {
+                        MessageBox.Show(answers[1], "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                } 
             }
         }
         /// <summary>
-        /// OPenTaskCard
+        /// OpenTaskCard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -385,7 +831,7 @@ namespace UST_ProjectManagement
                 general = new PublishForm();
                 general.GetOpenning += GetOpen;
                 general.GetTOPO += GetTop;
-                general.EditCoord += EditCoordinate;
+                general.EditCoord += EditCoordinate;//Unhold
                 general.StartPosition = FormStartPosition.CenterParent;
                 general.dataGridView_Files.CellContentDoubleClick += new DataGridViewCellEventHandler(general.dataGridView_Files_CellMouseDoubleClick);
 
@@ -515,6 +961,17 @@ namespace UST_ProjectManagement
             }
         }
 
-        
+        private void tableLayoutPanel1_SizeChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (tableLayoutPanel1.RowStyles[1].Height > 0)
+                {
+                    tableLayoutPanel1.RowStyles[1].Height = (this.Height - 30) / 3;
+                    tableLayoutPanel1.RowStyles[2].Height = 5;
+                }
+            }
+            catch { }
+        }
     }
 }

@@ -17,10 +17,18 @@ namespace UST_ProjectManagement
     public partial class UC_CoordinationPanel : UserControl
     {
         PositionInfo positionInfo;
+        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+        ToolStripMenuItem toolStripMenuItem_Copy = new ToolStripMenuItem();
+        string text = "";
         public UC_CoordinationPanel()
         {
             InitializeComponent();
             richTextBox1.SelectionAlignment = HorizontalAlignment.Center;
+
+            toolStripMenuItem_Copy.Text = "Копировать в буфер";
+            //toolStripMenuItem_Copy.Image = Properties.Resources.Cop;
+            toolStripMenuItem_Copy.Click += new EventHandler(toolStripMenuItem_Click);
+            contextMenuStrip.Items.Add(toolStripMenuItem_Copy);
         }
 
         public void UpdateCoordinates()
@@ -165,6 +173,31 @@ namespace UST_ProjectManagement
             }
             catch
             {
+            }
+        }
+
+        private void toolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (sender.ToString() == toolStripMenuItem_Copy.Text)
+            {
+                Clipboard.SetText(text);
+            }
+        }
+
+        private void label7_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                try
+                {
+                    text = (sender as Label).Text;
+                    text.Replace(".", ",");
+                }
+                catch 
+                {
+                    text = "";
+                }
+                contextMenuStrip.Show(MousePosition);
             }
         }
     }

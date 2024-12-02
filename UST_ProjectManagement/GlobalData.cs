@@ -155,7 +155,7 @@ namespace UST_ProjectManagement
 
         public static List<ScheduleItem> addSubSetList = new List<ScheduleItem>();
 
-        public static HistoryLog historyLog;
+        //public static HistoryLog historyLog;
 
         public static List<string[,]> FilterList = new List<string[,]>();
 

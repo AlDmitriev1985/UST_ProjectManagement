@@ -38,11 +38,14 @@ namespace UST_ProjectManagement
         List<Task> outcomingTasks;
 
 
-        public delegate void OpenTask_Click(bool open, List<int> ids, List<int>tdids, string from, string to, int row);
+        public delegate void OpenTask_Click(bool open, List<int> ids, List<int> tdids, string from, string to, int row);
         public event OpenTask_Click TaskOpen;
 
         public delegate void AddTask_Click(byte mode);
         public event AddTask_Click EditTask;
+
+        public delegate void TaskRow_Click(int id, string from, string to);
+        public event TaskRow_Click TaskRowClick;
 
 
         int rNumber = 14;
@@ -50,6 +53,9 @@ namespace UST_ProjectManagement
         int num = 5;
 
         DataGridView dataGridView;
+        DataGridView dataGridView1;
+
+
         ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
         ToolStripMenuItem toolStripMenuItem_AddTask = new ToolStripMenuItem();
         ToolStripMenuItem toolStripMenuItem_OpenTask = new ToolStripMenuItem();
@@ -71,7 +77,6 @@ namespace UST_ProjectManagement
             dataGridView.ReadOnly = true;
             dataGridView.RowHeadersVisible = false;
             dataGridView.ColumnHeadersVisible = false;
-            dataGridView.ReadOnly = true;
             dataGridView.MultiSelect = false;
             dataGridView.BackgroundColor = Color.WhiteSmoke;
             dataGridView.Margin = new Padding(0);
@@ -87,6 +92,36 @@ namespace UST_ProjectManagement
             dataGridView.CellMouseEnter += new DataGridViewCellEventHandler(DG_Cell_MouseEnter);
             dataGridView.CellMouseLeave += new DataGridViewCellEventHandler(DG_Cell_MouseLeave);
             dataGridView.SizeChanged += new EventHandler(DG_SizeChanged);
+
+            dataGridView1 = new DataGridView();
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.ColumnHeadersHeight = 50;
+            dataGridView1.MultiSelect = false;
+            dataGridView1.BackgroundColor = Color.WhiteSmoke;
+            dataGridView1.Margin = new Padding(5);
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.AllowUserToResizeColumns = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AllowUserToOrderColumns = false;
+            dataGridView1.BorderStyle = BorderStyle.FixedSingle;
+            dataGridView1.RowsDefaultCellStyle.SelectionBackColor = MainForm.HeaderColor;
+            dataGridView1.BorderStyle = BorderStyle.None;
+            dataGridView1.SizeChanged += new EventHandler(DG1_SizeChanged);
+            dataGridView1.CellClick += new DataGridViewCellEventHandler(DG1_Cell_Click);
+            dataGridView1.MouseDown += new MouseEventHandler(dataGridView1_MouseDown);
+            //dataGridView1.CellMouseEnter += new DataGridViewCellEventHandler(DG_Cell_MouseEnter);
+            //dataGridView1.CellMouseLeave += new DataGridViewCellEventHandler(DG_Cell_MouseLeave);
+
+
+
+            List<string> header1 = new List<string>() { "№ задания", "Наименование", "Тип задания", "От", "Для", "Статус", "tId", "tdId" };
+            CardTask.Methodes_DataGrid.CreateDataGrid(dataGridView1, header1);
+            dataGridView1.Columns[dataGridView1.Columns.Count - 2].Visible = false;
+            dataGridView1.Columns[dataGridView1.Columns.Count - 1].Visible = false;
+            panel8.Controls.Add(dataGridView1);
 
             toolStripMenuItem_AddTask.Text = "Создать задание";
             toolStripMenuItem_AddTask.Image = Properties.Resources.Btn_Add_20x20;
@@ -108,6 +143,7 @@ namespace UST_ProjectManagement
             toolStripMenuItem_AddOutTask.Click += new EventHandler(toolStripMenuItem_Click);
             contextMenuStrip.Items.Add(toolStripMenuItem_AddOutTask);
 
+
         }
 
 
@@ -120,7 +156,14 @@ namespace UST_ProjectManagement
 
         public void UpdateControls()
         {
-            radioButton1.Checked = true;
+            comboBox1.Items.Clear();
+            comboBox1.Items.AddRange((new List<string> { "Показать все", "Показать задания", "Задания от моей дисциплины", "Задания для моей дисциплины" }).ToArray());
+            comboBox1.SelectedIndex = 0;
+
+            comboBox2.Items.Clear();
+            comboBox2.Items.AddRange((new List<string> { "Матрица", "Таблица" }).ToArray());
+            comboBox2.SelectedIndex = 0;
+
             UpdateDG();
         }
 
@@ -140,7 +183,7 @@ namespace UST_ProjectManagement
 
             List<string> userSets = new List<string>();
 
-            foreach(ScheduleItem item in positionInfo.scheduleItems)
+            foreach (ScheduleItem item in positionInfo.scheduleItems)
             {
                 try
                 {
@@ -158,7 +201,7 @@ namespace UST_ProjectManagement
 
 
             Dictionary<string, int> incomingColumns = new Dictionary<string, int>();
-       
+
             GetIncomingSectionsInfo(out incomingSections, out incomingSectionIds, out incomingTasks, out incomingColumns);
 
             foreach (var pair in incomingColumns)
@@ -239,7 +282,7 @@ namespace UST_ProjectManagement
                 catch { }
             }
 
-            
+
 
             foreach (string set in GlobalData.UserSets)
             {
@@ -284,7 +327,7 @@ namespace UST_ProjectManagement
                 headerrow.Cells[c].Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 if (!outcomingSections.ContainsKey(pair.Key))
                 {
-                    headerrow.Cells[c].Style.BackColor = Color.AliceBlue; 
+                    headerrow.Cells[c].Style.BackColor = Color.AliceBlue;
                 }
                 else
                 {
@@ -301,8 +344,8 @@ namespace UST_ProjectManagement
 
             #region --- CreateRows ---
             int r = 1;
-            
-            foreach(var _row in rSectionsId)
+
+            foreach (var _row in rSectionsId)
             {
                 c = 1;
                 DataGridViewRow row = new DataGridViewRow();
@@ -321,18 +364,21 @@ namespace UST_ProjectManagement
                 row.Cells[0].Value = _row.Key;
                 row.Cells[0].Tag = _row.Value;
 
-                foreach(var _cell in cSectionsId)
+                foreach (var _cell in cSectionsId)
                 {
                     if (c != r)
                     {
                         int status = -1;
                         List<int> ids = new List<int>();
                         List<int> tdids = new List<int>();
+                        int number = 0;
+                        int accepted = 0;
+                        bool inwork = false;
 
-                        GetCellTaskStatus(_row.Key, _cell.Key, out status, out ids, out tdids);
+                        GetCellTaskStatus(_row.Key, _cell.Key, out status, out ids, out tdids, out number, out accepted, out inwork);
 
                         int num = 0;
-                        foreach(int id in ids)
+                        foreach (int id in ids)
                         {
                             Task task = incomingTasks.FirstOrDefault(x => x.TaskId == id);
                             if (task != null)
@@ -340,12 +386,32 @@ namespace UST_ProjectManagement
                                 num += 1;
                             }
                         }
-                        if(num == ids.Count())
+                        if (num == ids.Count())
                         {
                             //status = -1;
                         }
                         row.Cells[c].Tag = status;
                         row.Cells[c].Style.BackColor = GlobalMethodes.GetCellColor(status, 0);
+                        if (status == 10 || status == 13)
+                        {
+                            row.Cells[c].Style.ForeColor = Color.White;
+                        }
+                        else
+                        {
+                            row.Cells[c].Style.ForeColor = Color.Black;
+                        }
+                        if (tdids.Count > 0)
+                        {
+                            row.Cells[c].Style.Alignment = DataGridViewContentAlignment.BottomRight;
+
+                            string txt = $"{accepted}/{number}";
+                            if (inwork) txt += "*";
+                            row.Cells[c].Value = txt;
+                        }
+                        else
+                        {
+                            row.Cells[c].Value = null;
+                        }
                     }
                     else
                     {
@@ -360,7 +426,7 @@ namespace UST_ProjectManagement
                 r++;
                 dataGridView.Rows.Add(row);
             }
-            for(int rr = r; rr < rNumber; rr++)
+            for (int rr = r; rr < rNumber; rr++)
             {
                 DataGridViewRow row = new DataGridViewRow();
                 row.CreateCells(dataGridView);
@@ -377,7 +443,7 @@ namespace UST_ProjectManagement
 
             panelGrid.Controls.Add(dataGridView);
 
-            if (from == null || to == null)
+            if (from == null || to == null || from == "" || to =="")
             {
                 dataGridView.Rows[0].Cells[0].Selected = false;
             }
@@ -403,6 +469,114 @@ namespace UST_ProjectManagement
                 //TaskOpen(true, null, null, "..", "..", taskrow);
             }
             
+        }
+
+        public void UpdateDG1()
+        {
+            dataGridView1.Rows.Clear();
+            List<LibraryDB.DB.TaskDepartment> taskDeps = RequestInfo.lb.TaskDepartments.Where(x => x.PositionId == GlobalData.SelectedPosition.PositionId).ToList();
+            List<Task> posTasks = new List<LibraryDB.DB.Task>();
+
+            posTasks.AddRange(RequestInfo.lb.Tasks.Where(x => x.PositionId == GlobalData.SelectedPosition.PositionId));
+           
+
+            foreach (var _pTask in posTasks)
+            {
+                taskDeps.AddRange(RequestInfo.lb.TaskDepartments.Where(x => x.TaskId == _pTask.TaskId));
+            }
+            foreach (var td in taskDeps)
+            {
+                Task task = RequestInfo.lb.Tasks.FirstOrDefault(x => x.TaskId == td.TaskId);
+                if (task != null)
+                {
+                    posTasks.Add(task);
+                }
+            }
+            posTasks = posTasks.OrderByDescending(x => x.TaskId).ToList();
+
+            taskDeps.Distinct();
+            taskDeps.OrderByDescending(x => x.TaskDepartmentId);
+
+            var gTask = taskDeps.GroupBy(x => x.TaskId).OrderByDescending(x => x.Key);
+            foreach (var _task in gTask)
+            {
+                var Task = RequestInfo.lb.Tasks.FirstOrDefault(x => x.TaskId == _task.Key);
+                
+                if (Task != null && (comboBox1.SelectedIndex != 2 || (comboBox1.SelectedIndex == 2 && GlobalData.user.DepartmentId == Task.DepartmentId)))
+                {
+                    LibraryDB.DB.Type type = null;
+                    try
+                    {
+                        type = RequestInfo.lb.Types.FirstOrDefault(x => x.TypeId == Task.TypeId);
+                    }
+                    catch { }
+                    if (type == null) type = RequestInfo.lb.Types.FirstOrDefault(x => x.TypeId == 7);
+                    SectionsThree secFrom = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == Task.SectionThreeId);
+                    string secFromNum = "";
+
+                    SectionsThree secTo = null;
+
+                    foreach (var _taskDep in _task)
+                    {
+                        if (comboBox1.SelectedIndex != 3 || (comboBox1.SelectedIndex == 3 && GlobalData.user.DepartmentId == _taskDep.DepartmentId))
+                        {
+                            secTo = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == _taskDep.SectionThreeId);
+                            var status = RequestInfo.lb.Status.FirstOrDefault(x => x.StatusId == _taskDep.StatusId);
+
+
+                            DataGridViewRow row = new DataGridViewRow();
+                            row.CreateCells(dataGridView1);
+                            row.Height = 30;
+                            row.Cells[0].Value = $"{Task.TaskNumer}-{Task.TaskYear}";
+                            row.Cells[1].Value = Task.TaskName;
+                            row.Cells[2].Value = type.TypeName;
+                            if (secFrom != null)
+                            {
+                                if (GlobalData.SelectedProject != null && GlobalData.SelectedProject.LanguageId == 2)
+                                {
+                                    row.Cells[3].Value = secFrom.SectionThreeTagEng;
+                                }
+                                else
+                                {
+                                    row.Cells[3].Value = secFrom.SectionThreeTagRus;
+                                }
+                            }
+                            else
+                            {
+                                row.Cells[3].Value = "-";
+                            }
+                            if (secTo != null)
+                            {
+                                if (GlobalData.SelectedProject != null && GlobalData.SelectedProject.LanguageId == 2)
+                                {
+                                    row.Cells[4].Value = $"{secTo.SectionThreeTagEng}{secTo.SectionPositionNumber}";
+                                }
+                                else
+                                {
+                                    row.Cells[4].Value = secTo.SectionThreeTagRus;
+                                }
+                            }
+                            else
+                            {
+                                row.Cells[4].Value = "-";
+                            }
+                            if (status != null)
+                            {
+                                row.Cells[5].Value = status.StatusName;
+                                row.Cells[5].Style.BackColor = GlobalMethodes.GetCellColor(status.StatusId, 0);
+                            }
+                            else
+                            {
+                                row.Cells[5].Value = "-";
+                            }
+                            row.Cells[6].Value = Task.TaskId;
+                            row.Cells[7].Value = _taskDep.TaskDepartmentId;
+
+                            dataGridView1.Rows.Add(row); 
+                        }
+                    } 
+                }
+            }
         }
 
         private bool DepartmentExistingInProject(int fromId, int toId)
@@ -470,10 +644,14 @@ namespace UST_ProjectManagement
             int result = 0;
             for (int i = 1; i < dataGridView.Rows[0].Cells.Count; i++)
             {
-                if (dataGridView.Rows[0].Cells[i].Value.ToString() == key)
+                try
                 {
-                    return i;
+                    if (dataGridView.Rows[0].Cells[i].Value.ToString() == key)
+                    {
+                        return i;
+                    }
                 }
+                catch { }
             }
             return result;
         }
@@ -621,11 +799,14 @@ namespace UST_ProjectManagement
             height = gridMinHeight;
         }
 
-        private void GetCellTaskStatus(string fromTag, string toTag, out int status, out List<int> cellTasksIds, out List<int> cellTDIds)
+        private void GetCellTaskStatus(string fromTag, string toTag, out int status, out List<int> cellTasksIds, out List<int> cellTDIds,out int number, out int accepted, out bool inwork)
         {
             status = -1;
             cellTasksIds = new List<int>();
             cellTDIds = new List<int>();
+            number = 0;
+            accepted = 0;
+            inwork = false;
 
             var Tasks = RequestInfo.lb.Tasks.Where(p => p.PositionId == GlobalData.SelectedPosition.PositionId).ToList();
             try
@@ -674,25 +855,71 @@ namespace UST_ProjectManagement
                     if (cellTDs != null && cellTDs.Count > 0)
                     {
                         cellTDIds = cellTDs.Select(x => x.TaskDepartmentId).ToList();
-                        TaskDepartment cellTD = cellTDs.FirstOrDefault(id => id.TaskDepartmentId == cellTDs.Max(x => x.TaskDepartmentId));
-                        try
-                        {
-                            if (cellTD != null && DepartmentExistingInProject(rowTasks.FirstOrDefault(x => x.TaskId == cellTD.TaskId).DepartmentId, cellTD.DepartmentId))
+                        if (cellTDs.Count == 1)
+                        {                           
+                            TaskDepartment cellTD = cellTDs.FirstOrDefault(id => id.TaskDepartmentId == cellTDs.Max(x => x.TaskDepartmentId));
+                            number = 1;
+                            try
                             {
-                                status = cellTD.StatusId;
+                                if (cellTD != null && DepartmentExistingInProject(rowTasks.FirstOrDefault(x => x.TaskId == cellTD.TaskId).DepartmentId, cellTD.DepartmentId))
+                                {
+                                    status = cellTD.StatusId;
+                                    if (status == 10 || status == 12 || status == 14 || status == 17)
+                                    {
+                                        accepted = 1;
+                                    }
+                                    else if (status == 5)
+                                    {
+                                        inwork = true;
+                                    }
 
+                                }
+                                else
+                                {
+                                    status = -1;
+                                }
                             }
-                            else
+                            catch (Exception ex)
                             {
+                                MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace, "Errore");
                                 status = -1;
                             }
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace, "Errore");
-                            status = -1;
-                        }
+                            List<int> statusIds = new List<int>();
+                            statusIds = cellTDs.Select(x => x.StatusId).ToList();
 
+                            List<int> analizeIds = new List<int>();
+                            foreach(int id in statusIds)
+                            {
+                                if (id != 12 && id != 14 && id != 17 && id != 5 && !analizeIds.Contains(id))
+                                {
+                                    analizeIds.Add(id);
+                                }
+                                else if (id == 5)
+                                {
+                                    inwork = true;
+                                }
+                                if (id == 10 || id == 12 || id == 14 || id == 17)
+                                {
+                                    accepted += 1;
+                                }
+                                number += 1;
+                            }
+                            if (analizeIds.Count == 1)
+                            {
+                                status = analizeIds.First();
+                            }
+                            else if (analizeIds.Contains(13))
+                            {
+                                status = 13;
+                            }
+                            else
+                            {
+                                status = 8;
+                            }
+                        }
                         cellTasksIds = cellTDs.Select(x => x.TaskId).Distinct().ToList();
                     }
                 }
@@ -735,6 +962,38 @@ namespace UST_ProjectManagement
             }
         }
 
+        public void DG1_SizeChanged(object sender, EventArgs e)
+        {
+            int cSumm = 0;
+            for (int i = 0; i < dataGridView1.Columns.Count - 2; i++)
+            {
+                int W = 0;
+                
+                if (i == 0 || i == 5)
+                {
+                    W = 120;
+                }
+                else if (i == 2)
+                {
+                    W = 150;
+                }
+                else if (i == 3 || i == 4)
+                {
+                    W = 60;
+                }
+                dataGridView1.Columns[i].Width = W;
+                cSumm += W;
+            }
+            try
+            {
+                dataGridView1.Columns[1].Width = dataGridView1.Width - cSumm;
+            }
+            catch
+            {
+                dataGridView1.Columns[1].Width = 300;
+            }
+        }
+
         private void DG_Cell_Click(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex != 0 && e.ColumnIndex != 0 && e.RowIndex != e.ColumnIndex && e.RowIndex <= rSections.Count && e.ColumnIndex <= cSections.Count)
@@ -747,11 +1006,13 @@ namespace UST_ProjectManagement
                 //secfrom = RefreshSectionTag(secfrom);
 
                 string secto = dataGridView.Rows[0].Cells[e.ColumnIndex].Value.ToString();
-                //secto = RefreshSectionTag(secto);
+                int number = 0;
+                int accepted = 0;
+                bool inwork = false;
 
                 try
                 {
-                    GetCellTaskStatus(secfrom, secto, out status, out ids, out tdids);
+                    GetCellTaskStatus(secfrom, secto, out status, out ids, out tdids, out number, out accepted, out inwork);
                 }
                 catch { }
 
@@ -769,6 +1030,14 @@ namespace UST_ProjectManagement
             {
                 dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
             }
+        }
+
+        private void DG1_Cell_Click(object sender, DataGridViewCellEventArgs e)
+        {
+            TaskRowClick(Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[7].Value), dataGridView1.SelectedRows[0].Cells[3].Value.ToString(), dataGridView1.SelectedRows[0].Cells[4].Value.ToString());
+            string txt = $"{dataGridView1.SelectedRows[0].Cells[0].Value} {dataGridView1.SelectedRows[0].Cells[3].Value}->{dataGridView1.SelectedRows[0].Cells[4].Value}";
+            var status = RequestInfo.lb.Status.FirstOrDefault(x => x.StatusName == dataGridView1.SelectedRows[0].Cells[5].Value.ToString());
+            UpdateTaskRoute(txt, status.StatusId, 0);
         }
 
         private void DG_Cell_MouseEnter(object sender, DataGridViewCellEventArgs e)
@@ -1194,16 +1463,19 @@ namespace UST_ProjectManagement
                     contextMenuStrip.Items[0].Visible = true;
                     contextMenuStrip.Items[1].Visible = true;
                     contextMenuStrip.Items[2].Visible = true;
-                    contextMenuStrip.Items[3].Visible = false;
+                    contextMenuStrip.Items[3].Visible = true;
 
                     int status = -1;
                     List<int> ids = new List<int>();
                     List<int> tdids = new List<int>();
+                    int number = 0;
+                    int accepted = 0;
+                    bool inwork = false;
                     try
                     {
                         string secfrom = dataGridView.Rows[ht.RowIndex].Cells[0].Value.ToString();
                         string secto = dataGridView.Rows[0].Cells[ht.ColumnIndex].Value.ToString();
-                        GetCellTaskStatus(secfrom, secto, out status, out ids, out tdids);
+                        GetCellTaskStatus(secfrom, secto, out status, out ids, out tdids,out number, out accepted, out inwork);
                     }
                     catch { }
 
@@ -1226,17 +1498,39 @@ namespace UST_ProjectManagement
                         contextMenuStrip.Items[1].Enabled = true;
                         contextMenuStrip.Items[2].Enabled = true;
                     }
-                    contextMenuStrip.Items[3].Visible = false;
+                    //contextMenuStrip.Items[3].Visible = false;
                     contextMenuStrip.Show(MousePosition);
                 }
-                else if (ht.ColumnIndex == 0)
+                else
                 {
-                    contextMenuStrip.Items[0].Visible = false;
-                    contextMenuStrip.Items[1].Visible = false;
-                    contextMenuStrip.Items[2].Visible = false;
+                    contextMenuStrip.Items[0].Enabled = false;
+                    contextMenuStrip.Items[1].Enabled = false;
+                    contextMenuStrip.Items[2].Enabled = false;
                     contextMenuStrip.Items[3].Visible = true;
                     contextMenuStrip.Show(MousePosition);
                 }
+            }
+        }
+
+        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip.Items[3].Visible = false;
+                var ht = dataGridView1.HitTest(e.X, e.Y);
+
+                if (ht.RowIndex != dataGridView1.SelectedRows[0].Index)
+                {
+                    contextMenuStrip.Items[1].Enabled = false;
+                    contextMenuStrip.Items[2].Enabled = false;
+                }
+                else
+                {
+                    contextMenuStrip.Items[1].Enabled = true;
+                    contextMenuStrip.Items[2].Enabled = true;
+                }
+
+                contextMenuStrip.Show(MousePosition);
             }
         }
 
@@ -1246,22 +1540,17 @@ namespace UST_ProjectManagement
             {
                 EditTask?.Invoke(0);
             }
-            if (sender.ToString() == toolStripMenuItem_OpenTask.Text)
+            else if (sender.ToString() == toolStripMenuItem_OpenTask.Text)
             {
                 EditTask?.Invoke(1);
             }
-            if (sender.ToString() == toolStripMenuItem_PromoteTask.Text)
+            else if (sender.ToString() == toolStripMenuItem_PromoteTask.Text)
             {
                 EditTask?.Invoke(2);
             }
-        }
-
-        private void radioButtonFilter_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton radioButton = sender as RadioButton;
-            if (radioButton.Checked)
+            else if (sender.ToString() == toolStripMenuItem_AddOutTask.Text)
             {
-                UpdateDataGridViewCellsVisibility(radioButton.TabIndex);
+                EditTask?.Invoke(3);
             }
         }
 
@@ -1543,6 +1832,51 @@ namespace UST_ProjectManagement
         private void panel5_SizeChanged(object sender, EventArgs e)
         {
             panel5.Invalidate();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            if (comboBox!= null)
+            {
+                if (comboBox2.SelectedIndex == 0)
+                {
+                    UpdateDataGridViewCellsVisibility(comboBox.SelectedIndex); 
+                }
+                else
+                {
+                    UpdateDG1();
+                    DataGridViewCellEventArgs ea = new DataGridViewCellEventArgs(0, dataGridView1.SelectedRows[0].Cells[0].RowIndex);
+                    DG1_Cell_Click(dataGridView1.SelectedRows[0].Cells[0], ea);
+                }
+            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            if (comboBox.SelectedIndex == 0)
+            {
+                try
+                {
+                    DataGridViewCellEventArgs ev = new DataGridViewCellEventArgs(dataGridView.SelectedCells[0].ColumnIndex, dataGridView.SelectedCells[0].RowIndex);
+                    DG_Cell_Click(dataGridView.SelectedCells[0], ev);
+                }
+                catch { }
+                tableLayoutPanel4.BringToFront();
+            }
+            else if (comboBox.SelectedIndex == 1)
+            {
+                UpdateDG1();  
+                //TaskRowClick(Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[7].Value), dataGridView1.SelectedRows[0].Cells[3].Value.ToString(), dataGridView1.SelectedRows[0].Cells[4].Value.ToString());
+                //string txt = $"{dataGridView1.SelectedRows[0].Cells[0].Value} {dataGridView1.SelectedRows[0].Cells[3].Value}->{dataGridView1.SelectedRows[0].Cells[4].Value}";
+                //var status = RequestInfo.lb.Status.FirstOrDefault(x => x.StatusName == dataGridView1.SelectedRows[0].Cells[5].Value.ToString());
+                //UpdateTaskRoute(txt, status.StatusId, 0);
+
+                DataGridViewCellEventArgs ea = new DataGridViewCellEventArgs(0, dataGridView1.SelectedRows[0].Cells[0].RowIndex);
+                DG1_Cell_Click(dataGridView1.SelectedRows[0].Cells[0], ea);
+                dataGridView1.BringToFront();
+            }
         }
     }
 }

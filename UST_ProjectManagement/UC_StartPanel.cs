@@ -351,93 +351,97 @@ namespace UST_ProjectManagement
                     List<LibraryDB.DB.Task> tasks = RequestInfo.lb.Tasks.ToList().OrderByDescending(x => x.TaskId).ToList();
                     foreach (LibraryDB.DB.Task task in tasks)
                     {
-                        List<Project> sortP = RequestInfo.lb.Projects.OrderByDescending(x => x.ProjectId).ToList();
-                        Position position = RequestInfo.lb.Positions.FirstOrDefault(x => x.PositionId == task.PositionId);
-                        Project project = sortP.FirstOrDefault(x => x.ProjectId == position.ProjectId);
-                        Stage stage = RequestInfo.lb.Stages.FirstOrDefault(x => x.StageId == position.StageId);
-
-                        if (project != null && stage != null)
+                        try
                         {
-                            var taskDepartments = RequestInfo.lb.TaskDepartments.Where(x => x.TaskId == task.TaskId);
-                            SectionsThree sectionFrom = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == task.SectionThreeId);
-                            User userFrom = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == task.TaskUserId);
-                            foreach (TaskDepartment taskDepartment in taskDepartments)
+                            List<Project> sortP = RequestInfo.lb.Projects.OrderByDescending(x => x.ProjectId).ToList();
+                            Position position = RequestInfo.lb.Positions.FirstOrDefault(x => x.PositionId == task.PositionId);
+                            Project project = sortP.FirstOrDefault(x => x.ProjectId == position.ProjectId);
+                            Stage stage = RequestInfo.lb.Stages.FirstOrDefault(x => x.StageId == position.StageId);
+
+                            if (project != null && stage != null)
                             {
-                                SectionsThree sectionTo = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == taskDepartment.SectionThreeId);
-                                if (filters != null && filters[0, 5] != null && filters[0, 5] != "<Нет>" && sectionTo.SectionThreeId.ToString() != filters[0, 5])
+                                var taskDepartments = RequestInfo.lb.TaskDepartments.Where(x => x.TaskId == task.TaskId);
+                                SectionsThree sectionFrom = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == task.SectionThreeId);
+                                User userFrom = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == task.TaskUserId);
+                                foreach (TaskDepartment taskDepartment in taskDepartments)
                                 {
-                                    continue;
-                                }
-                                User userTo = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == taskDepartment.TaskDepartmentUserId);
-                                Status status = RequestInfo.lb.Status.FirstOrDefault(x => x.StatusId == taskDepartment.StatusId);
-
-                                DataGridViewRow row = new DataGridViewRow();
-                                row.CreateCells(dataGrid);
-                                row.Cells[0].Value = position.ProjectId;
-                                row.Cells[1].Value = position.PositionCode;
-                                row.Cells[2].Value = stage.StageTag;
-                                row.Cells[3].Value = $"{task.TaskNumer}-{task.TaskYear}";
-                                row.Cells[4].Value = task.TaskName;
-                                if (stage.LanguageId == 2)
-                                {
-                                    row.Cells[5].Value = sectionFrom.SectionThreeTagEng;
-                                    row.Cells[6].Value = sectionTo.SectionThreeTagEng;
-                                }
-                                else
-                                {
-                                    row.Cells[5].Value = sectionFrom.SectionThreeTagRus;
-                                    row.Cells[6].Value = sectionTo.SectionThreeTagRus;
-                                }
-                                row.Cells[7].Value = $"{userFrom.UserSurname} {userFrom.UserName}";
-                                if (userTo.UserSurname != "-")
-                                {
-                                    row.Cells[8].Value = $"{userTo.UserSurname} {userTo.UserName}";
-                                }
-                                else
-                                {
-                                    row.Cells[8].Value = GetAsignie(task, taskDepartment, status);
-                                }
-                                row.Cells[9].Value = status.StatusName;
-                                row.Cells[9].Style.BackColor = GlobalMethodes.GetCellColor(status.StatusId, 0);
-                                row.Cells[10].Value = task.TaskId;
-                                row.Cells[11].Value = taskDepartment.TaskDepartmentId;
-                                row.Height = CardTask.Methodes_DataGrid.RowHeight;
-                                dataGrid.Rows.Add(row);
-
-                                for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
-                                {
-                                    int index = Filters.filterColumns[Mode][f];
-                                    if (Filters.filters[Mode].ContainsKey(f))
+                                    SectionsThree sectionTo = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == taskDepartment.SectionThreeId);
+                                    if (filters != null && filters[0, 5] != null && filters[0, 5] != "<Нет>" && sectionTo.SectionThreeId.ToString() != filters[0, 5])
                                     {
-                                        if (Filters.filters[Mode][f] != "" && Filters.filters[Mode][f] != "<Нет>")
-                                        {
-                                            if (row.Cells[index].Value.ToString() != Filters.filters[Mode][f])
-                                            {
-                                                row.Visible = false;
-                                                break;
-                                            }
-                                        }
+                                        continue;
                                     }
-                                }
-                                if (row.Visible)
-                                {
+                                    User userTo = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == taskDepartment.TaskDepartmentUserId);
+                                    Status status = RequestInfo.lb.Status.FirstOrDefault(x => x.StatusId == taskDepartment.StatusId);
+
+                                    DataGridViewRow row = new DataGridViewRow();
+                                    row.CreateCells(dataGrid);
+                                    row.Cells[0].Value = position.ProjectId;
+                                    row.Cells[1].Value = position.PositionCode;
+                                    row.Cells[2].Value = stage.StageTag;
+                                    row.Cells[3].Value = $"{task.TaskNumer}-{task.TaskYear}";
+                                    row.Cells[4].Value = task.TaskName;
+                                    if (stage.LanguageId == 2)
+                                    {
+                                        row.Cells[5].Value = sectionFrom.SectionThreeTagEng;
+                                        row.Cells[6].Value = sectionTo.SectionThreeTagEng;
+                                    }
+                                    else
+                                    {
+                                        row.Cells[5].Value = sectionFrom.SectionThreeTagRus;
+                                        row.Cells[6].Value = sectionTo.SectionThreeTagRus;
+                                    }
+                                    row.Cells[7].Value = $"{userFrom.UserSurname} {userFrom.UserName}";
+                                    if (userTo.UserSurname != "-")
+                                    {
+                                        row.Cells[8].Value = $"{userTo.UserSurname} {userTo.UserName}";
+                                    }
+                                    else
+                                    {
+                                        row.Cells[8].Value = GetAsignie(task, taskDepartment, status);
+                                    }
+                                    row.Cells[9].Value = status.StatusName;
+                                    row.Cells[9].Style.BackColor = GlobalMethodes.GetCellColor(status.StatusId, 0);
+                                    row.Cells[10].Value = task.TaskId;
+                                    row.Cells[11].Value = taskDepartment.TaskDepartmentId;
+                                    row.Height = CardTask.Methodes_DataGrid.RowHeight;
+                                    dataGrid.Rows.Add(row);
+
                                     for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
                                     {
                                         int index = Filters.filterColumns[Mode][f];
-                                        if (!Filters.filterItems[Mode].ContainsKey(f))
+                                        if (Filters.filters[Mode].ContainsKey(f))
                                         {
-                                            Filters.filterItems[Mode].Add(f, new List<string>());
-                                            //Filters.filterItems[Mode][f] = new List<string>();
+                                            if (Filters.filters[Mode][f] != "" && Filters.filters[Mode][f] != "<Нет>")
+                                            {
+                                                if (row.Cells[index].Value.ToString() != Filters.filters[Mode][f])
+                                                {
+                                                    row.Visible = false;
+                                                    break;
+                                                }
+                                            }
                                         }
-
-                                        if (!Filters.filterItems[Mode][f].Contains(row.Cells[index].Value.ToString()))
+                                    }
+                                    if (row.Visible)
+                                    {
+                                        for (int f = 0; f < Filters.filterColumns[Mode].Count; f++)
                                         {
-                                            Filters.filterItems[Mode][f].Add(row.Cells[index].Value.ToString());
+                                            int index = Filters.filterColumns[Mode][f];
+                                            if (!Filters.filterItems[Mode].ContainsKey(f))
+                                            {
+                                                Filters.filterItems[Mode].Add(f, new List<string>());
+                                                //Filters.filterItems[Mode][f] = new List<string>();
+                                            }
+
+                                            if (!Filters.filterItems[Mode][f].Contains(row.Cells[index].Value.ToString()))
+                                            {
+                                                Filters.filterItems[Mode][f].Add(row.Cells[index].Value.ToString());
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                        catch { }
                     }
                 }
                 catch
@@ -469,7 +473,25 @@ namespace UST_ProjectManagement
                             Position position = RequestInfo.lb.Positions.FirstOrDefault(x => x.PositionId == id);
                             Project project = RequestInfo.lb.Projects.FirstOrDefault(x => x.ProjectId == position.ProjectId);
                             Stage stage = RequestInfo.lb.Stages.FirstOrDefault(x => x.StageId == position.StageId);
-                            List < InventorToNwd > inventors = RequestInfo.lb.InventorToNwds.Where(z => z.Account != "-").Where(x => x.PositionId == id).OrderByDescending(x => x.InventorToNwdId).ToList();
+                            List < InventorToNwd > inventors = RequestInfo.lb.InventorToNwds.Where(z => z.Account != "-").Where(x => x.PositionId == id).ToList();
+                            List<InventorDwg> inventorDwgs = RequestInfo.lb.InventorDwgs.Where(z => z.Account != "-").Where(x => x.PositionId == id).ToList();
+
+                            foreach(InventorDwg dwg in inventorDwgs)
+                            {
+                                InventorToNwd item = new InventorToNwd();
+                                item.InventorToNwdId = dwg.InventorDwgId;
+                                item.PositionId = dwg.PositionId;
+                                item.InventorToNwdInfo = dwg.InventorDwgInfo;
+                                item.Account = dwg.Account;
+                                item.UserSurname = dwg.UserSurname;
+                                item.Name = dwg.Name;
+                                item.MidlName = dwg.MidlName;
+                                item.InventorToNwdDate = dwg.InventorToDwgDate;
+                                item.InventorToNwdLastWriteTime = dwg.InventorToDwgLastWriteTime;
+                                inventors.Add(item);
+                            }
+                            inventors = inventors.OrderByDescending(x => Convert.ToDateTime(x.InventorToNwdLastWriteTime)).ToList();
+
 
                             if (inventors != null && inventors.Count > 0)
                             {
@@ -744,7 +766,14 @@ namespace UST_ProjectManagement
                         else
                         {
                             name = GetName(spPath[i], out type);
-                            nwdpath += name + ".nwd";
+                            if (type != "Чертеж")
+                            {
+                                nwdpath += name + ".nwd";
+                            }
+                            else
+                            {
+                                nwdpath += name + ".dwg";
+                            }
                         }
                     }
                 }
@@ -781,6 +810,9 @@ namespace UST_ProjectManagement
                         break;
                     case "ipt":
                         type = "Деталь";
+                        break;
+                    case "dwg":
+                        type = "Чертеж";
                         break;
                 }
             }
@@ -1157,8 +1189,8 @@ namespace UST_ProjectManagement
                 }
                 else if (radioButton5.Checked)
                 {
-                    stripItemOpen.Text = "Открыть в Navisworks";
-                    stripItemOpen.Image = Properties.Resources.OpenNavisworks_25x25;
+                    stripItemOpen.Text = "Открыть в документ";
+                    stripItemOpen.Image = Properties.Resources.Btn_OpenCard_20x20;
 
                     stripItemOpenDir.Visible = false;
                     stripItemGetPath.Visible = false;

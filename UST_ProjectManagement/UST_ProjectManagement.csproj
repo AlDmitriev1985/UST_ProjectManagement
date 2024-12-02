@@ -42,10 +42,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Z:\BIM01\01_Библиотеки\06_Приложения\05_UST ProjectManagement\LibraryDB.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Z:\BIM01\01_Библиотеки\00_Autodesk Revit\13_SkyWay_вкладка\Version\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -127,6 +125,12 @@
     <Compile Include="CreateTechSolution.cs" />
     <Compile Include="CreateProduct.cs" />
     <Compile Include="Filters.cs" />
+    <Compile Include="Form_Comment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Comment.Designer.cs">
+      <DependentUpon>Form_Comment.cs</DependentUpon>
+    </Compile>
     <Compile Include="globalKeyboardHook.cs" />
     <Compile Include="HistoryInfo.cs" />
     <Compile Include="HistoryLog.cs" />
@@ -339,6 +343,12 @@
     <Compile Include="Form_Approve.Designer.cs">
       <DependentUpon>Form_Approve.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_AddTask.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_AddTask.Designer.cs">
+      <DependentUpon>Form_AddTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="UST_HorizontalTabControl_Settings.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -359,6 +369,9 @@
     </Compile>
     <EmbeddedResource Include="EditSetForm.resx">
       <DependentUpon>EditSetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Comment.resx">
+      <DependentUpon>Form_Comment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -459,6 +472,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Approve.resx">
       <DependentUpon>Form_Approve.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_AddTask.resx">
+      <DependentUpon>Form_AddTask.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

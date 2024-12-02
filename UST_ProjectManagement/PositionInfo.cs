@@ -122,6 +122,11 @@ namespace UST_ProjectManagement
                             catch
                             {
                             }
+                            try
+                            {
+                                item.DepId = sectionsThree.DepartmentId;
+                            }
+                            catch { }
 
                             if (stage.LanguageId == 2)
                             {
@@ -170,10 +175,13 @@ namespace UST_ProjectManagement
                 SectionsTxt = "-";
             }
 
-
-            if (SectionsPositions.Count() > 0)
+            if (SectionsPositions.Count() > 0 && SectionsPositions.Count() < 3)
             {
-                PersentComplete = (SectionsPositions.Sum(x => x.SectionProgress) / SectionsPositions.Count()).ToString() + "%";
+                PersentComplete = (SectionsPositions.Sum(x => x.SectionProgress) / (SectionsPositions.Count())).ToString() + "%";
+            }
+            else if (SectionsPositions.Count() > 2)
+            {
+                PersentComplete = (SectionsPositions.Sum(x => x.SectionProgress) / (SectionsPositions.Count()-2)).ToString() + "%";
             }
             else
             {

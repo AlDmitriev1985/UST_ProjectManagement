@@ -34,8 +34,11 @@ namespace UST_ProjectManagement
         public delegate void OpenComment_Click();
         public event OpenComment_Click CommentOpen;
 
-        public delegate void OpenHistory_Click(bool open);
+        public delegate void OpenHistory_Click(bool open, HistoryLog history);
         public event OpenHistory_Click HistoryOpen;
+
+        public delegate void UpdateHistory_Click(HistoryLog history);
+        public event UpdateHistory_Click HistoryUpdate;
 
         public delegate void StartProcess_Start();
         public event StartProcess_Start StartProcess;
@@ -52,6 +55,7 @@ namespace UST_ProjectManagement
         ToolStripMenuItem stripItemEdit = new ToolStripMenuItem();
         ToolStripMenuItem stripItemPromote = new ToolStripMenuItem();
         ToolStripMenuItem stripItemDemote = new ToolStripMenuItem();
+        ToolStripMenuItem stripItemHistory = new ToolStripMenuItem();
 
         List<ScheduleItem> EditedItems = new List<ScheduleItem>();
         EditPercentForm percentForm;
@@ -76,6 +80,11 @@ namespace UST_ProjectManagement
             stripItemDemote.Image = Properties.Resources.Demote_25x25;
             stripItemDemote.Click += new EventHandler(toolStripItem_Click);
             contextMenu.Items.Add(stripItemDemote);
+
+            stripItemHistory.Text = "История изменений";
+            stripItemHistory.Image = Properties.Resources.Btn_Help_25x25;
+            stripItemHistory.Click += new EventHandler(toolStripItem_Click);
+            contextMenu.Items.Add(stripItemHistory);
 
             dataGridView_Approvals.ScrollBars = ScrollBars.Vertical;
         }
@@ -175,9 +184,14 @@ namespace UST_ProjectManagement
                 {
                     if (ht.RowIndex == cell.RowIndex)
                     {
+                        stripItemPromote.Visible = false;
+                        stripItemDemote.Visible = false;
+                        stripItemEdit.Visible = false;
+
+                        contextMenu.Show(MousePosition);
                         if (cell.Style.BackColor == Color.White && UserRole != 3)
                         {
-                            contextMenu.Show(MousePosition);
+                            stripItemEdit.Visible = true;
                             if (GetRole() == 0)
                             {
                                 stripItemPromote.Visible = false;
@@ -189,6 +203,7 @@ namespace UST_ProjectManagement
                                 stripItemDemote.Visible = true;
                             }
                         }
+                        stripItemHistory.Visible = true;
                     }
                 }
             }
@@ -207,6 +222,20 @@ namespace UST_ProjectManagement
             else if (sender.ToString() == stripItemDemote.Text)
             {
                 button_Demote_Click(button_Demote, EventArgs.Empty);
+            }
+            else if (sender.ToString() == stripItemHistory.Text)
+            {
+                HistoryLog historyLog = null;
+                if (dataGridView_Approvals.SelectedRows.Count > 0 && dataGridView_Approvals.SelectedRows[0].Cells[9].Value != null)
+                {
+                    try
+                    {
+                        historyLog = JsonConvert.DeserializeObject<HistoryLog>(dataGridView_Approvals.SelectedRows[0].Cells[9].Value.ToString());
+                    }
+                    catch { }
+                }
+
+                HistoryOpen?.Invoke(true, historyLog);
             }
         }
 
@@ -264,7 +293,6 @@ namespace UST_ProjectManagement
                 {
                     id = item.Status.StatusId;
                 }
-                
             }
             else if (item.Progress == 100 && item.Status.StatusId == 4 && GetRole() == 2) id = 0;
             Status status = RequestInfo.lb.Status.FirstOrDefault(x => x.StatusId == id);
@@ -274,15 +302,39 @@ namespace UST_ProjectManagement
 
         private void dataGridView_Approvals_SizeChanged(object sender, EventArgs e)
         {
-            dataGridView_Approvals.Columns[0].Width = 80;
-            dataGridView_Approvals.Columns[1].Width = 80;
-            dataGridView_Approvals.Columns[2].Width = dataGridView_Approvals.Width - (80 * 2 + 100 * 3 + 150 + 60);
-            dataGridView_Approvals.Columns[3].Width = 0;
-            dataGridView_Approvals.Columns[4].Width = 100;
-            dataGridView_Approvals.Columns[5].Width = 150;
-            dataGridView_Approvals.Columns[6].Width = 100;
-            dataGridView_Approvals.Columns[7].Width = 100;
-            dataGridView_Approvals.Columns[8].Width = 60;
+            int summ = 0;
+            for(int c = 0; c < dataGridView_Approvals.Columns.Count - 1; c++)
+            {
+                int w = 0;
+                if(c < 2)
+                {
+                    w = 80;
+                }
+                else if (c == 3)
+                {
+                    w = 0;
+                }
+                else if(c == 4 || c > 5)
+                {
+                    w = 120;
+                }
+                else if (c == 5)
+                {
+                    w = 150;
+                }
+                summ += w;
+                dataGridView_Approvals.Columns[c].Width = w;
+            }
+            //dataGridView_Approvals.Columns[0].Width = 80;
+            //dataGridView_Approvals.Columns[1].Width = 80;          
+            //dataGridView_Approvals.Columns[3].Width = 0;
+            //dataGridView_Approvals.Columns[4].Width = 100;
+            //dataGridView_Approvals.Columns[5].Width = 150;
+            //dataGridView_Approvals.Columns[6].Width = 100;
+            //dataGridView_Approvals.Columns[7].Width = 100;
+            //dataGridView_Approvals.Columns[8].Width = 100;
+            
+            dataGridView_Approvals.Columns[2].Width = dataGridView_Approvals.Width - summ;
         }
 
         public void UpdateDG()
@@ -301,94 +353,116 @@ namespace UST_ProjectManagement
                 var secTowGroup = sorted.GroupBy(x => x.SecTowId);
                 foreach (var group in secTowGroup)
                 {
-                    DataGridViewRow secTowRow = new DataGridViewRow();
-                    secTowRow.CreateCells(dataGridView_Approvals);
-                    secTowRow.ReadOnly = true;
-                    secTowRow.Height = rowh;
-                    var secTow = RequestInfo.lb.SectionsTwoes.FirstOrDefault(x => x.SectionTwoId == group.Key);
-                    secTowRow.Cells[0].Value = secTow.SectionTwoNum;
-                    if (positionInfo.LanguageId == 7)
+                    if (group.Key != 1 && group.Key != 38)
                     {
-                        secTowRow.Cells[2].Value = secTow.SectionTwoNameEng;
-                    }
-                    else
-                    {
-                        secTowRow.Cells[2].Value = secTow.SectionTwoNameRus;
-                    }
-                    DataGridViewComboBoxCell cbcell = new DataGridViewComboBoxCell();
-
-                    int progress = 0;
-                    try
-                    {
-                        progress = group.Sum(x => x.Progress.Value) / group.Count();
-                    }
-                    catch { }   
-                    secTowRow.Cells[4].Value = progress.ToString() + "%";
-                    try
-                    {
-                        Status status = group.FirstOrDefault(x => x.Status.StatusId == group.Min(y => y.Status.StatusId)).Status;
-                        secTowRow.Cells[5].Value = status.StatusName;
-
-                        Methodes.ApplyRowBackColor(secTowRow, Color.LightBlue);
-
-                        switch (status.StatusId)
+                        DataGridViewRow secTowRow = new DataGridViewRow();
+                        secTowRow.CreateCells(dataGridView_Approvals);
+                        secTowRow.ReadOnly = true;
+                        secTowRow.Height = rowh;
+                        var secTow = RequestInfo.lb.SectionsTwoes.FirstOrDefault(x => x.SectionTwoId == group.Key);
+                        secTowRow.Cells[0].Value = secTow.SectionTwoNum;
+                        if (positionInfo.LanguageId == 7)
                         {
-                            case 0: Methodes.ApplyRowBackColor(secTowRow, Color.Gainsboro); break;
-                            case 1: Methodes.ApplyRowBackColor(secTowRow, Color.LightBlue); break;
-                            case 2: Methodes.ApplyRowBackColor(secTowRow, Color.Orange); break;
-                            case 3: Methodes.ApplyRowBackColor(secTowRow, Color.LightCoral); break;
-                            case 4: Methodes.ApplyRowBackColor(secTowRow, Color.MediumSeaGreen); break;
-                            case 11: Methodes.ApplyRowBackColor(secTowRow, Color.MediumSeaGreen); break;
-                            case 21: Methodes.ApplyRowBackColor(secTowRow, Color.YellowGreen); break;
+                            secTowRow.Cells[2].Value = secTow.SectionTwoNameEng;
                         }
-                        dataGridView_Approvals.Rows.Add(secTowRow);
-
-                        foreach (var section in group)
+                        else
                         {
-                            DataGridViewRow row = new DataGridViewRow();
-                            row.CreateCells(dataGridView_Approvals);
-                            row.ReadOnly = true;
-                            row.Height = rowh;
+                            secTowRow.Cells[2].Value = secTow.SectionTwoNameRus;
+                        }
+                        DataGridViewComboBoxCell cbcell = new DataGridViewComboBoxCell();
 
-                            row.Cells[0].Value = section.SecThreeNum;
-                            row.Cells[1].Value = section.SecThreeTag + section.SecThreePostfix;
-                            row.Cells[2].Value = section.SecThreeName;
-                            row.Cells[4].Value = section.Progress + "%";
-                            row.Cells[5].Value = section.Status.StatusName;
-                            HistoryLog historyLog = null;
-                            if (section.History != null)
+                        int progress = 0;
+                        try
+                        {
+                            progress = group.Sum(x => x.Progress.Value) / group.Count();
+                        }
+                        catch { }
+                        secTowRow.Cells[4].Value = progress.ToString() + "%";
+                        try
+                        {
+                            Status status = group.FirstOrDefault(x => x.Status.StatusId == group.Min(y => y.Status.StatusId)).Status;
+                            secTowRow.Cells[5].Value = status.StatusName;
+
+                            Methodes.ApplyRowBackColor(secTowRow, Color.LightBlue);
+
+                            switch (status.StatusId)
                             {
-                                historyLog = JsonConvert.DeserializeObject<HistoryLog>(section.History);
+                                case 0: Methodes.ApplyRowBackColor(secTowRow, Color.Gainsboro); break;
+                                case 1: Methodes.ApplyRowBackColor(secTowRow, Color.LightBlue); break;
+                                case 2: Methodes.ApplyRowBackColor(secTowRow, Color.Orange); break;
+                                case 3: Methodes.ApplyRowBackColor(secTowRow, Color.LightCoral); break;
+                                case 4: Methodes.ApplyRowBackColor(secTowRow, Color.MediumSeaGreen); break;
+                                case 11: Methodes.ApplyRowBackColor(secTowRow, Color.MediumSeaGreen); break;
+                                case 21: Methodes.ApplyRowBackColor(secTowRow, Color.YellowGreen); break;
                             }
-                            if (historyLog != null)
+
+                            //secTowRow.Visible = false;
+                            dataGridView_Approvals.Rows.Add(secTowRow);
+
+                            //dataGridView_Approvals.DataSource = group;
+
+                            foreach (var section in group)
                             {
-                                POSTServer.History.HistoryInfo history = historyLog.spHistory.Last();
-                                try
+                                DataGridViewRow row = new DataGridViewRow();
+                                row.CreateCells(dataGridView_Approvals);
+                                row.ReadOnly = true;
+                                row.Height = rowh;
+
+                                row.Cells[0].Value = section.SecThreeNum;
+                                row.Cells[1].Value = section.SecThreeTag + section.SecThreePostfix;
+                                row.Cells[2].Value = section.SecThreeName;
+                                row.Cells[4].Value = section.Progress + "%";
+                                row.Cells[5].Value = section.Status.StatusName;
+                                HistoryLog historyLog = null;
+                                if (section.History != null)
                                 {
-                                    row.Cells[6].Value = (history.Date.Split(' '))[0];
-                                    row.Cells[7].Value = history.User;
+                                    try
+                                    {
+                                        row.Cells[9].Value = section.History;
+                                        historyLog = JsonConvert.DeserializeObject<HistoryLog>(section.History);
+                                    }
+                                    catch { }
                                 }
-                                catch
+                                if (historyLog != null)
                                 {
-                                    row.Cells[6].Value = "";
+                                    POSTServer.History.HistoryInfo history = historyLog.spHistory.Last();
+                                    try
+                                    {
+                                        row.Cells[7].Value = (history.Date.Split(' '))[0];
+                                        row.Cells[8].Value = history.User;
+                                    }
+                                    catch
+                                    {
+                                        row.Cells[7].Value = "";
+                                        row.Cells[8].Value = "";
+                                    }
+                                }
+                                else
+                                {
                                     row.Cells[7].Value = "";
+                                    row.Cells[8].Value = "";
                                 }
-                            }
-                            else
-                            {
-                                row.Cells[6].Value = "";
-                                row.Cells[7].Value = "";
-                            }
-                            dataGridView_Approvals.Rows.Add(row);
+                                //if(section.SecThreeId == 1 || section.SecThreeId == 65)
+                                //{
+                                //    row.Visible = false;
+                                //}
+                                dataGridView_Approvals.Rows.Add(row);
 
+                            }
                         }
-                    }
-                    catch
-                    {
+                        catch
+                        {
 
+                        } 
                     }
                 }
             }
+
+            try
+            {
+                dataGridView_Approvals.Rows[0].Selected = false;
+            }
+            catch { }
         }
 
         public int GetRole()
@@ -439,13 +513,13 @@ namespace UST_ProjectManagement
                     //UpdateProgressDict();
                     UpdateEnabled();
                     UpdateButtonsEnabled();
-                    HistoryOpen?.Invoke(false);
+                    HistoryOpen?.Invoke(false, null);
                     EditStarted?.Invoke();
                 }
             }
             else
             {
-                MessageBox.Show("У вас нет прав на редактирование статуса разделов по данномк проекту", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("У вас нет прав на редактирование статуса разделов по данному проекту", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -529,7 +603,6 @@ namespace UST_ProjectManagement
                     Edit = false;
                     UpdateProgress();
                     UpdateDG();
-                    //UpdateDG_Approve();
                     UpdateEnabled();
                     EditFinished();
                     GlobalMethodes._stop = true;
@@ -561,7 +634,7 @@ namespace UST_ProjectManagement
                         SP.Progress = 100;
                         SP.SectionThreeId = set.SectionThreeId;
                         SP.Status = 3;
-                        //SP.Description = info.Comment;
+                        SP.Description = "";
                         string GroupId = set.SectionTwoId.ToString();
                         //if (!EditedGroupsList.Contains(GroupId)) EditedGroupsList.Add(GroupId);
                         spProgress.Add(SP);
@@ -577,57 +650,10 @@ namespace UST_ProjectManagement
                     SP.Progress = item.Progress.Value;
                     SP.SectionThreeId = item.SecThreeId;
                     SP.Status = item.Status.StatusId;
+                    SP.Description = item.Comment;
                     spProgress.Add(SP);
 
                 }
-
-                #region --- OLD ---
-                //foreach (DataGridViewRow _row in EditedRows)
-                //{
-                //    SectionsThree set = positionInfo.ListSecThree.FirstOrDefault(x => x.SectionThreeNum == _row.Cells[0].Value.ToString());
-
-                //    foreach (KeyValuePair<string, string> _pair in dictEditedRows)
-                //    {
-                //        if (_pair.Key == _row.Cells[0].Value.ToString())
-                //        {
-                //            //ClassSubsetInfo info = GlobalData.SelectedPosition.SubSetInfoList.FirstOrDefault(x => x.SubSetId == _row.Cells[0].Value.ToString());
-                //            string secthreeid = set.SectionThreeId.ToString();
-                //            string persent = "0";
-                //            //foreach (ClassSet _set in GlobalData.SelectedPosition.SetsList)
-                //            //{
-                //            //    if (_set.SubSetId == _row.Cells[0].Value.ToString())
-                //            //    {
-                //            //        secthreeid = _set.SubSetTreeId;
-                //            //        break;
-                //            //    }
-                //            //}
-                //            persent = _row.Cells[3].Value.ToString().Substring(0, _row.Cells[3].Value.ToString().Length - 1);
-
-                //            KeyValuePair<string, string> statuspair = dictEditedRowsStatus.FirstOrDefault(k => k.Key == _pair.Key);
-
-                //            if (_pair.Value != _row.Cells[3].Value.ToString() || statuspair.Value != _row.Cells[5].Value.ToString())
-                //            {
-                //                //GlobalMethodes.UpdatePositionProgress(persent, GlobalData.SelectedPosition.pId, secthreeid);
-                //                SectionProgress SP = new SectionProgress();
-                //                SP.PositionId = Convert.ToInt32(GlobalData.SelectedPosition.PositionId);
-                //                SP.Progress = Convert.ToInt32(persent);
-                //                SP.SectionThreeId = Convert.ToInt32(secthreeid);
-                //                //SP.Description = info.Comment;
-                //                if (Mode == 1 && SP.Progress < 100) SP.Status = 1;
-                //                else if (Mode == 1 && SP.Progress == 100) SP.Status = 2;
-                //                else if (Mode == 4 && SP.Progress == 100) SP.Status = 4;
-                //                else SP.Status = 1;
-
-                //                string[] spltid = _pair.Key.Split('.');
-                //                string GroupId = spltid[0] + "." + spltid[1];
-                //                if (!EditedGroupsList.Contains(GroupId)) EditedGroupsList.Add(GroupId);
-                //                spProgress.Add(SP);
-                //            }
-                //            break;
-                //        }
-                //    }
-                //} 
-                #endregion
             }
 
             string txt = JsonConvert.SerializeObject(spProgress, Newtonsoft.Json.Formatting.Indented);
@@ -715,173 +741,156 @@ namespace UST_ProjectManagement
         /// <param name="e"></param>
         private void buttonPercent_Click(object sender, EventArgs e)
         {
-            List<ScheduleItem> editedItems = GetEditedItems();
-            if (editedItems.Count > 0 && editedItems.Max(x => x.Progress) < 100)
+            try
             {
-                percentForm = new EditPercentForm();
-                percentForm.numericUpDown1.Value = editedItems.Min(x => x.Progress.Value);
-                percentForm.StartPosition = FormStartPosition.CenterParent;
-                if (percentForm.ShowDialog() == DialogResult.OK)
+                List<ScheduleItem> editedItems = GetEditedItems();
+                if (editedItems.Count > 0 && editedItems.Max(x => x.Progress) < 100)
                 {
-                    foreach (ScheduleItem item in editedItems)
-                    {
-                        if (item.Progress != Convert.ToInt32(percentForm.numericUpDown1.Value))
-                        {
-                            item.Progress = Convert.ToInt32(percentForm.numericUpDown1.Value);
-                            item.Status = GetStatus(item);
-                            if (!EditedItems.Contains(item)) EditedItems.Add(item);
-                        }
-
-                    }
-                    UpdateDG();
-                    UpdateEnabled();
-                }
-            }
-            else
-            {
-                if (editedItems.Count == 0)
-                {
-                    MessageBox.Show("Не выбрано ни одного раздела", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    MessageBox.Show("Изменение процента выполнения доступно только для задач со статусом \"В работе\"", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-        private void button_Promote_Click(object sender, EventArgs e)
-        {
-            if (Edit == true)
-            {
-                List<string> selectedid = new List<string>();
-                if (dataGridView_Approvals.SelectedRows.Count > 0)
-                {
-                    List<ScheduleItem> editedItems = GetEditedItems();
-                    int minprogress = editedItems.Min(x => x.Progress.Value);
-                    if (minprogress < 100)
+                    percentForm = new EditPercentForm();
+                    percentForm.numericUpDown1.Value = editedItems.Min(x => x.Progress.Value);
+                    percentForm.StartPosition = FormStartPosition.CenterParent;
+                    if (percentForm.ShowDialog() == DialogResult.OK)
                     {
                         foreach (ScheduleItem item in editedItems)
                         {
-                            if (item.Progress < 100)
+                            if (item.Progress != Convert.ToInt32(percentForm.numericUpDown1.Value))
                             {
-                                selectedid.Add(item.SecThreeTag + item.SecThreePostfix);
-                                item.Progress = 100;
+                                item.Progress = Convert.ToInt32(percentForm.numericUpDown1.Value);
                                 item.Status = GetStatus(item);
                                 if (!EditedItems.Contains(item)) EditedItems.Add(item);
                             }
 
                         }
+                        UpdateDG();
+                        UpdateEnabled();
                     }
-                    else
-                    {
-                        foreach (ScheduleItem item in editedItems)
-                        {
-                            selectedid.Add(item.SecThreeTag + item.SecThreePostfix);
-                            item.Status = GetStatus(item);
-                            if (!EditedItems.Contains(item)) EditedItems.Add(item);
-                        }
-                    }
-
-                    #region --- Old ---
-                    //foreach (ScheduleItem item in editedItems)
-                    //{
-                    //    if (item.Progress != Convert.ToInt32(percentForm.numericUpDown1.Value))
-                    //    {
-                    //        item.Progress = Convert.ToInt32(percentForm.numericUpDown1.Value);
-                    //        item.Status = GetStatus(item.Progress.Value);
-                    //        if (!EditedItems.Contains(item)) EditedItems.Add(item);
-                    //    }
-
-                    //}
-
-
-
-
-                    //foreach (DataGridViewRow _row in dataGridView_Approvals.SelectedRows)
-                    //{
-
-                    //    //if (UserRole > 0 && UserRole < 3 && EditedRows.Contains(_row))
-                    //    //{
-                    //    //    ClassSubsetInfo info = GlobalData.SelectedPosition.SubSetInfoList.FirstOrDefault(x => x.SubSetId == _row.Cells[0].Value.ToString());
-                    //    //    _row.Cells[3].Value = "100%";
-                    //    //    _row.Cells[5].Value = GlobalData.Statuses[4];
-                    //    //    info.PercentComplete = 100;
-                    //    //    info.Status = GlobalData.Statuses[4];
-                    //    //    info.StatusId = 4;
-                    //    //    Mode = 4;
-                    //    //    if (!selectedid.Contains(_row.Cells[0].Value.ToString()))
-                    //    //    {
-                    //    //        selectedid.Add(_row.Cells[0].Value.ToString());
-                    //    //    }
-                    //    //}
-                    //    //else if (UserRole == 3 && _row.Cells[5].Value.ToString() == GlobalData.Statuses[3])
-                    //    //{
-                    //    //    ClassSubsetInfo info = GlobalData.SelectedPosition.SubSetInfoList.FirstOrDefault(x => x.SubSetId == _row.Cells[0].Value.ToString());
-                    //    //    _row.Cells[5].Value = GlobalData.Statuses[5];
-                    //    //    info.Status = GlobalData.Statuses[5];
-                    //    //    info.StatusId = 5;
-                    //    //    Mode = 4;
-                    //    //    if (!selectedid.Contains(_row.Cells[0].Value.ToString()))
-                    //    //    {
-                    //    //        selectedid.Add(_row.Cells[0].Value.ToString());
-                    //    //    }
-                    //    //}
-                    //}
-                    //UpdateProgress(); 
-                    #endregion
-                    UpdateDG();
-                    UpdateEnabled();
-                    foreach (DataGridViewRow _row in dataGridView_Approvals.Rows)
-                    {
-                        foreach (string id in selectedid)
-                        {
-                            try
-                            {
-                                if (_row.Cells[1].Value.ToString() == id)
-                                {
-                                    _row.Selected = true;
-                                }
-                            }
-                            catch
-                            {
-
-                                _row.Selected = false;
-                            }
-                        }
-                    }
-                }
-                
-            }
-            else
-            {
-                if (UserRole != 0)
-                {
-                    MessageBox.Show("Для активации команды, перейдите в режим редактирования", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("Команда доступна только ГИПам и Руководитлям отделов", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (editedItems.Count == 0)
+                    {
+                        Form_MessageBox messageBox = new Form_MessageBox("Не выбрано ни одного раздела", "Предупреждение", 0);
+                        messageBox.ShowDialog();
+                    }
+                    else
+                    {
+                        Form_MessageBox messageBox = new Form_MessageBox("Изменение процента выполнения доступно только для задач со статусом \"В работе\"", "Предупреждение", 0);
+                        messageBox.ShowDialog();
+                    }
                 }
+            }
+            catch
+            {
+                Form_MessageBox messageBox = new Form_MessageBox("Что-то пошло нетак. \nОбратитесь в BIM-отдел.", "Ошибка", 0);
+                messageBox.ShowDialog();
+            }
+        }
+
+        private void button_Promote_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Edit == true)
+                {
+                    List<string> selectedid = new List<string>();
+                    if (dataGridView_Approvals.SelectedRows.Count > 0)
+                    {
+                        List<ScheduleItem> editedItems = GetEditedItems();
+                        int minprogress = editedItems.Min(x => x.Progress.Value);
+                        if (minprogress < 100)
+                        {
+                            foreach (ScheduleItem item in editedItems)
+                            {
+                                if (item.Progress < 100)
+                                {
+                                    selectedid.Add(item.SecThreeTag + item.SecThreePostfix);
+                                    item.Progress = 100;
+                                    item.Status = GetStatus(item);
+                                    if (!EditedItems.Contains(item)) EditedItems.Add(item);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            foreach (ScheduleItem item in editedItems)
+                            {
+                                selectedid.Add(item.SecThreeTag + item.SecThreePostfix);
+                                item.Status = GetStatus(item);
+                                if (!EditedItems.Contains(item)) EditedItems.Add(item);
+                            }
+                        }
+                        UpdateDG();
+                        UpdateEnabled();
+                        foreach (DataGridViewRow _row in dataGridView_Approvals.Rows)
+                        {
+                            foreach (string id in selectedid)
+                            {
+                                try
+                                {
+                                    if (_row.Cells[1].Value.ToString() == id)
+                                    {
+                                        _row.Selected = true;
+                                    }
+                                }
+                                catch
+                                {
+
+                                    _row.Selected = false;
+                                }
+                            }
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (UserRole != 0)
+                    {
+                        Form_MessageBox messageBox = new Form_MessageBox("Для активации команды, перейдите в режим редактирования", "Предупреждение", 0);
+                        messageBox.ShowDialog();
+                    }
+                    else
+                    {
+                        Form_MessageBox messageBox = new Form_MessageBox("Команда доступна только ГИПам и Руководитлям отделов", "Предупреждение", 0);
+                        messageBox.ShowDialog();
+                    }
+                }
+            }
+            catch
+            {
+                Form_MessageBox messageBox = new Form_MessageBox("Что-то пошло нетак. \nОбратитесь в BIM-отдел.", "Ошибка", 0);
+                messageBox.ShowDialog();
             }
         }
 
         private void button_Demote_Click(object sender, EventArgs e)
         {
-            if (Edit == true)
+            try
             {
-                GlobalData.Comment = "";
-                CommentOpen?.Invoke();
-            }
-            else
-            {
-                if (UserRole != 0)
+                if (Edit == true)
                 {
-                    MessageBox.Show("Для активации команды, перейдите в режим редактирования", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    GlobalData.Comment = "";
+                    CommentOpen?.Invoke();
                 }
                 else
                 {
-                    MessageBox.Show("Команда доступна только ГИПам и Руководитлям отделов", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (UserRole != 0)
+                    {
+                        Form_MessageBox messageBox = new Form_MessageBox("Для активации команды, перейдите в режим редактирования", "Предупреждение", 0);
+                        messageBox.ShowDialog();
+                    }
+                    else
+                    {
+                        Form_MessageBox messageBox = new Form_MessageBox("Команда доступна только ГИПам и Руководитлям отделов", "Предупреждение", 0);
+                        messageBox.ShowDialog();
+                    }
                 }
+            }
+            catch
+            {
+                Form_MessageBox messageBox = new Form_MessageBox("Что-то пошло нетак. \nОбратитесь в BIM-отдел.", "Ошибка", 0);
+                messageBox.ShowDialog();
             }
         }
 
@@ -898,6 +907,7 @@ namespace UST_ProjectManagement
                         selectedid.Add(item.SecThreeTag + item.SecThreePostfix);
                         item.Progress = 90;
                         item.Status = GetStatus(item);
+                        item.Comment = GlobalData.Comment;
                         if (!EditedItems.Contains(item)) EditedItems.Add(item);
                     }
 
@@ -921,55 +931,45 @@ namespace UST_ProjectManagement
         {
             foreach(ScheduleItem item in positionInfo.scheduleItems)
             {
-                if (item.Status.StatusId != 3 && item.Status.StatusId != 4)
+                if (item.SecThreeId != 1 && item.SecThreeId != 65 && item.Status.StatusId != 3 && item.Status.StatusId != 4)
                 {
                     return false;
                 }
             }
-
-            
-            //foreach (DataGridViewRow _row in dataGridView_Approvals.Rows)
-            //{
-            //    if (_row.Cells[0].Value.ToString().Length > 5)
-            //    {
-            //        if (_row.Cells[5].Value.ToString() != GlobalData.Statuses[4] && _row.Cells[5].Value.ToString() != GlobalData.Statuses[3])
-            //        {
-            //            return false;
-            //        }
-            //    }
-            //}
             return true;
         }
-        
 
+        private void dataGridView_Approvals_SelectionChanged(object sender, EventArgs e)
+        {
 
+        }
 
+        private void dataGridView_Approvals_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                int index = e.RowIndex;
+                string[] sp = dataGridView_Approvals.Rows[index].Cells[0].Value.ToString().Split('.');
 
-
-
-
-
-
-        //private void dataGridView_Approvals_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    if (Edit == true)
-        //    {
-        //        foreach (DataGridViewRow _row in dataGridView_Approvals.Rows)
-        //        {
-        //            foreach (ClassSubsetInfo _info in GlobalData.SelectedPosition.SubSetInfoList)
-        //            {
-        //                if (_info.SubSetId == _row.Cells[1].Value.ToString())
-        //                {
-        //                    _info.PercentComplete = Convert.ToInt32(_row.Cells[4].Value.ToString().Substring(0, _row.Cells[4].Value.ToString().Length - 1));
-        //                    _info.Responsible = GlobalData.UserName;
-        //                    break;
-        //                }
-        //            }
-
-        //        }
-        //        UpdateDG_Approve();
-        //        UpdateEnabled();
-        //    }
-        //}
+                if (sp.Length < 3)
+                {
+                    dataGridView_Approvals.Rows[index].Selected = false;
+                }
+                else
+                {
+                    HistoryLog historyLog = null;
+                    if (dataGridView_Approvals.SelectedRows.Count > 0 && dataGridView_Approvals.SelectedRows[0].Cells[9].Value != null)
+                    {
+                        try
+                        {
+                            historyLog = JsonConvert.DeserializeObject<HistoryLog>(dataGridView_Approvals.SelectedRows[0].Cells[9].Value.ToString());
+                        }
+                        catch { }
+                    }
+                    HistoryUpdate?.Invoke(historyLog);
+                }
+            }
+            catch { }
+        }
     }
 }

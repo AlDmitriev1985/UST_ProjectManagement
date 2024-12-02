@@ -79,9 +79,8 @@ namespace UST_ProjectManagement
         public string PathCheck = @"Z:\BIM01\01_Библиотеки\00_Autodesk Revit\13_SkyWay_вкладка\Version\";
 
         string PathBIMManager = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $@"\SkyWay\BIM Manager";
-        //public static string request = @"ustpm:01_Проекты\112_БЕЛАРУСЬ\2.112.190\01_А\2.112.190-00\:4:169:188";
+        //public static string request = @"ustpm:01_Проекты\356_ИНДИЯ\2.356.003\2.356.003-01\03_PD\2.356.003-01.2\:4:469:672";
         public static string request;
-
 
         public MainForm()
         {
@@ -249,6 +248,7 @@ namespace UST_ProjectManagement
             uC_Approve.EditFinished += FinishEdit;
             uC_Approve.CommentOpen += OpenCommentPanel;
             uC_Approve.HistoryOpen += OpenSetHistoryPanel;
+            uC_Approve.HistoryUpdate += UpdateSetHistoryPanel;
             uC_Approve.StartProcess += StartProcess;
             UC_HistoryPanel.HistoryOpen += OpenSetHistoryPanel;
 
@@ -258,7 +258,8 @@ namespace UST_ProjectManagement
             uC_TaskPanel.TaskOpen += OpenTaskInfo;
             uC_TaskInfo.OpenTaskRoute += OpenTaskRoute;
             uC_TaskInfo.ChangeTaskStatus += ChangeTaskStatus;
-            uC_TaskPanel.EditTask += EditTask;            
+            uC_TaskPanel.EditTask += EditTask;
+            uC_TaskPanel.TaskRowClick += OpenTaskInfo;
 
             #region --- StartValues ---
             tableLayoutPanel5.ColumnStyles[2].Width = 0;
@@ -465,7 +466,7 @@ namespace UST_ProjectManagement
             {
                 usT_HorizontalTab_ActionsPanel.Visible = false;
             }
-            //WindowState = FormWindowState.Normal;
+            ///request = @"ustpm:01_Проекты\356_ИНДИЯ\2.356.003\03_PD\2.356.003-00\:4:480:709";
 
             if (request != null && request != "")
             {
@@ -493,8 +494,33 @@ namespace UST_ProjectManagement
             string[] spreques = request.Split(':');
             GlobalData.SelectedDirPath = spreques[1].Trim();
 
+            string[] sppath = GlobalData.SelectedDirPath.Split('\\');
+            //if (sppath.Length > 6)
+            //{
+            //    string path = "";
+            //    for(int i = 0; i < sppath.Length-1; i++)
+            //    {
+            //        if(i < 3 || i > 4)
+            //        {
+            //            path += sppath[i];
+            //        }
+            //        else if (i == 3)
+            //        {
+            //            path += sppath[i + 1];
+            //        }
+            //        else if (i == 4)
+            //        {
+            //            path += sppath[i - 1];
+            //        }
+            //        path += "\\";
+            //    }
+            //    GlobalData.SelectedDirPath = path;
+            //}
+            //MessageBox.Show(GlobalData.SelectedDirPath);
+
             if (GlobalData.NaviTreeView.SelectTreeNode_New(1) && GlobalData.SelectedPosition != null)
             {
+                //MessageBox.Show(spreques[2]);
                 switch (spreques[2])
                 {
                     case "0":
@@ -699,6 +725,7 @@ namespace UST_ProjectManagement
         private void OpenCommentPanel()
         {
             CreatePanel = true;
+            uC_Comments.textBox1.Text = GlobalData.Comment;
             uC_Comments.BringToFront();
             UpdateCreatePanel();
 
@@ -719,7 +746,7 @@ namespace UST_ProjectManagement
 
         public void OpenHomePanel()
         {
-            OpenSetHistoryPanel(false);
+            OpenSetHistoryPanel(false, null);
             GlobalData.OpenPanelIndex = 0;
             if (firstStart)
             {
@@ -742,7 +769,7 @@ namespace UST_ProjectManagement
 
         public void OpenProjectPanel()
         {
-            OpenSetHistoryPanel(false);
+            OpenSetHistoryPanel(false, null);
             GlobalData.OpenPanelIndex = 2;
             uC_ProjectPanel1.UpdateProjectPanel();
             uC_TopActionsPanel1.UpdateButtonsEnabled();
@@ -756,7 +783,7 @@ namespace UST_ProjectManagement
         private void OpenSearchPanel()
         {
             GlobalData.OpenPanelIndex = 1;
-            OpenSetHistoryPanel(false);        
+            OpenSetHistoryPanel(false, null);        
             uC_SearchPanel1.ClearAllControls();
             uC_SearchPanel1.UpdateSearchView();
             tableLayoutPanel8.RowStyles[0].Height = 0;
@@ -767,7 +794,7 @@ namespace UST_ProjectManagement
         private void OpenAdminPanel()
         {
             GlobalData.OpenPanelIndex = 3;
-            OpenSetHistoryPanel(false);
+            OpenSetHistoryPanel(false, null);
              
             usT_HorizontalTab_ActionsPanel_Click(this.usT_HorizontalTab_ActionsPanel, EventArgs.Empty);
             uC_AdmiPanel1.GetAllSetList();           
@@ -881,25 +908,40 @@ namespace UST_ProjectManagement
             UpdateCreatePanel();
         }
 
-        private void OpenSetHistoryPanel(bool open)
+        private void OpenSetHistoryPanel(bool open, POSTServer.History.HistoryLog history)
         {
             CreatePanel = open;
+            UpdateCreatePanel();
             if (CreatePanel == true)
             {
                 //CreatePanel = false;
                 UC_HistoryPanel.BringToFront();
-                UC_HistoryPanel.UpdateHistory();
+                UC_HistoryPanel.UpdateHistory(history);
                 //uC_TopMainPanel1.Enabled = true;
             }
-            UpdateCreatePanel();
+            
+        }
+
+        private void UpdateSetHistoryPanel(POSTServer.History.HistoryLog history)
+        {
+            UC_HistoryPanel.UpdateHistory(history);
         }
 
         private void OpenTaskInfo(bool open, List<int> ids, List<int> tdids, string from, string to, int row)
         {
-            CreatePanelWidth = 400;
+            CreatePanelWidth = 350;
             CreatePanel = open;
             uC_TaskInfo.BringToFront();
             uC_TaskInfo.UpdateDG(ids, tdids, from, to);
+            UpdateCreatePanel();
+        }
+
+        private void OpenTaskInfo(int id, string from, string to)
+        {
+            CreatePanelWidth = 350;
+            CreatePanel = true;
+            uC_TaskInfo.BringToFront();
+            uC_TaskInfo.UpdateHistory1(id, from, to);
             UpdateCreatePanel();
         }
 
@@ -927,6 +969,11 @@ namespace UST_ProjectManagement
                     break;
                 case 2:
                     uC_TaskInfo.button3_Click(uC_TaskInfo.button3, EventArgs.Empty);
+                    break;
+                case 3:
+                    uC_TaskInfo.To = "";
+                    uC_TaskInfo.From = "";
+                    uC_TaskInfo.button2_Click(uC_TaskInfo.button2, EventArgs.Empty);
                     break;
             }
 
@@ -1009,7 +1056,7 @@ namespace UST_ProjectManagement
         private void openPosMainPanel()
         {
             ProjectNaviPanelIndex = 0;
-            OpenSetHistoryPanel(false);
+            OpenSetHistoryPanel(false, null);
             uC_ProjectPanel1.BringToFront();
             uC_ProjectPanel1.Focus();
         }
@@ -1022,7 +1069,7 @@ namespace UST_ProjectManagement
         private void openPosSchedulePanel(byte mode)
         {
             ProjectNaviPanelIndex = 1;
-            OpenSetHistoryPanel(false);
+            OpenSetHistoryPanel(false, null);
             if (mode == 0)
             {
                 uC_ProjectSchedulePanel1.UpdateTopBtnEnabled();
@@ -1042,7 +1089,7 @@ namespace UST_ProjectManagement
         private void openCoordoinationPanel()
         {
             ProjectNaviPanelIndex = 2;
-            OpenSetHistoryPanel(false);
+            OpenSetHistoryPanel(false, null);
             uC_Coordination.GetCoordinates();
             uC_Coordination.UpdateHistoryDG();
             uC_Coordination.UpdateCoordinates();
@@ -1056,7 +1103,7 @@ namespace UST_ProjectManagement
         private void openApprovalsPanel()
         {
             ProjectNaviPanelIndex = 4;
-            OpenSetHistoryPanel(false);
+            OpenSetHistoryPanel(false, null);
             GlobalMethodes.ReadSQL_GetUserSets();
             uC_Approve.GetRole();
             uC_Approve.UpdateButtonsEnabled();
@@ -1067,7 +1114,7 @@ namespace UST_ProjectManagement
         private void openTaskPanel()
         {
             ProjectNaviPanelIndex = 5;
-            OpenSetHistoryPanel(false);
+            OpenSetHistoryPanel(false, null);
             uC_TaskPanel.UpdateControls();
             uC_TaskPanel.BringToFront();
         }
@@ -1176,7 +1223,7 @@ namespace UST_ProjectManagement
         {
 
             GlobalData.loadInfo = "Создание структуры проекта";
-            OpenSetHistoryPanel(false);
+            OpenSetHistoryPanel(false, null);
             StartProcess();
             uC_NavigationPanel2.Enabled = false;          
             uC_ProjectSchedulePanel1.ApproveSets();
@@ -1499,8 +1546,8 @@ namespace UST_ProjectManagement
 
         public static bool UpdateUserAxes(string account)
         {
-            //account = "a.garbachenok";
-            //account = "s.gorodnik";
+            //account = "a.symanovich";
+            //account = "a.gamaev";
             GlobalData.user = RequestInfo.lb.Users.FirstOrDefault(x => x.UserAccount == account);
 
             try
@@ -1563,8 +1610,6 @@ namespace UST_ProjectManagement
         {
             if (this.WindowState == FormWindowState.Minimized) minimized = true;
             else minimized = false;
-
-
         }
 
         private void uC_StartPanel1_SizeChanged(object sender, EventArgs e)

@@ -33,7 +33,6 @@ namespace UST_ProjectManagement
         {
             if (textBox1.Text != "")
             {
-                
                 GlobalData.Comment = textBox1.Text;
                 Apply?.Invoke();
             }

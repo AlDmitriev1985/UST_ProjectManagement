@@ -389,54 +389,57 @@ namespace UST_ProjectManagement
 
             foreach (var gr in secOneGroup)
             {
-                var secOne = RequestInfo.lb.SectionsOnes.First(x => x.SectionOneId == gr.Key);
-                Code = secOne.SectionOneNum; 
+                if (gr.Key != 1 && gr.Key != 17)
+                {
+                    var secOne = RequestInfo.lb.SectionsOnes.First(x => x.SectionOneId == gr.Key);
+                    Code = secOne.SectionOneNum;
 
-                if (languageRus)
-                {
-                    Discription = secOne.SectionOneNameRus;
-                }
-                else
-                {
-                    Discription = secOne.SectionOneNameEng;
-                }
+                    if (languageRus)
+                    {
+                        Discription = secOne.SectionOneNameRus;
+                    }
+                    else
+                    {
+                        Discription = secOne.SectionOneNameEng;
+                    }
 
-                DataGridViewRow groupRow = new DataGridViewRow();
-                groupRow.CreateCells(dataGrid);
-                groupRow.SetValues(new string[] { Code, "", Discription});
-                groupRow.Height = Settings.RowHeight;
-                Methodes.ApplyRowBackColor(groupRow, Color.LightBlue);
-                dataGrid.Rows.Add(groupRow);
-                List<ScheduleItem> Sets = new List<ScheduleItem>();
-                try
-                {
-                    Sets = gr.OrderBy(x => x.SecThreeNum).ThenBy(y => y.SecThreePostfix).ToList();
-                }
-                catch
-                {
-                    Sets = gr.OrderBy(x => x.SecThreeNum).ToList();
-                }
-
-                foreach (var secThr in Sets)
-                {
-                    if (SecList.Contains(secThr)) Status = "Утверждено";
-                    else Status = "В работе";
-
+                    DataGridViewRow groupRow = new DataGridViewRow();
+                    groupRow.CreateCells(dataGrid);
+                    groupRow.SetValues(new string[] { Code, "", Discription });
+                    groupRow.Height = Settings.RowHeight;
+                    Methodes.ApplyRowBackColor(groupRow, Color.LightBlue);
+                    dataGrid.Rows.Add(groupRow);
+                    List<ScheduleItem> Sets = new List<ScheduleItem>();
                     try
                     {
-                        var dep = RequestInfo.lb.Departments.FirstOrDefault(x => x.DepartmentId == secThr.DelegatedDepId);
-                        CreatedBy = dep.DepartmentName;
+                        Sets = gr.OrderBy(x => x.SecThreeNum).ThenBy(y => y.SecThreePostfix).ToList();
                     }
                     catch
                     {
-                        CreatedBy = "";
+                        Sets = gr.OrderBy(x => x.SecThreeNum).ToList();
                     }
 
-                    DataGridViewRow row = new DataGridViewRow();
-                    row.CreateCells(dataGrid);
-                    row.Height = Settings.RowHeight;
-                    row.SetValues(new string[] { secThr.SecThreeNum, $"{secThr.PositionCode} {secThr.SecThreeTag}{secThr.SecThreePostfix}", secThr.SecThreeName, CreatedBy, Status, secThr.SecThreeTag, secThr.SecThreePostfix, secThr.DelegatedDepId.ToString() });
-                    dataGrid.Rows.Add(row);
+                    foreach (var secThr in Sets)
+                    {
+                        if (SecList.Contains(secThr)) Status = "Утверждено";
+                        else Status = "В работе";
+
+                        try
+                        {
+                            var dep = RequestInfo.lb.Departments.FirstOrDefault(x => x.DepartmentId == secThr.DelegatedDepId);
+                            CreatedBy = dep.DepartmentName;
+                        }
+                        catch
+                        {
+                            CreatedBy = "";
+                        }
+
+                        DataGridViewRow row = new DataGridViewRow();
+                        row.CreateCells(dataGrid);
+                        row.Height = Settings.RowHeight;
+                        row.SetValues(new string[] { secThr.SecThreeNum, $"{secThr.PositionCode} {secThr.SecThreeTag}{secThr.SecThreePostfix}", secThr.SecThreeName, CreatedBy, Status, secThr.SecThreeTag, secThr.SecThreePostfix, secThr.DelegatedDepId.ToString() });
+                        dataGrid.Rows.Add(row);
+                    } 
                 }
             }
         }

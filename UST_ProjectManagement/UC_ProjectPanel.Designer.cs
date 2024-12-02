@@ -118,8 +118,8 @@
             this.tableLayoutPanel3.RowCount = 12;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -137,7 +137,7 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label10.ForeColor = System.Drawing.Color.DimGray;
-            this.label10.Location = new System.Drawing.Point(141, 231);
+            this.label10.Location = new System.Drawing.Point(141, 291);
             this.label10.Margin = new System.Windows.Forms.Padding(0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(38, 18);
@@ -163,7 +163,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label11.ForeColor = System.Drawing.Color.DimGray;
-            this.label11.Location = new System.Drawing.Point(45, 311);
+            this.label11.Location = new System.Drawing.Point(45, 371);
             this.label11.Margin = new System.Windows.Forms.Padding(0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(134, 18);
@@ -176,7 +176,7 @@
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label12.ForeColor = System.Drawing.Color.DimGray;
-            this.label12.Location = new System.Drawing.Point(65, 96);
+            this.label12.Location = new System.Drawing.Point(65, 111);
             this.label12.Margin = new System.Windows.Forms.Padding(0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(114, 18);
@@ -202,7 +202,7 @@
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label13.ForeColor = System.Drawing.Color.DimGray;
-            this.label13.Location = new System.Drawing.Point(11, 146);
+            this.label13.Location = new System.Drawing.Point(11, 191);
             this.label13.Margin = new System.Windows.Forms.Padding(0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(168, 18);
@@ -215,7 +215,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label14.ForeColor = System.Drawing.Color.DimGray;
-            this.label14.Location = new System.Drawing.Point(140, 191);
+            this.label14.Location = new System.Drawing.Point(140, 251);
             this.label14.Margin = new System.Windows.Forms.Padding(0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(39, 18);
@@ -228,7 +228,7 @@
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label15.ForeColor = System.Drawing.Color.DimGray;
-            this.label15.Location = new System.Drawing.Point(81, 271);
+            this.label15.Location = new System.Drawing.Point(81, 331);
             this.label15.Margin = new System.Windows.Forms.Padding(0);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(98, 18);
@@ -241,7 +241,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label4.ForeColor = System.Drawing.Color.DimGray;
-            this.label4.Location = new System.Drawing.Point(99, 351);
+            this.label4.Location = new System.Drawing.Point(99, 411);
             this.label4.Margin = new System.Windows.Forms.Padding(0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(80, 18);
@@ -254,7 +254,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label5.ForeColor = System.Drawing.Color.DimGray;
-            this.label5.Location = new System.Drawing.Point(99, 391);
+            this.label5.Location = new System.Drawing.Point(99, 451);
             this.label5.Margin = new System.Windows.Forms.Padding(0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 18);
@@ -267,7 +267,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label6.ForeColor = System.Drawing.Color.DimGray;
-            this.label6.Location = new System.Drawing.Point(99, 431);
+            this.label6.Location = new System.Drawing.Point(99, 491);
             this.label6.Margin = new System.Windows.Forms.Padding(0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(80, 18);
@@ -296,8 +296,8 @@
             this.tableLayoutPanel2.RowCount = 12;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -326,7 +326,7 @@
             this.textBoxGAP.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxGAP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxGAP.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxGAP.Location = new System.Drawing.Point(3, 231);
+            this.textBoxGAP.Location = new System.Drawing.Point(3, 291);
             this.textBoxGAP.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.textBoxGAP.Name = "textBoxGAP";
             this.textBoxGAP.ReadOnly = true;
@@ -338,7 +338,7 @@
             this.maskedTextBox2.BackColor = System.Drawing.Color.WhiteSmoke;
             this.maskedTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.maskedTextBox2.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.maskedTextBox2.Location = new System.Drawing.Point(3, 312);
+            this.maskedTextBox2.Location = new System.Drawing.Point(3, 372);
             this.maskedTextBox2.Margin = new System.Windows.Forms.Padding(3, 12, 3, 3);
             this.maskedTextBox2.Mask = "00/00/0000";
             this.maskedTextBox2.Name = "maskedTextBox2";
@@ -352,7 +352,7 @@
             this.maskedTextBox1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.maskedTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.maskedTextBox1.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.maskedTextBox1.Location = new System.Drawing.Point(3, 272);
+            this.maskedTextBox1.Location = new System.Drawing.Point(3, 332);
             this.maskedTextBox1.Margin = new System.Windows.Forms.Padding(3, 12, 3, 3);
             this.maskedTextBox1.Mask = "00/00/0000";
             this.maskedTextBox1.Name = "maskedTextBox1";
@@ -370,7 +370,7 @@
             this.richTextBoxProjectName.Location = new System.Drawing.Point(3, 83);
             this.richTextBoxProjectName.Name = "richTextBoxProjectName";
             this.richTextBoxProjectName.ReadOnly = true;
-            this.richTextBoxProjectName.Size = new System.Drawing.Size(802, 44);
+            this.richTextBoxProjectName.Size = new System.Drawing.Size(802, 74);
             this.richTextBoxProjectName.TabIndex = 3;
             this.richTextBoxProjectName.Text = "";
             this.richTextBoxProjectName.TextChanged += new System.EventHandler(this.richTextBoxProjectName_TextChanged);
@@ -381,10 +381,10 @@
             this.richTextBoxPositionName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBoxPositionName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBoxPositionName.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.richTextBoxPositionName.Location = new System.Drawing.Point(3, 133);
+            this.richTextBoxPositionName.Location = new System.Drawing.Point(3, 163);
             this.richTextBoxPositionName.Name = "richTextBoxPositionName";
             this.richTextBoxPositionName.ReadOnly = true;
-            this.richTextBoxPositionName.Size = new System.Drawing.Size(802, 44);
+            this.richTextBoxPositionName.Size = new System.Drawing.Size(802, 74);
             this.richTextBoxPositionName.TabIndex = 4;
             this.richTextBoxPositionName.Text = "";
             this.richTextBoxPositionName.TextChanged += new System.EventHandler(this.richTextBoxPositionName_TextChanged);
@@ -395,7 +395,7 @@
             this.textBoxGIP.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxGIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxGIP.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxGIP.Location = new System.Drawing.Point(3, 191);
+            this.textBoxGIP.Location = new System.Drawing.Point(3, 251);
             this.textBoxGIP.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.textBoxGIP.Name = "textBoxGIP";
             this.textBoxGIP.ReadOnly = true;
@@ -408,7 +408,7 @@
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox1.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.richTextBox1.Location = new System.Drawing.Point(3, 343);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 403);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.Size = new System.Drawing.Size(802, 34);
@@ -422,7 +422,7 @@
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox1.Location = new System.Drawing.Point(3, 391);
+            this.textBox1.Location = new System.Drawing.Point(3, 451);
             this.textBox1.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -435,7 +435,7 @@
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox2.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox2.Location = new System.Drawing.Point(3, 431);
+            this.textBox2.Location = new System.Drawing.Point(3, 491);
             this.textBox2.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;

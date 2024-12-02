@@ -238,7 +238,8 @@ namespace UST_ProjectManagement
         public void UpdateDataGrid()
         {
             dataGrid.Rows.Clear();
-            List<PositionInfo> infos = GetPositions();
+            List<PositionInfo> infos = null;
+            if (GlobalData.SelectedProject != null) infos = GetPositions();
             if (infos != null)
             {
                 foreach(PositionInfo position in infos)
@@ -256,110 +257,113 @@ namespace UST_ProjectManagement
                     var groupSecOne = position.scheduleItems.GroupBy(x => x.SecOneId);
                     foreach(var group in groupSecOne)
                     {
-                        DataGridViewRow rowG = new DataGridViewRow();
-                        rowG.CreateCells(dataGrid);
-                        rowG.Height = 30;
-                        rowG.DefaultCellStyle.BackColor = Color.LightBlue;
-                        SectionsOne sectionsOne = RequestInfo.lb.SectionsOnes.FirstOrDefault(x => x.SectionOneId == group.Key);
-                        try
+                        if (group.Key != 1 && group.Key != 17)
                         {
-                            rowG.Cells[0].Value = sectionsOne.SectionOneNum;
-                            if (position.LanguageId == 2)
-                            {
-                                rowG.Cells[2].Value = sectionsOne.SectionOneNameEng;
-                            }
-                            else
-                            {
-                                rowG.Cells[2].Value = sectionsOne.SectionOneNameRus;
-                            }
-                            rowG.Cells[8].Value = position.Code;
-
-
-                            dataGrid.Rows.Add(rowG);
-                        }
-                        catch
-                        {
-                        }
-
-                        foreach(var section in group)
-                        {
-                            DataGridViewRow rowS = new DataGridViewRow();
-                            rowS.CreateCells(dataGrid);
-                            rowS.Height = 30;
-                            rowS.Cells[0].Value = section.SecThreeNum;
-                            rowS.Cells[1].Value = position.Code + " " + section.SecThreeTag;
-                            rowS.Cells[2].Value = section.SecThreeName;
-                            rowS.Cells[3].Value = "";
-                            int progress = 0;
+                            DataGridViewRow rowG = new DataGridViewRow();
+                            rowG.CreateCells(dataGrid);
+                            rowG.Height = 30;
+                            rowG.DefaultCellStyle.BackColor = Color.LightBlue;
+                            SectionsOne sectionsOne = RequestInfo.lb.SectionsOnes.FirstOrDefault(x => x.SectionOneId == group.Key);
                             try
                             {
-                                progress = section.Progress.Value;
-                            }
-                            catch { }
-                            rowS.Cells[4].Value = progress.ToString() + "%";
-                            rowS.Cells[4].Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                            rowS.Cells[5].Value = section.Status.StatusName;
-                            Color color = Color.White;
-                            switch (section.Status.StatusId)
-                            {
-                                case 0: color = Color.Gainsboro; break;
-                                //case 1: color = Color.LightBlue; break;
-                                case 2: color = Color.Orange; break;
-                                case 3: color = Color.LightCoral; break;
-                                case 4: color = Color.MediumSeaGreen; break;
-                                case 11: color = Color.MediumSeaGreen; break;
-                                case 21: color = Color.YellowGreen; break;
-                            }
-                            rowS.Cells[5].Style.BackColor = color;
-                            string date = "";
-                            string user = "";
-                            GlobalMethodes.GetHistory(section.History, out date, out user);
-
-                            rowS.Cells[6].Value = date;
-                            rowS.Cells[7].Value = user;
-                            rowS.Cells[8].Value = position.Code;
-
-                            dataGrid.Rows.Add(rowS);
-
-                            for (int f = 0; f < filterColumns.Count; f++)
-                            {
-                                int index = filterColumns[f];
-                                if (filters.ContainsKey(f))
+                                rowG.Cells[0].Value = sectionsOne.SectionOneNum;
+                                if (position.LanguageId == 2)
                                 {
-                                    if (filters[f] != "" && filters[f] != "<Нет>")
-                                    {
-                                        if (rowS.Cells[index].Value.ToString() != filters[f])
-                                        {
-                                            rowS.Visible = false;
-                                            break;
-                                        }
-                                    }
+                                    rowG.Cells[2].Value = sectionsOne.SectionOneNameEng;
                                 }
+                                else
+                                {
+                                    rowG.Cells[2].Value = sectionsOne.SectionOneNameRus;
+                                }
+                                rowG.Cells[8].Value = position.Code;
+
+
+                                dataGrid.Rows.Add(rowG);
                             }
-                            if (row.Visible)
+                            catch
                             {
+                            }
+
+                            foreach (var section in group)
+                            {
+                                DataGridViewRow rowS = new DataGridViewRow();
+                                rowS.CreateCells(dataGrid);
+                                rowS.Height = 30;
+                                rowS.Cells[0].Value = section.SecThreeNum;
+                                rowS.Cells[1].Value = position.Code + " " + section.SecThreeTag;
+                                rowS.Cells[2].Value = section.SecThreeName;
+                                rowS.Cells[3].Value = "";
+                                int progress = 0;
+                                try
+                                {
+                                    progress = section.Progress.Value;
+                                }
+                                catch { }
+                                rowS.Cells[4].Value = progress.ToString() + "%";
+                                rowS.Cells[4].Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                                rowS.Cells[5].Value = section.Status.StatusName;
+                                Color color = Color.White;
+                                switch (section.Status.StatusId)
+                                {
+                                    case 0: color = Color.Gainsboro; break;
+                                    //case 1: color = Color.LightBlue; break;
+                                    case 2: color = Color.Orange; break;
+                                    case 3: color = Color.LightCoral; break;
+                                    case 4: color = Color.MediumSeaGreen; break;
+                                    case 11: color = Color.MediumSeaGreen; break;
+                                    case 21: color = Color.YellowGreen; break;
+                                }
+                                rowS.Cells[5].Style.BackColor = color;
+                                string date = "";
+                                string user = "";
+                                GlobalMethodes.GetHistory(section.History, out date, out user);
+
+                                rowS.Cells[6].Value = date;
+                                rowS.Cells[7].Value = user;
+                                rowS.Cells[8].Value = position.Code;
+
+                                dataGrid.Rows.Add(rowS);
+
                                 for (int f = 0; f < filterColumns.Count; f++)
                                 {
                                     int index = filterColumns[f];
-                                    if (!filterItems.ContainsKey(f))
+                                    if (filters.ContainsKey(f))
                                     {
-                                        filterItems.Add(f, new List<string>());
-                                        //Filters.filterItems[Mode][f] = new List<string>();
-                                    }
-
-                                    try
-                                    {
-                                        if (!filterItems[f].Contains(rowS.Cells[index].Value.ToString()))
+                                        if (filters[f] != "" && filters[f] != "<Нет>")
                                         {
-                                            filterItems[f].Add(rowS.Cells[index].Value.ToString());
+                                            if (rowS.Cells[index].Value.ToString() != filters[f])
+                                            {
+                                                rowS.Visible = false;
+                                                break;
+                                            }
                                         }
                                     }
-                                    catch
+                                }
+                                if (row.Visible)
+                                {
+                                    for (int f = 0; f < filterColumns.Count; f++)
                                     {
+                                        int index = filterColumns[f];
+                                        if (!filterItems.ContainsKey(f))
+                                        {
+                                            filterItems.Add(f, new List<string>());
+                                            //Filters.filterItems[Mode][f] = new List<string>();
+                                        }
+
+                                        try
+                                        {
+                                            if (!filterItems[f].Contains(rowS.Cells[index].Value.ToString()))
+                                            {
+                                                filterItems[f].Add(rowS.Cells[index].Value.ToString());
+                                            }
+                                        }
+                                        catch
+                                        {
+                                        }
                                     }
                                 }
                             }
-                        }
+                        } 
                     }
                 }
             }

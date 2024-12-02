@@ -31,12 +31,12 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
+            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonCreate = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -91,6 +91,24 @@
             this.label1.Size = new System.Drawing.Size(88, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "Комментарии";
+            // 
+            // usT_CloseButton1
+            // 
+            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_CloseButton1.Location = new System.Drawing.Point(198, 0);
+            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0);
+            this.usT_CloseButton1.Name = "usT_CloseButton1";
+            this.usT_CloseButton1.Size = new System.Drawing.Size(25, 25);
+            this.usT_CloseButton1.TabIndex = 3;
+            this.usT_CloseButton1.Text = "usT_CloseButton1";
+            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
+            this.usT_CloseButton1.UST_IconLineSize = 1F;
+            this.usT_CloseButton1.UST_IconOffset = 7;
+            this.usT_CloseButton1.UST_PressedAlpha = 200;
+            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectionAlpha = 150;
+            this.usT_CloseButton1.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -164,24 +182,6 @@
             this.textBox1.Size = new System.Drawing.Size(213, 296);
             this.textBox1.TabIndex = 20;
             // 
-            // usT_CloseButton1
-            // 
-            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.usT_CloseButton1.Location = new System.Drawing.Point(198, 0);
-            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0);
-            this.usT_CloseButton1.Name = "usT_CloseButton1";
-            this.usT_CloseButton1.Size = new System.Drawing.Size(25, 25);
-            this.usT_CloseButton1.TabIndex = 3;
-            this.usT_CloseButton1.Text = "usT_CloseButton1";
-            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
-            this.usT_CloseButton1.UST_IconLineSize = 1F;
-            this.usT_CloseButton1.UST_IconOffset = 7;
-            this.usT_CloseButton1.UST_PressedAlpha = 200;
-            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectionAlpha = 150;
-            this.usT_CloseButton1.Click += new System.EventHandler(this.buttonCancel_Click);
-            // 
             // UC_Comments
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -211,6 +211,6 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonCreate;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.TextBox textBox1;
     }
 }

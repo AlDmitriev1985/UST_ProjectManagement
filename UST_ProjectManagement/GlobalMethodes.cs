@@ -1117,29 +1117,41 @@ namespace UST_ProjectManagement
             
             GlobalData.UserSets.Clear();
 
-            using (connection = new SqlConnection(MainForm.ConnectionString))
+            try
             {
-                connection.ConnectionString = connectionString;
-                // Подключение открыто
-                connection.Open();
-
-                SqlCommand command = new SqlCommand();
-
-                command.CommandText = string.Format("SELECT SectionThreeNum FROM SectionsThree " +
-                    $"WHERE DepartmentId = (SELECT DepartmentId FROM Users WHERE UserAccount = '{GlobalData.user.UserAccount}')");
-
-                command.Connection = connection;
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        GlobalData.UserSets.Add(reader.GetValue(0).ToString());
-                    }
-                }
-                reader.Close();
+                var user = RequestInfo.lb.Users.FirstOrDefault(x => x.UserAccount == GlobalData.user.UserAccount);
+                var sections = RequestInfo.lb.SectionsThrees.Where(x => x.DepartmentId == user.DepartmentId).Select(x => x.SectionThreeNum);
+                GlobalData.UserSets = sections.ToList();
             }
+            catch { }
+
+
+            //using (connection = new SqlConnection(MainForm.ConnectionString))
+            //{
+
+
+
+            //    connection.ConnectionString = connectionString;
+            //    // Подключение открыто
+            //    connection.Open();
+
+            //    SqlCommand command = new SqlCommand();
+
+            //    command.CommandText = string.Format("SELECT SectionThreeNum FROM SectionsThree " +
+            //        $"WHERE DepartmentId = (SELECT DepartmentId FROM Users WHERE UserAccount = '{GlobalData.user.UserAccount}')");
+
+            //    command.Connection = connection;
+            //    SqlDataReader reader = command.ExecuteReader();
+
+            //    if (reader.HasRows)
+            //    {
+            //        while (reader.Read())
+            //        {
+            //            GlobalData.UserSets.Add(reader.GetValue(0).ToString());
+            //        }
+            //    }
+            //    reader.Close();
+            //}
             return true;
         }
 
@@ -1958,7 +1970,7 @@ namespace UST_ProjectManagement
             }
             else
             {
-                Form_MessageBox messageBox = new Form_MessageBox("Моодель элемента отсутствует. Обратитесь в BIM-отдел.", "Предупреждение",0);
+                Form_MessageBox messageBox = new Form_MessageBox($"Модель элемента: {path} отсутствует. Обратитесь в BIM-отдел.", "Предупреждение",0);
                 messageBox.ShowDialog();
                 GlobalMethodes.CreateLog($"Отсутствует NWD: {path}");
             }

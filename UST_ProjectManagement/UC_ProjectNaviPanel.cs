@@ -106,7 +106,14 @@ namespace UST_ProjectManagement
             UpdateButtonsStatus(btn);
             if(GlobalData.SelectedStage != null && GlobalData.SelectedPosition == null)
             {
-                schedulePanel?.Invoke(1);
+                if (GlobalData.SelectedTechSolution != null || GlobalData.SelectedProduct != null)
+                {
+                    schedulePanel?.Invoke(0); 
+                }
+                else
+                {
+                    schedulePanel?.Invoke(1);
+                }
             }
             else
             {

@@ -110,7 +110,7 @@ namespace UST_ProjectManagement
             if (File.Exists(filepath))
             {
                 wordapp = new Word.Application();
-                wordapp.Visible = true;
+                wordapp.Visible = false;
                 Object filename = filepath;
                 Object confirmConversions = true;
                 Object readOnly = false;
@@ -142,8 +142,10 @@ namespace UST_ProjectManagement
 
         public static void CreateGrid(string filepath, int columns, int rows, List<ScheduleItem> sections)
         {
+            rows -= 4;
             object oMissing = System.Reflection.Missing.Value;
             worddocument.Paragraphs.Add(ref oMissing);
+
 
             int p = worddocument.Paragraphs.Count;
 
@@ -203,39 +205,43 @@ namespace UST_ProjectManagement
 
             foreach (var group in secOneGroup)
             {
-                sectionOne = RequestInfo.lb.SectionsOnes.FirstOrDefault(x => x.SectionOneId == group.Key);
-                ///Объединение ячеек
-                object begCell = worddocument.Tables[t].Cell(row, 2).Range.Start;
-                object endCell = worddocument.Tables[t].Cell(row, 4).Range.End;
-                wordcellrange = worddocument.Range(ref begCell, ref endCell);
-                wordcellrange.Select();
-                wordapp.Selection.Cells.Merge();
-
-                var secOne = RequestInfo.lb.SectionsOnes.First(x => x.SectionOneId == group.Key);
-                string groupName = "";
-                if (GlobalData.SelectedStage.LanguageId == 0) groupName = $"{secOne.SectionOneNum} {secOne.SectionOneNameRus}";
-                else groupName = $"{secOne.SectionOneNum} {secOne.SectionOneNameEng}";
-
-                Word.Range cell_01 = worddocument.Tables[t].Cell(row, 1).Range;
-                cell_01.Text = sectionOne.SectionOneNum + ".00";
-
-                Word.Range cell_02 = worddocument.Tables[t].Cell(row, 2).Range;
-                cell_02.Text = sectionOne.SectionOneNameRus;
-
-
-                foreach (var secThree in group)
+                if (group.Key != 1 && group.Key != 17)
                 {
+                    sectionOne = RequestInfo.lb.SectionsOnes.FirstOrDefault(x => x.SectionOneId == group.Key);
+                    ///Объединение ячеек
+                    object begCell = worddocument.Tables[t].Cell(row, 2).Range.Start;
+                    object endCell = worddocument.Tables[t].Cell(row, 4).Range.End;
+                    wordcellrange = worddocument.Range(ref begCell, ref endCell);
+                    wordcellrange.Select();
+                    wordapp.Selection.Cells.Merge();
+
+                    var secOne = RequestInfo.lb.SectionsOnes.First(x => x.SectionOneId == group.Key);
+                    string groupName = "";
+                    if (GlobalData.SelectedStage.LanguageId == 0) groupName = $"{secOne.SectionOneNum} {secOne.SectionOneNameRus}";
+                    else groupName = $"{secOne.SectionOneNum} {secOne.SectionOneNameEng}";
+
+                    Word.Range cell_01 = worddocument.Tables[t].Cell(row, 1).Range;
+                    cell_01.Text = sectionOne.SectionOneNum + ".00";
+
+                    Word.Range cell_02 = worddocument.Tables[t].Cell(row, 2).Range;
+                    cell_02.Text = sectionOne.SectionOneNameRus;
+
+
+                    foreach (var secThree in group)
+                    {
+                        row += 1;
+                        Word.Range cell_1 = worddocument.Tables[t].Cell(row, 1).Range;
+                        cell_1.Text = secThree.SecThreeNum;
+
+                        Word.Range cell_2 = worddocument.Tables[t].Cell(row, 2).Range;
+                        cell_2.Text = posid + " " + secThree.SecThreeTag + secThree.SecThreePostfix;
+
+                        Word.Range cell_3 = worddocument.Tables[t].Cell(row, 3).Range;
+                        cell_3.Text = secThree.SecThreeName;
+                    }
                     row += 1;
-                    Word.Range cell_1 = worddocument.Tables[t].Cell(row, 1).Range;
-                    cell_1.Text = secThree.SecThreeNum;
-
-                    Word.Range cell_2 = worddocument.Tables[t].Cell(row, 2).Range;
-                    cell_2.Text = posid + " " + secThree.SecThreeTag + secThree.SecThreePostfix;
-
-                    Word.Range cell_3 = worddocument.Tables[t].Cell(row, 3).Range;
-                    cell_3.Text = secThree.SecThreeName;
                 }
-                row += 1;
+                
 
             }
             #endregion
@@ -313,6 +319,7 @@ namespace UST_ProjectManagement
                 }
                 catch { }
             }
+            wordapp.Visible = true;
         }
     }
 }

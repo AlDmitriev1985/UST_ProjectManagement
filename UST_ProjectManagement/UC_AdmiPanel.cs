@@ -39,7 +39,7 @@ namespace UST_ProjectManagement
         ToolStripMenuItem stripItemRefresh = new ToolStripMenuItem();
 
         DataGridView dataGridView_Tasks = new DataGridView();
-        List<string> columns_Tasks = new List<string>() { "Шифр", "Взял в работу", "Статус", "Дата", "Тип"};
+        List<string> columns_Tasks = new List<string>() { "Шифр", "Взял в работу", "Статус", "Дата", "Тип", "ID"};
 
         List<classCreatedSchedule> ScheduleList = new List<classCreatedSchedule>();
         public UC_AdmiPanel()
@@ -71,6 +71,7 @@ namespace UST_ProjectManagement
             dataGridView_Tasks.Margin = new Padding(0);
             dataGridView_Tasks.BorderStyle = BorderStyle.None;
             dataGridView_Tasks.Dock = DockStyle.Fill;
+            dataGridView_Tasks.ScrollBars = ScrollBars.None;
             dataGridView_Tasks.SelectionChanged += listView1_SizeChanged;
             dataGridView_Tasks.MouseDown += dataGridView_Tasks_MouseDown;
             dataGridView_Tasks.MultiSelect = false;
@@ -83,12 +84,16 @@ namespace UST_ProjectManagement
         private void listView1_SizeChanged(object sender, EventArgs e)
         {
             int n = dataGridView_Tasks.Columns.Count;
-            for (int i = 0; i < n - 1; i++)
+            int w = dataGridView_Tasks.Width / (n - 1);
+            int summ = 0;
+            for (int i = 0; i < n - 2; i++)
             {
-                dataGridView_Tasks.Columns[i].Width = dataGridView_Tasks.Width / n;
+                dataGridView_Tasks.Columns[i].Width = w;
+                summ += w;
             }
 
-            dataGridView_Tasks.Columns[n - 1].Width = dataGridView_Tasks.Width - (dataGridView_Tasks.Width / n * (n - 1));
+            dataGridView_Tasks.Columns[n - 2].Width = dataGridView_Tasks.Width - summ;
+            dataGridView_Tasks.Columns[n - 1].Visible = false;
         }
 
         private void dataGridView_Tasks_MouseDown(object sender, MouseEventArgs e)
@@ -197,7 +202,7 @@ namespace UST_ProjectManagement
 
                                 DataGridViewRow row = new DataGridViewRow();
                                 row.CreateCells(dataGridView_Tasks);
-                                row.SetValues(new string[] { sch.PositionId, sch.Responsble, sch.Status, sch.Date, sch.Type });
+                                row.SetValues(new string[] { sch.PositionId, sch.Responsble, sch.Status, sch.Date, sch.Type, inf[0]});
                                 dataGridView_Tasks.Rows.Add(row);
                                 row.Height = CardTask.Methodes_DataGrid.RowHeight;
                             }
