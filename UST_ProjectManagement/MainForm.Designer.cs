@@ -46,6 +46,9 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel10 = new System.Windows.Forms.Panel();
+            this.uC_ProjectNaviPanel1 = new UST_ProjectManagement.UC_ProjectNaviPanel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.usT_VerticalTabControl1 = new TestTemplate.UST_VerticalTabControl();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -53,19 +56,8 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
-            this.uC_CreatePositionPanel1 = new UST_ProjectManagement.UC_CreatePositionPanel();
-            this.uC_CreateStagePanel1 = new UST_ProjectManagement.UC_CreateStagePanel();
-            this.uC_AddProjectSetPanel1 = new UST_ProjectManagement.UC_AddProjectSetPanel();
             this.panel13 = new System.Windows.Forms.Panel();
             this.uC_NavigationPanel2 = new UST_ProjectManagement.UC_NavigationPanel();
-            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel10 = new System.Windows.Forms.Panel();
-            this.uC_StartPanel1 = new UST_ProjectManagement.UC_StartPanel();
-            this.uC_AdmiPanel1 = new UST_ProjectManagement.UC_AdmiPanel();
-            this.uC_ProjectPanel1 = new UST_ProjectManagement.UC_ProjectPanel();
-            this.uC_SearchPanel1 = new UST_ProjectManagement.UC_SearchPanel();
-            this.uC_ProjectSchedulePanel1 = new UST_ProjectManagement.UC_ProjectSchedulePanel();
-            this.uC_ProjectNaviPanel1 = new UST_ProjectManagement.UC_ProjectNaviPanel();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.panel7 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
@@ -80,11 +72,9 @@
             this.tableLayoutPanel4.SuspendLayout();
             this.panel5.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
-            this.panel12.SuspendLayout();
-            this.panel13.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
-            this.panel10.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.panel13.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
             this.panel9.SuspendLayout();
             this.SuspendLayout();
@@ -366,6 +356,7 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel8, 4, 0);
             this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel6, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.panel3, 7, 0);
             this.tableLayoutPanel5.Controls.Add(this.panel4, 0, 0);
@@ -373,7 +364,6 @@
             this.tableLayoutPanel5.Controls.Add(this.panel11, 5, 0);
             this.tableLayoutPanel5.Controls.Add(this.panel12, 6, 0);
             this.tableLayoutPanel5.Controls.Add(this.panel13, 2, 0);
-            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel8, 4, 0);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
@@ -383,6 +373,42 @@
             this.tableLayoutPanel5.Size = new System.Drawing.Size(1498, 653);
             this.tableLayoutPanel5.TabIndex = 1;
             this.tableLayoutPanel5.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel5_MouseUp);
+            // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.ColumnCount = 1;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel8.Controls.Add(this.panel10, 0, 1);
+            this.tableLayoutPanel8.Controls.Add(this.uC_ProjectNaviPanel1, 0, 0);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(185, 0);
+            this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 2;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(1053, 653);
+            this.tableLayoutPanel8.TabIndex = 12;
+            // 
+            // panel10
+            // 
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel10.Location = new System.Drawing.Point(0, 50);
+            this.panel10.Margin = new System.Windows.Forms.Padding(0);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(1053, 603);
+            this.panel10.TabIndex = 8;
+            // 
+            // uC_ProjectNaviPanel1
+            // 
+            this.uC_ProjectNaviPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
+            this.uC_ProjectNaviPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uC_ProjectNaviPanel1.Font = new System.Drawing.Font("Bahnschrift", 11.25F);
+            this.uC_ProjectNaviPanel1.Location = new System.Drawing.Point(0, 0);
+            this.uC_ProjectNaviPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.uC_ProjectNaviPanel1.Name = "uC_ProjectNaviPanel1";
+            this.uC_ProjectNaviPanel1.Size = new System.Drawing.Size(1053, 50);
+            this.uC_ProjectNaviPanel1.TabIndex = 9;
             // 
             // tableLayoutPanel6
             // 
@@ -465,45 +491,12 @@
             // 
             // panel12
             // 
-            this.panel12.Controls.Add(this.uC_CreatePositionPanel1);
-            this.panel12.Controls.Add(this.uC_CreateStagePanel1);
-            this.panel12.Controls.Add(this.uC_AddProjectSetPanel1);
             this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel12.Location = new System.Drawing.Point(1243, 0);
             this.panel12.Margin = new System.Windows.Forms.Padding(0);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(250, 653);
             this.panel12.TabIndex = 10;
-            // 
-            // uC_CreatePositionPanel1
-            // 
-            this.uC_CreatePositionPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uC_CreatePositionPanel1.Font = new System.Drawing.Font("Bahnschrift", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.uC_CreatePositionPanel1.Location = new System.Drawing.Point(0, 0);
-            this.uC_CreatePositionPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.uC_CreatePositionPanel1.Name = "uC_CreatePositionPanel1";
-            this.uC_CreatePositionPanel1.Size = new System.Drawing.Size(250, 653);
-            this.uC_CreatePositionPanel1.TabIndex = 1;
-            // 
-            // uC_CreateStagePanel1
-            // 
-            this.uC_CreateStagePanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uC_CreateStagePanel1.Location = new System.Drawing.Point(0, 0);
-            this.uC_CreateStagePanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.uC_CreateStagePanel1.Name = "uC_CreateStagePanel1";
-            this.uC_CreateStagePanel1.Size = new System.Drawing.Size(250, 653);
-            this.uC_CreateStagePanel1.TabIndex = 0;
-            // 
-            // uC_AddProjectSetPanel1
-            // 
-            this.uC_AddProjectSetPanel1.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.uC_AddProjectSetPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uC_AddProjectSetPanel1.Font = new System.Drawing.Font("Bahnschrift", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.uC_AddProjectSetPanel1.Location = new System.Drawing.Point(0, 0);
-            this.uC_AddProjectSetPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.uC_AddProjectSetPanel1.Name = "uC_AddProjectSetPanel1";
-            this.uC_AddProjectSetPanel1.Size = new System.Drawing.Size(250, 653);
-            this.uC_AddProjectSetPanel1.TabIndex = 2;
             // 
             // panel13
             // 
@@ -525,98 +518,6 @@
             this.uC_NavigationPanel2.Name = "uC_NavigationPanel2";
             this.uC_NavigationPanel2.Size = new System.Drawing.Size(150, 653);
             this.uC_NavigationPanel2.TabIndex = 7;
-            // 
-            // tableLayoutPanel8
-            // 
-            this.tableLayoutPanel8.ColumnCount = 1;
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Controls.Add(this.panel10, 0, 1);
-            this.tableLayoutPanel8.Controls.Add(this.uC_ProjectNaviPanel1, 0, 0);
-            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(185, 0);
-            this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
-            this.tableLayoutPanel8.RowCount = 2;
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(1053, 653);
-            this.tableLayoutPanel8.TabIndex = 12;
-            // 
-            // panel10
-            // 
-            this.panel10.Controls.Add(this.uC_StartPanel1);
-            this.panel10.Controls.Add(this.uC_AdmiPanel1);
-            this.panel10.Controls.Add(this.uC_ProjectPanel1);
-            this.panel10.Controls.Add(this.uC_SearchPanel1);
-            this.panel10.Controls.Add(this.uC_ProjectSchedulePanel1);
-            this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel10.Location = new System.Drawing.Point(0, 25);
-            this.panel10.Margin = new System.Windows.Forms.Padding(0);
-            this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1053, 628);
-            this.panel10.TabIndex = 8;
-            // 
-            // uC_StartPanel1
-            // 
-            this.uC_StartPanel1.BackColor = System.Drawing.Color.White;
-            this.uC_StartPanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("uC_StartPanel1.BackgroundImage")));
-            this.uC_StartPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.uC_StartPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uC_StartPanel1.Location = new System.Drawing.Point(0, 0);
-            this.uC_StartPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.uC_StartPanel1.Name = "uC_StartPanel1";
-            this.uC_StartPanel1.Size = new System.Drawing.Size(1053, 628);
-            this.uC_StartPanel1.TabIndex = 3;
-            this.uC_StartPanel1.SizeChanged += new System.EventHandler(this.uC_StartPanel1_SizeChanged);
-            // 
-            // uC_AdmiPanel1
-            // 
-            this.uC_AdmiPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uC_AdmiPanel1.Location = new System.Drawing.Point(0, 0);
-            this.uC_AdmiPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.uC_AdmiPanel1.Name = "uC_AdmiPanel1";
-            this.uC_AdmiPanel1.Size = new System.Drawing.Size(1053, 628);
-            this.uC_AdmiPanel1.TabIndex = 4;
-            // 
-            // uC_ProjectPanel1
-            // 
-            this.uC_ProjectPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uC_ProjectPanel1.Location = new System.Drawing.Point(0, 0);
-            this.uC_ProjectPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.uC_ProjectPanel1.Name = "uC_ProjectPanel1";
-            this.uC_ProjectPanel1.Size = new System.Drawing.Size(1053, 628);
-            this.uC_ProjectPanel1.TabIndex = 1;
-            // 
-            // uC_SearchPanel1
-            // 
-            this.uC_SearchPanel1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.uC_SearchPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uC_SearchPanel1.Location = new System.Drawing.Point(0, 0);
-            this.uC_SearchPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.uC_SearchPanel1.Name = "uC_SearchPanel1";
-            this.uC_SearchPanel1.Size = new System.Drawing.Size(1053, 628);
-            this.uC_SearchPanel1.TabIndex = 0;
-            // 
-            // uC_ProjectSchedulePanel1
-            // 
-            this.uC_ProjectSchedulePanel1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.uC_ProjectSchedulePanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uC_ProjectSchedulePanel1.Font = new System.Drawing.Font("Bahnschrift", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.uC_ProjectSchedulePanel1.Location = new System.Drawing.Point(0, 0);
-            this.uC_ProjectSchedulePanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.uC_ProjectSchedulePanel1.Name = "uC_ProjectSchedulePanel1";
-            this.uC_ProjectSchedulePanel1.Size = new System.Drawing.Size(1053, 628);
-            this.uC_ProjectSchedulePanel1.TabIndex = 2;
-            // 
-            // uC_ProjectNaviPanel1
-            // 
-            this.uC_ProjectNaviPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(110)))), ((int)(((byte)(190)))));
-            this.uC_ProjectNaviPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uC_ProjectNaviPanel1.Location = new System.Drawing.Point(0, 0);
-            this.uC_ProjectNaviPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.uC_ProjectNaviPanel1.Name = "uC_ProjectNaviPanel1";
-            this.uC_ProjectNaviPanel1.Size = new System.Drawing.Size(1053, 25);
-            this.uC_ProjectNaviPanel1.TabIndex = 9;
             // 
             // tableLayoutPanel7
             // 
@@ -713,11 +614,9 @@
             this.tableLayoutPanel4.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel6.ResumeLayout(false);
-            this.panel12.ResumeLayout(false);
-            this.panel13.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
-            this.panel10.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.panel13.ResumeLayout(false);
             this.tableLayoutPanel7.ResumeLayout(false);
             this.panel9.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -751,25 +650,17 @@
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Panel panel9;
         private UC_TopMainPanel uC_TopMainPanel1;
-        private System.Windows.Forms.Panel panel10;
-        private UC_SearchPanel uC_SearchPanel1;
-        private UC_ProjectPanel uC_ProjectPanel1;
         private UC_TopActionsPanel uC_TopActionsPanel1;
         private System.Windows.Forms.Panel panel11;
         private System.Windows.Forms.Panel panel12;
-        public UC_CreateStagePanel uC_CreateStagePanel1;
-        private UC_CreatePositionPanel uC_CreatePositionPanel1;
-        private UC_AddProjectSetPanel uC_AddProjectSetPanel1;
         private System.Windows.Forms.Panel panel13;
-        private UC_ProjectSchedulePanel uC_ProjectSchedulePanel1;
-        private UC_StartPanel uC_StartPanel1;
-        private UC_AdmiPanel uC_AdmiPanel1;
         private System.Windows.Forms.Label labelUserName;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
-        private UC_ProjectNaviPanel uC_ProjectNaviPanel1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.Panel panel10;
+        private UC_ProjectNaviPanel uC_ProjectNaviPanel1;
     }
 }
 

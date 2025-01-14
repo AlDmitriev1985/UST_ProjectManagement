@@ -1845,9 +1845,18 @@ namespace UST_ProjectManagement
                 }
                 else
                 {
+
                     UpdateDG1();
-                    DataGridViewCellEventArgs ea = new DataGridViewCellEventArgs(0, dataGridView1.SelectedRows[0].Cells[0].RowIndex);
-                    DG1_Cell_Click(dataGridView1.SelectedRows[0].Cells[0], ea);
+                    DataGridViewCellEventArgs ea = null;
+                    try
+                    {
+                        ea = new DataGridViewCellEventArgs(0, dataGridView1.SelectedRows[0].Cells[0].RowIndex);
+                    }
+                    catch { }
+                    if (dataGridView1.SelectedRows != null && dataGridView1.SelectedRows.Count > 0)
+                    {
+                        DG1_Cell_Click(dataGridView1.SelectedRows[0].Cells[0], ea); 
+                    }
                 }
             }
         }

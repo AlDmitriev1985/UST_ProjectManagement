@@ -381,6 +381,14 @@ namespace UST_ProjectManagement
                 label.Location = new Point(panel_History.Width / 2 - label.Width / 2, panel_History.Height / 2 - label.Height / 2);
                 panel_History.Controls.Add(label);
             }
+            try
+            {
+                OpenTaskRoute?.Invoke($"{TaskCode} {From}->{To}", TD.StatusId, 0);
+            }
+            catch
+            {
+                OpenTaskRoute?.Invoke($"{TaskCode} {From}->{To}", -1, 0);
+            }
         }
 
         public void UpdateHistory1 (int id, string from, string to)
@@ -493,6 +501,7 @@ namespace UST_ProjectManagement
                 label.Location = new Point(panel_History.Width / 2 - label.Width / 2, panel_History.Height / 2 - label.Height / 2);
                 panel_History.Controls.Add(label);
             }
+
         }
 
         private void panel_Paint(object sender, PaintEventArgs e)
@@ -626,7 +635,7 @@ namespace UST_ProjectManagement
                 if (st != null) status = st.StatusName;
             }
             return status;
-        } 
+        }
         #endregion
 
         //public void UpdateHistory(int id)
@@ -745,6 +754,11 @@ namespace UST_ProjectManagement
                 form.comboBox2.Text = positionInfo.ProjectId;
                 form.comboBox3.Text = positionInfo.StageTag;
                 form.comboBox4.Text = positionInfo.Code;
+                try
+                {
+                    form.comboBox5.Text = To;
+                }
+                catch { }
 
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -791,12 +805,20 @@ namespace UST_ProjectManagement
                     depTaskUser.SectionThree = RequestInfo.lb.SectionsThrees.FirstOrDefault(x => x.SectionThreeId == scheduleItem.SecThreeId);
                     depTaskUser.Department = RequestInfo.lb.Departments.FirstOrDefault(x => x.DepartmentId == scheduleItem.DepId || x.DepartmentId == scheduleItem.DelegatedDepId);
                     depTaskUser.Pos = position;
-                    depTaskUser.SectionPositionNumber = scheduleItem.SecThreePostfix.ToString();
+                    try
+                    {
+                        depTaskUser.SectionPositionNumber = scheduleItem.SecThreePostfix.ToString();
+                    }
+                    catch { }
                     //depTaskUser.SectionPositionNumber = form.PositionInfo.SectionsPositions.FirstOrDefault(x => x.SectionThreeId == scheduleItem.SecThreeId).SectionPositionNumber;
-                    depTaskUser.SectionThree.SectionPositionNumber = scheduleItem.SecThreePostfix.ToString();
+                    try
+                    {
+                        depTaskUser.SectionThree.SectionPositionNumber = scheduleItem.SecThreePostfix.ToString();
+                    }
+                    catch { }
                     depTaskUser.HeadDep = RequestInfo.lb.Users.FirstOrDefault(x => x.UserId == depTaskUser.Department.DepartmentHeade);
                     //depTaskUser.TaskUserId = GlobalData.user;
-                    depTaskUser.SectionPositionNumber = scheduleItem.SecThreePostfix.ToString();
+                    //depTaskUser.SectionPositionNumber = scheduleItem.SecThreePostfix.ToString();
                     publishForm.spTaskDep.Add(depTaskUser);
                     publishForm.GetDepartmentAndSections(depTaskUser, scheduleItem.SecThreeTag + scheduleItem.SecThreePostfix);
                 }

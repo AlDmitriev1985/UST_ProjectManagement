@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CardTask, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Z:\BIM01\01_Библиотеки\06_Приложения\05_UST ProjectManagement\CardTask.exe</HintPath>
-    </Reference>
     <Reference Include="LibraryDB, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Z:\BIM01\01_Библиотеки\06_Приложения\05_UST ProjectManagement\LibraryDB.dll</HintPath>
@@ -367,6 +363,12 @@
     <Compile Include="UST_VerticalTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WarningMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WarningMessage.Designer.cs">
+      <DependentUpon>WarningMessage.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="EditSetForm.resx">
       <DependentUpon>EditSetForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -475,6 +477,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_AddTask.resx">
       <DependentUpon>Form_AddTask.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WarningMessage.resx">
+      <DependentUpon>WarningMessage.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -698,6 +703,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Btn_Help_25x25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CardTask\CardTask.csproj">
+      <Project>{4d3bbed6-6696-4907-b165-0a249df84870}</Project>
+      <Name>CardTask</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

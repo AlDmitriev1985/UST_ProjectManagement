@@ -76,21 +76,21 @@ namespace UST_ProjectManagement
                     }
                 }
             }
-
-            usT_HorizontalTabControl1.Text = btnText;
-            if (btnText.Length * 8 > 220)
-            {
-                btnWidth = btnText.Length * 10;
-            }
-            else if (btnText.Length * 8 > 150)
-            {
-                btnWidth = btnText.Length * 12;
-            }
-            else if (btnText.Length * 8 > 100)
-            {
-                btnWidth = btnText.Length * 12;
-            }
-            usT_HorizontalTabControl1.Width = btnWidth;
+            label1.Text = btnText;
+            usT_HorizontalTabControl1.Text = "Главная";
+            //if (btnText.Length * 8 > 220)
+            //{
+            //    btnWidth = btnText.Length * 10;
+            //}
+            //else if (btnText.Length * 8 > 150)
+            //{
+            //    btnWidth = btnText.Length * 12;
+            //}
+            //else if (btnText.Length * 8 > 100)
+            //{
+            //    btnWidth = btnText.Length * 12;
+            //}
+            //usT_HorizontalTabControl1.Width = btnWidth;
 
 
             UST_HorizontalTabControl btn = sender as UST_HorizontalTabControl;

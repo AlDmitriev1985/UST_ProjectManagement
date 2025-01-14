@@ -61,13 +61,18 @@ namespace UST_ProjectManagement
 
         public static bool CloseStart = false;
 
-        Thread StratThread;
+        Thread SubThread;
         Thread ProcasThread;
         static StartForm sForm;
         static ProcessForm pForm;
         DateTime startTime;
         public static DateTime lastUpdate;
 
+
+        UC_StartPanel uC_StartPanel1 = new UC_StartPanel();
+        UC_AdmiPanel uC_AdmiPanel1 = new UC_AdmiPanel();
+        UC_ProjectPanel uC_ProjectPanel1 = new UC_ProjectPanel();
+        UC_SearchPanel uC_SearchPanel1 = new UC_SearchPanel();
         UC_CoordinationPanel uC_Coordination = new UC_CoordinationPanel();
         UC_Approvals uC_Approve = new UC_Approvals();
         UC_Comments uC_Comments = new UC_Comments();
@@ -75,12 +80,21 @@ namespace UST_ProjectManagement
         UC_TaskPanel uC_TaskPanel = new UC_TaskPanel();
         UC_TaskInfo uC_TaskInfo = new UC_TaskInfo();
         UC_StageSchedulePanel uC_StageSchedulePanel = new UC_StageSchedulePanel();
+        UC_ProjectSchedulePanel uC_ProjectSchedulePanel1 = new UC_ProjectSchedulePanel();
+
+
+
+        UC_CreatePositionPanel uC_CreatePositionPanel1 = new UC_CreatePositionPanel();
+        UC_CreateStagePanel uC_CreateStagePanel1 = new UC_CreateStagePanel();
+        UC_AddProjectSetPanel uC_AddProjectSetPanel1 = new UC_AddProjectSetPanel();
 
         public string PathCheck = @"Z:\BIM01\01_Библиотеки\00_Autodesk Revit\13_SkyWay_вкладка\Version\";
 
         string PathBIMManager = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $@"\SkyWay\BIM Manager";
         //public static string request = @"ustpm:01_Проекты\356_ИНДИЯ\2.356.003\2.356.003-01\03_PD\2.356.003-01.2\:4:469:672";
         public static string request;
+
+        Update.WarningMessage WarningMessage;
 
         public MainForm()
         {
@@ -103,8 +117,28 @@ namespace UST_ProjectManagement
             }
             UpdateUserAxes(GetUserName());
 
+            panel10.Controls.Add(uC_StartPanel1);
+            uC_StartPanel1.Dock = DockStyle.Fill;
+            uC_StartPanel1.Margin = new Padding(0);
+
+            panel10.Controls.Add(uC_AdmiPanel1);
+            uC_AdmiPanel1.Dock = DockStyle.Fill;
+            uC_AdmiPanel1.Margin = new Padding(0);
+
+            panel10.Controls.Add(uC_ProjectPanel1);
+            uC_ProjectPanel1.Dock = DockStyle.Fill;
+            uC_ProjectPanel1.Margin = new Padding(0);
+
+            panel10.Controls.Add(uC_SearchPanel1);
+            uC_SearchPanel1.Dock = DockStyle.Fill;
+            uC_SearchPanel1.Margin = new Padding(0);
+
             panel10.Controls.Add(uC_Coordination);
             uC_Coordination.Dock = DockStyle.Fill;
+
+            panel10.Controls.Add(uC_ProjectSchedulePanel1);
+            uC_ProjectSchedulePanel1.Dock = DockStyle.Fill;
+            uC_ProjectSchedulePanel1.Margin = new Padding(0);
 
             panel10.Controls.Add(uC_Approve);
             uC_Approve.Dock = DockStyle.Fill;
@@ -123,6 +157,22 @@ namespace UST_ProjectManagement
 
             panel12.Controls.Add(uC_TaskInfo);
             uC_TaskInfo.Dock = DockStyle.Fill;
+
+
+
+            panel12.Controls.Add(uC_CreatePositionPanel1);
+            uC_CreatePositionPanel1.Dock = DockStyle.Fill;
+            uC_CreatePositionPanel1.Margin = new Padding(0);
+
+            panel12.Controls.Add(uC_CreateStagePanel1);
+            uC_CreateStagePanel1.Dock = DockStyle.Fill;
+            uC_CreateStagePanel1.Margin = new Padding(0);
+
+            panel12.Controls.Add(uC_AddProjectSetPanel1);
+            uC_AddProjectSetPanel1.Dock = DockStyle.Fill;
+            uC_AddProjectSetPanel1.Margin = new Padding(0);
+
+            
 
             #region --- ReadFromSQL ---
             try
@@ -281,7 +331,7 @@ namespace UST_ProjectManagement
             UILib.GetAllTypedControls(tableLayoutPanel6, NaviPanelTabControls, typeof(Control));
 
             #endregion
-           
+
 
             
         }
@@ -454,7 +504,7 @@ namespace UST_ProjectManagement
         {
             GlobalMethodes.CreateLog("Открытие программы");
             labelUserName.Text = GetUserName();
-            OpenHomePanel();
+            OpenHomePanel(0);
             tableLayoutPanel2_Click(this.tableLayoutPanel2, EventArgs.Empty);
             RefreshForm();
             GlobalMethodes._stop = true;
@@ -485,7 +535,34 @@ namespace UST_ProjectManagement
             
             this.Visible = true;
             this.Show();
-            //this.WindowState = FormWindowState.Normal;
+
+            SubThread = new Thread(WarningThread);
+            SubThread.IsBackground = true;
+            SubThread.Name = "Sub";
+            SubThread.IsBackground = true;
+            SubThread.Priority = ThreadPriority.Lowest;
+            SubThread.Start();
+
+            var usertasks = RequestInfo.lb.TaskDepartments.Where(x => x.TaskDepartmentUserId == GlobalData.user.UserId);
+            //var usertasks = RequestInfo.lb.TaskDepartments.Where(x => x.TaskDepartmentUserId == GlobalData.user.UserId && (x.StatusId > 5 && x.StatusId < 10));
+            //if (usertasks != null && usertasks.Count() > 0)
+            //{
+            //    Form_MessageBox form_MessageBox = new Form_MessageBox($"У вас есть назначенные задания ({usertasks.Count()} шт.)", "Предупреждение", 0);
+            //    form_MessageBox.ShowDialog();
+            //}
+        }
+
+        public void WarningThread()
+        {
+            try
+            {
+                pForm = new ProcessForm();
+                //pForm._Close += CloseProcessForm;
+                pForm.ShowDialog();
+            }
+            catch
+            {
+            }
         }
 
         private void ExecuteRequest()
@@ -744,7 +821,7 @@ namespace UST_ProjectManagement
             uC_Approve.Demote();
         }
 
-        public void OpenHomePanel()
+        public void OpenHomePanel(byte mode)
         {
             OpenSetHistoryPanel(false, null);
             GlobalData.OpenPanelIndex = 0;
@@ -775,7 +852,7 @@ namespace UST_ProjectManagement
             uC_TopActionsPanel1.UpdateButtonsEnabled();
             //uC_NaviSettingsPanel1.ButtonMainClick();
             uC_ProjectNaviPanel1.ButtonClick(ProjectNaviPanelIndex);
-            tableLayoutPanel8.RowStyles[0].Height = 25;
+            tableLayoutPanel8.RowStyles[0].Height = 50;
             uC_TopMainPanel1.UpdateMainBtnColor();
             uC_ProjectPanel1.BringToFront();
         }
@@ -915,8 +992,9 @@ namespace UST_ProjectManagement
             if (CreatePanel == true)
             {
                 //CreatePanel = false;
-                UC_HistoryPanel.BringToFront();
+                
                 UC_HistoryPanel.UpdateHistory(history);
+                UC_HistoryPanel.BringToFront();
                 //uC_TopMainPanel1.Enabled = true;
             }
             
@@ -931,8 +1009,9 @@ namespace UST_ProjectManagement
         {
             CreatePanelWidth = 350;
             CreatePanel = open;
-            uC_TaskInfo.BringToFront();
+            
             uC_TaskInfo.UpdateDG(ids, tdids, from, to);
+            uC_TaskInfo.BringToFront();
             UpdateCreatePanel();
         }
 
@@ -940,8 +1019,9 @@ namespace UST_ProjectManagement
         {
             CreatePanelWidth = 350;
             CreatePanel = true;
-            uC_TaskInfo.BringToFront();
+            
             uC_TaskInfo.UpdateHistory1(id, from, to);
+            uC_TaskInfo.BringToFront();
             UpdateCreatePanel();
         }
 

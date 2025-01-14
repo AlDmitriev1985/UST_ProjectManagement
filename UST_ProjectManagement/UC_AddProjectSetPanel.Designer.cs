@@ -31,6 +31,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
+            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -53,7 +54,6 @@
             this.labelSet = new System.Windows.Forms.Label();
             this.comboBoxGroupDis = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.usT_CloseButton1 = new UST_ProjectManagement.UST_CloseButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -118,6 +118,25 @@
             this.label4.Size = new System.Drawing.Size(209, 18);
             this.label4.TabIndex = 3;
             this.label4.Text = "Добавить раздел(ы) проекта";
+            // 
+            // usT_CloseButton1
+            // 
+            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.usT_CloseButton1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.usT_CloseButton1.Location = new System.Drawing.Point(495, 0);
+            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.usT_CloseButton1.Name = "usT_CloseButton1";
+            this.usT_CloseButton1.Size = new System.Drawing.Size(26, 26);
+            this.usT_CloseButton1.TabIndex = 3;
+            this.usT_CloseButton1.Text = "usT_CloseButton1";
+            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
+            this.usT_CloseButton1.UST_IconLineSize = 1F;
+            this.usT_CloseButton1.UST_IconOffset = 5;
+            this.usT_CloseButton1.UST_PressedAlpha = 200;
+            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
+            this.usT_CloseButton1.UST_SelectionAlpha = 150;
+            this.usT_CloseButton1.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -387,25 +406,6 @@
             this.label2.Size = new System.Drawing.Size(128, 16);
             this.label2.TabIndex = 7;
             this.label2.Text = "Группа подразделов";
-            // 
-            // usT_CloseButton1
-            // 
-            this.usT_CloseButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.usT_CloseButton1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.usT_CloseButton1.Location = new System.Drawing.Point(495, 0);
-            this.usT_CloseButton1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.usT_CloseButton1.Name = "usT_CloseButton1";
-            this.usT_CloseButton1.Size = new System.Drawing.Size(26, 26);
-            this.usT_CloseButton1.TabIndex = 3;
-            this.usT_CloseButton1.Text = "usT_CloseButton1";
-            this.usT_CloseButton1.UST_IconColor = System.Drawing.Color.White;
-            this.usT_CloseButton1.UST_IconLineSize = 1F;
-            this.usT_CloseButton1.UST_IconOffset = 5;
-            this.usT_CloseButton1.UST_PressedAlpha = 200;
-            this.usT_CloseButton1.UST_PressedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectedColor = System.Drawing.Color.Red;
-            this.usT_CloseButton1.UST_SelectionAlpha = 150;
-            this.usT_CloseButton1.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // UC_AddProjectSetPanel
             // 

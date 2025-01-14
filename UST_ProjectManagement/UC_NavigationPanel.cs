@@ -17,7 +17,7 @@ namespace UST_ProjectManagement
         public delegate void PrjectPanel_Click();
         public event PrjectPanel_Click OpenProjectPanel;
 
-        public delegate void HomePanel_Click();
+        public delegate void HomePanel_Click(byte mode);
         public event HomePanel_Click OpenHomePanel;
 
         public delegate void ThreeNode_Click();
@@ -75,8 +75,26 @@ namespace UST_ProjectManagement
             }
             else
             {
-                OpenHomePanel?.Invoke();
+                OpenHomePanel?.Invoke(0);
             }
+
+            //if (GlobalData.SelectedCountry != null || 
+            //    GlobalData.SelectedProject != null ||
+            //    GlobalData.SelectedStage != null ||
+            //    GlobalData.SelectedPosition != null ||
+            //    GlobalData.SelectedProductCatalog != null ||
+            //    GlobalData.SelectedProduct != null ||
+            //    GlobalData.SelectedTechSolutionCatalog != null ||
+            //    GlobalData.SelectedTechSolution != null)
+            //{
+            //    OpenProjectPanel?.Invoke();
+            //}
+            //else
+            //{
+            //    if(GlobalData.SelectedMainFolderName != null) OpenHomePanel?.Invoke(0);
+            //    else if (GlobalData.SelectedProductCatalog != null) OpenHomePanel?.Invoke(1);
+            //    else if (GlobalData.SelectedTechSolutionCatalog != null) OpenHomePanel?.Invoke(2);
+            //}
         }
 
         public void GetNodeInfo(TreeNode e)

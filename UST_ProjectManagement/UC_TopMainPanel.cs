@@ -14,7 +14,7 @@ namespace UST_ProjectManagement
 {
     public partial class UC_TopMainPanel : UserControl
     {
-        public delegate void HomeButton_Click();
+        public delegate void HomeButton_Click(byte mode);
         public event HomeButton_Click OpenHomePanel;
 
         public delegate void ProjectButton_Click();
@@ -98,7 +98,7 @@ namespace UST_ProjectManagement
 
             GlobalData.OpenPanelIndex = Convert.ToByte((sender as Button).TabIndex);
             UpdateMainBtnColor();
-            OpenHomePanel?.Invoke();
+            OpenHomePanel?.Invoke(0);
         }
 
         /// <summary>
